@@ -24,10 +24,19 @@ Un projet web pour gérer et afficher un catalogue de trains avec galerie de pho
 ### Étapes d'installation
 
 1. **Cloner ou télécharger le projet**
+   
+   Avec SSH (recommandé) :
    ```bash
    cd /opt/lampp/htdocs/projet_perso/
-   git clone ssh://git@git.uha4point0.fr:22222/clement.rupert/projet-perso-train.git
-   cd projet-perso-train
+   git clone git@github.com:Clemrup/trains.git
+   cd trains
+   ```
+   
+   Ou avec HTTPS :
+   ```bash
+   cd /opt/lampp/htdocs/projet_perso/
+   git clone https://github.com/Clemrup/trains.git
+   cd trains
    ```
 
 2. **Importer la base de données**
