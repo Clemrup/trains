@@ -1,0 +1,317 @@
+/* --- RESET / BASE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+body {
+    background: linear-gradient(180deg, #e9ecef, #dee2e6);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+/* --- HEADER --- */
+header {
+    width: 100%;
+    background-color: #1f2a44;
+    color: #fff;
+    padding: 1.5rem 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    margin-bottom: 2rem;
+}
+header h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+nav {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* --- FORMULAIRE D’AJOUT --- */
+.ajout-train {
+    background-color: #fff;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.ajout-train h2 {
+    text-align: center;
+    color: #1f2a44;
+    margin-bottom: 1.5rem;
+}
+.ajout-train form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+/* Remplacer les IDs de lieux par des classes (.lieux_simple / .lieux_double) */
+.lieux_simple select,
+.lieux_double select {
+    width: 100%;
+}
+.ajout-train label {
+    margin: 5px 0;
+    display: block;
+    font-weight: 600;
+    color: #1f2a44;
+}
+.ajout-train input,
+.ajout-train select,
+.ajout-train textarea {
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #adb5bd;
+    background-color: #f8f9fa;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+.ajout-train input:focus,
+.ajout-train select:focus,
+.ajout-train textarea:focus {
+    outline: none;
+    border-color: #0077b6;
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+    background-color: #fff;
+}
+.ajout-train button {
+    background-color: #0077b6;
+    color: #fff;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s ease;
+}
+.ajout-train button:hover {
+    background-color: #005f8f;
+}
+.success-msg {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px 15px;
+    margin: 1rem auto;
+    width: fit-content;
+    border-radius: 6px;
+    text-align: center;
+}
+.error-msg {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    margin: 1rem auto;
+    width: fit-content;
+    border-radius: 6px;
+    text-align: center;
+}
+.hidden{
+    display:none;
+}
+
+
+
+/* --- SCROLLBAR (optionnel) --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #868e96;
+}
+
+
+
+/* --- GALERIE --- */
+.galerie {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.type-titre {
+    font-size: 1.6rem;
+    color: #1f2a44;
+    border-left: 6px solid #0077b6;
+    padding-left: 10px;
+    margin-top: 2rem;
+}
+
+/* ====== TRAIN-GROUPE : max 4 lignes → scroll si plus ====== */
+.train-groupe {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+
+    background: #0001;
+    padding: 30px 0;
+    border-radius: 20px;
+
+    max-height: calc((280px + 1rem + 30px) * 4); /* hauteur = 4 lignes */
+    overflow-y: auto;
+}
+
+/* ====== TRAIN-CARD ====== */
+.train-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 280px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #ccc;
+}
+.train-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.train-header {
+    cursor: pointer;
+    user-select: none;
+}
+.train-card h3 {
+    color: #1f2a44;
+    margin-bottom: 0.3rem;
+}
+.train-numero {
+    font-weight: 600;
+    color: #0077b6;
+    margin-bottom: 0.5rem;
+}
+.train-livree {
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 0.8rem;
+}
+
+/* ====== MÉDIAS : max 4 visible → scroll interne ====== */
+.medias-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+.medias-column.open {
+    max-height: calc(180px * 4 + 1rem * 4); /* 4 médias visibles */
+    overflow-y: auto;
+}
+
+/* Conteneur média */
+.media-container {
+    flex: 0 0 auto; 
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+.media-container img,
+.media-container iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+.media-container img[src],
+.media-container iframe[src] {
+    opacity: 1;
+}
+
+.media-lieu {
+    font-size: 0.85rem;
+    color: #555;
+    font-style: italic;
+}
+.no-media {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+
+/* --- Lien de navigation --- */
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    background: #0077b6;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.nav-link:hover {
+    background: #005f8f;
+}
+
+
+
+
+/* Lightbox modal */
+#lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+#lightbox.hidden {
+    display: none;
+}
+
+#lightbox-content {
+    position: relative;
+    text-align: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+#lightbox img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 5px;
+}
+
+#lightbox p {
+    color: white;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+#lightbox-close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
