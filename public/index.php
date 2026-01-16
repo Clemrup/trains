@@ -71,9 +71,11 @@
             <div class="lieux_double hidden">
                 <label>Lieu 1 :</label>
                 <select name="lieu1_double" id="lieu1_double">
+                    <option value="">-- Sélectionner le premier lieu --</option>
                 </select>
                 <label>Lieu 2 :</label>
                 <select name="lieu2_double" id="lieu2_double">
+                    <option value="">-- Sélectionner le deuxième lieu --</option>
                 </select>
             </div>
             

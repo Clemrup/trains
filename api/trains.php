@@ -63,8 +63,8 @@ function ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $i
 // Fonction pour déterminer le nom du train
 function getTrainName($type_nom, $numero_principal, $numero_secondaire = null) {
     if ($numero_secondaire) {
-        if ($type_nom == 'BB 75000') {
-            return "BB " . $numero_principal . "(" . $numero_secondaire . ")";
+        if ($type_nom == 'BB 75000' || $type_nom == 'BB 60000') {
+            return "BB " . $numero_principal;
         } else {
             return $type_nom . " " . $numero_principal . "/" . $numero_secondaire;
         }
