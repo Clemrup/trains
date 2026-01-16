@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : jeu. 11 déc. 2025 à 17:55
+-- Généré le : ven. 16 jan. 2026 à 15:17
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `trains_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `constructeur`
+--
+
+CREATE TABLE `constructeur` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `constructeur`
+--
+
+INSERT INTO `constructeur` (`id`, `nom`) VALUES
+(1, 'Alstom'),
+(2, 'CAF France'),
+(3, 'Bombardier'),
+(4, 'Usine ferroviaire de Reichshoffen'),
+(5, 'GEC Alsthom'),
+(6, 'Adtranz');
 
 -- --------------------------------------------------------
 
@@ -88,7 +111,8 @@ INSERT INTO `livrees` (`id`, `nom`, `color`) VALUES
 (19, 'Akiem', '#7a7c8099'),
 (20, 'Infra', '#ffee00aa'),
 (21, 'Neutre Gris', '#11111125'),
-(22, 'InOui LGBT', 'linear-gradient(to bottom,#e4030388 0%,#e4030388 16.66%,#ff8c0088 16.66%,#ff8c0088 33.33%,#ffed0088 33.33%,#ffed0088 50%,#00802688 50%,#00802688 66.66%,#004dff88 66.66%,#004dff88 83.33%,#75078788 83.33%,#75078788 100%);');
+(22, 'InOui LGBT', 'linear-gradient(to bottom,#e4030388 0%,#e4030388 16.66%,#ff8c0088 16.66%,#ff8c0088 33.33%,#ffed0088 33.33%,#ffed0088 50%,#00802688 50%,#00802688 66.66%,#004dff88 66.66%,#004dff88 83.33%,#75078788 83.33%,#75078788 100%);'),
+(23, 'DB', '#ff111188');
 
 -- --------------------------------------------------------
 
@@ -156,9 +180,9 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (44, 'video', 'https://youtube.com/embed/X3A3sta7Yh8', 3, NULL, '2025-04-04'),
 (45, 'video', 'https://youtube.com/embed/rE1fleJZLlM', 3, NULL, '2025-04-04'),
 (46, 'image', 'images/TGV_D/291_1.jpg', 3, NULL, '2025-04-04'),
-(47, 'image', 'images/TGV_RD/606.jpg', 1, NULL, '2025-04-04'),
-(48, 'image', 'images/AGC/27868.jpg', 1, NULL, '2025-11-18'),
-(49, 'image', 'images/AGC/27867.jpg', 1, NULL, '2025-04-04'),
+(47, 'image', 'images/TGV_RD/606_1.jpg', 1, NULL, '2025-04-04'),
+(48, 'image', 'images/AGC/27868_1.jpg', 1, NULL, '2025-11-18'),
+(49, 'image', 'images/AGC/27867_1.jpg', 1, NULL, '2025-04-04'),
 (50, 'image', 'images/TGV_RD/619.jpg', 1, NULL, '2025-04-06'),
 (51, 'image', 'images/Régiolis/51627M.jpg', 3, NULL, '2025-04-06'),
 (52, 'image', 'images/TGV_D/245_1.jpg', 3, NULL, '2025-04-11'),
@@ -179,7 +203,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (67, 'image', 'images/AGC/76798.jpg', 1, NULL, '2025-04-15'),
 (68, 'image', 'images/AGC/76797.jpg', 1, NULL, '2025-04-15'),
 (69, 'image', 'images/AGC/27878_1.jpg', 1, NULL, '2025-04-15'),
-(70, 'image', 'images/AGC/27877.jpg', 1, NULL, '2025-04-15'),
+(70, 'image', 'images/AGC/27877_1.jpg', 1, NULL, '2025-04-15'),
 (71, 'image', 'images/ATER/73910.jpg', 1, NULL, '2025-04-15'),
 (72, 'image', 'images/Régiolis/83003L.jpg', 1, NULL, '2025-04-15'),
 (73, 'image', 'images/TGV_D/856.jpg', 1, NULL, '2025-04-15'),
@@ -196,7 +220,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (84, 'image', 'images/ATER/73905.jpg', 1, NULL, '2025-04-18'),
 (85, 'image', 'images/Régiolis/83569L.jpg', 1, NULL, '2025-04-18'),
 (86, 'video', 'https://youtube.com/embed/HILzNVBbho4', 7, NULL, '2025-04-30'),
-(87, 'image', 'images/Régiolis/85553M.jpg', 9, NULL, '2025-04-30'),
+(87, 'image', 'images/Régiolis/85553M_1.jpg', 9, NULL, '2025-04-30'),
 (88, 'image', 'images/Régiolis/83575L.jpg', 1, NULL, '2025-05-04'),
 (89, 'image', 'images/Régiolis/85507M.jpg', 1, NULL, '2025-05-04'),
 (90, 'image', 'images/TGV_D/239_253.jpg', 1, NULL, '2025-05-04'),
@@ -219,7 +243,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (107, 'image', 'images/TGV_D/715.jpg', 1, NULL, '2025-05-07'),
 (108, 'image', 'images/Régiolis/85537M.jpg', 1, NULL, '2025-05-07'),
 (109, 'image', 'images/BB/26140R_83571L.jpg', 1, NULL, '2025-05-07'),
-(110, 'image', 'images/Corail/127.jpg', 1, NULL, '2025-05-07'),
+(110, 'image', 'images/Corail/127_1.jpg', 1, NULL, '2025-05-07'),
 (111, 'image', 'images/AGC/76602.jpg', 1, NULL, '2025-05-12'),
 (112, 'video', 'https://youtube.com/embed/5xh445dF0_4', 1, NULL, '2025-05-12'),
 (113, 'image', 'images/TGV_D/823.jpg', 1, NULL, '2025-05-12'),
@@ -253,7 +277,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (141, 'video', 'https://youtube.com/embed/hsiT7L0GUng', 1, NULL, '2025-05-16'),
 (142, 'video', 'https://youtube.com/embed/Wjwf7a454aE', 1, NULL, '2025-05-16'),
 (143, 'video', 'https://youtube.com/embed/fc-xuUP3x5w', 1, NULL, '2025-05-16'),
-(144, 'image', 'images/ATER/73548.jpg', 1, NULL, '2025-05-16'),
+(144, 'image', 'images/ATER/73548_1.jpg', 1, NULL, '2025-05-16'),
 (145, 'image', 'images/Régiolis/85531M_2.jpg', 1, NULL, '2025-05-16'),
 (146, 'video', 'https://youtube.com/embed/HcM47ndFXKE', 1, NULL, '2025-05-16'),
 (147, 'image', 'images/Corail/125_1.jpg', 1, NULL, '2025-05-16'),
@@ -357,12 +381,49 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (245, 'image', 'images/TGV_D/4718.jpg', 1, NULL, '2025-06-08'),
 (246, 'image', 'images/Régiolis/85531M_83603L.jpg', 1, NULL, '2025-06-08'),
 (247, 'image', 'images/Régiolis/83603L.jpg', 1, NULL, '2025-06-08'),
-(248, 'image', 'images/Régiolis/85547M_85505M.jpg', 7, NULL, '2025-06-08'),
+(248, 'image', 'images/Régiolis/85547M_85505M.jpg', 1, NULL, '2025-06-08'),
 (249, 'image', 'images/ATER/73909.jpg', 1, NULL, '2025-06-08'),
 (250, 'image', 'images/AGC/27887.jpg', 1, NULL, '2025-06-08'),
 (251, 'image', 'images/Corail/002.jpg', 1, NULL, '2025-06-08'),
 (252, 'video', 'https://youtube.com/embed/EAbza5n6Mwc', 1, NULL, '2025-06-08'),
-(253, 'video', 'https://youtube.com/embed/EnaoJmLNUio', 1, NULL, '2025-06-08');
+(253, 'video', 'https://youtube.com/embed/EnaoJmLNUio', 1, NULL, '2025-06-08'),
+(254, 'image', 'images/AGC/27867_27870.jpg', 1, NULL, '2025-06-08'),
+(255, 'video', 'https://youtube.com/embed/l141VtNQC94', 7, NULL, '2025-06-09'),
+(256, 'image', 'images/Corail/124.jpg', 7, NULL, '2025-06-09'),
+(257, 'video', 'https://youtube.com/embed/ichevbInVSU', 7, NULL, '2025-06-09'),
+(258, 'video', 'https://youtube.com/embed/ichevbInVSU', 7, NULL, '2025-06-09'),
+(259, 'video', 'https://youtube.com/embed/ichevbInVSU', 7, NULL, '2025-06-09'),
+(260, 'video', 'https://youtube.com/embed/ichevbInVSU', 7, NULL, '2025-06-09'),
+(261, 'video', 'https://youtube.com/embed/ichevbInVSU', 7, NULL, '2025-06-09'),
+(262, 'image', 'images/AGC/76571.jpg', 7, NULL, '2025-06-09'),
+(263, 'image', 'images/TGV_D/241_256_27827.jpg', 1, NULL, '2025-06-09'),
+(264, 'image', 'images/TGV_D/256_241_27827.jpg', 1, NULL, '2025-06-09'),
+(265, 'image', 'images/AGC/27867_2.jpg', 1, NULL, '2025-06-09'),
+(266, 'video', 'https://youtube.com/embed/PjuNozR0O-0', 1, NULL, '2025-06-09'),
+(267, 'image', 'images/BB/26161R_241.jpg', 1, NULL, '2025-06-09'),
+(268, 'video', 'https://youtube.com/embed/PJ-Ndu6spbk', 1, NULL, '2025-06-09'),
+(269, 'image', 'images/Corail/127_2.jpg', 1, NULL, '2025-06-09'),
+(270, 'image', 'images/Régiolis/83503L_83567L.jpg', 1, NULL, '2025-06-09'),
+(271, 'image', 'images/Régiolis/83567L_83503L.jpg', 1, NULL, '2025-06-09'),
+(272, 'video', 'https://youtube.com/embed/hj8YiGz4M2M', 1, NULL, '2025-06-09'),
+(273, 'image', 'images/TGV_R/501.jpg', 4, NULL, '2025-06-10'),
+(274, 'image', 'images/TGV_R/550_537.jpg', 4, NULL, '2025-06-10'),
+(275, 'image', 'images/TGV_R/537_550.jpg', 4, NULL, '2025-06-10'),
+(276, 'image', 'images/TGV_RD/606_2.jpg', 1, NULL, '2025-06-10'),
+(277, 'image', 'images/ATER/73548_2.jpg', 1, NULL, '2025-06-10'),
+(278, 'image', 'images/BB/26145R.jpg', 1, NULL, '2025-06-10'),
+(279, 'image', 'images/AGC/27868_2.jpg', 7, NULL, '2025-06-11'),
+(280, 'image', 'images/Régiolis/85527M_27877.jpg', 1, NULL, '2025-06-11'),
+(281, 'image', 'images/AGC/27877_2.jpg', 1, NULL, '2025-06-11'),
+(282, 'image', 'images/Régiolis/85553M_2.jpg', 1, NULL, '2025-06-11'),
+(283, 'image', 'images/Régiolis/83607L_1.jpg', 7, NULL, '2025-06-15'),
+(284, 'image', 'images/TGV_R/560.jpg', 1, NULL, '2025-06-15'),
+(285, 'image', 'images/TGV_R/545_560.jpg', 1, NULL, '2025-06-15'),
+(286, 'video', 'https://youtube.com/embed/OtOvl8nt3s0', 1, NULL, '2025-06-15'),
+(287, 'image', 'images/Régiolis/83607L_83501L.jpg', 1, NULL, '2025-06-15'),
+(288, 'image', 'images/Régiolis/83501L_83607L.jpg', 1, NULL, '2025-06-15'),
+(289, 'video', 'https://youtube.com/embed/Isd0v1BOzek', 1, NULL, '2025-06-15'),
+(290, 'video', 'https://youtube.com/embed/JjIzDqUCn7c', 1, NULL, '2025-06-15');
 
 -- --------------------------------------------------------
 
@@ -585,24 +646,36 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (203, 1, 'Régiolis 83563/64', '83563', '64', '2025-12-11 17:37:37', 2),
 (204, 4, 'TGV-D 4718', '4718', NULL, '2025-12-11 17:38:20', 7),
 (205, 1, 'Régiolis 85547/48M', '85547', '48M', '2025-12-11 17:45:26', 8),
-(206, 3, 'ATER 73909', '73909', NULL, '2025-12-11 17:48:25', 2);
+(206, 3, 'ATER 73909', '73909', NULL, '2025-12-11 17:48:25', 2),
+(207, 8, 'Corail 124', '124', NULL, '2025-12-12 11:26:10', 9),
+(208, 14, 'TRAXX 185 023-9', '185 023-9', NULL, '2026-01-16 13:24:14', 23),
+(209, 2, 'AGC 76571/72', '76571', '72', '2026-01-16 13:52:55', 14),
+(210, 4, 'TGV-D 256', '256', NULL, '2026-01-16 13:55:59', 3),
+(211, 8, 'Corail 143', '143', NULL, '2026-01-16 14:12:24', 9),
+(212, 1, 'Régiolis 83503/04L', '83503', '04L', '2026-01-16 14:20:39', 2),
+(213, 1, 'Régiolis 83567/68L', '83567', '68L', '2026-01-16 14:21:18', 2),
+(214, 6, 'TGV-RD 616', '616', NULL, '2026-01-16 14:26:57', 3),
+(215, 5, 'TGV-R 550', '550', NULL, '2026-01-16 14:29:40', 3),
+(216, 1, 'Régiolis 85527/28M', '85527', '28M', '2026-01-16 14:43:18', 8),
+(217, 1, 'Régiolis 83607/08L', '83607', '08L', '2026-01-16 14:56:33', 14),
+(218, 1, 'Régiolis 83501/02L', '83501', '02L', '2026-01-16 15:04:50', 2);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `train_medias`
+-- Structure de la table `trains_medias`
 --
 
-CREATE TABLE `train_medias` (
+CREATE TABLE `trains_medias` (
   `train_id` int(11) NOT NULL,
   `media_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `train_medias`
+-- Déchargement des données de la table `trains_medias`
 --
 
-INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
+INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (1, 1),
 (2, 2),
 (3, 3),
@@ -626,6 +699,9 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (12, 12),
 (12, 17),
 (12, 91),
+(12, 263),
+(12, 264),
+(12, 267),
 (13, 13),
 (13, 14),
 (13, 253),
@@ -637,8 +713,11 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (16, 18),
 (17, 20),
 (17, 33),
+(17, 273),
 (18, 20),
 (18, 58),
+(18, 284),
+(18, 285),
 (19, 19),
 (20, 19),
 (21, 21),
@@ -686,20 +765,29 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (41, 43),
 (42, 44),
 (42, 45),
+(42, 285),
 (43, 46),
 (43, 207),
 (43, 208),
 (43, 209),
 (44, 47),
+(44, 276),
 (45, 48),
 (45, 49),
 (45, 201),
 (45, 202),
+(45, 254),
+(45, 263),
+(45, 264),
+(45, 265),
+(45, 279),
 (46, 50),
 (47, 51),
 (47, 136),
 (48, 53),
 (49, 53),
+(49, 274),
+(49, 275),
 (50, 55),
 (51, 56),
 (52, 57),
@@ -726,13 +814,17 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (64, 70),
 (64, 106),
 (64, 142),
+(64, 280),
+(64, 281),
 (65, 71),
 (66, 72),
+(66, 289),
 (67, 73),
 (68, 74),
 (68, 145),
 (68, 146),
 (68, 246),
+(68, 254),
 (69, 75),
 (70, 76),
 (71, 77),
@@ -757,13 +849,16 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (77, 138),
 (77, 219),
 (77, 221),
+(77, 254),
 (78, 84),
 (79, 85),
 (80, 86),
 (80, 109),
 (81, 86),
 (81, 110),
+(81, 269),
 (82, 87),
+(82, 282),
 (83, 88),
 (83, 89),
 (84, 88),
@@ -816,6 +911,8 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (110, 119),
 (111, 119),
 (111, 141),
+(111, 255),
+(111, 290),
 (112, 120),
 (113, 121),
 (114, 122),
@@ -845,6 +942,7 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (126, 207),
 (127, 143),
 (128, 144),
+(128, 277),
 (129, 147),
 (129, 197),
 (129, 222),
@@ -934,13 +1032,16 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (189, 226),
 (189, 233),
 (190, 227),
+(190, 267),
 (191, 228),
+(191, 268),
 (192, 229),
 (193, 230),
 (193, 231),
 (193, 250),
 (194, 234),
 (195, 236),
+(195, 278),
 (196, 237),
 (197, 238),
 (198, 239),
@@ -957,42 +1058,100 @@ INSERT INTO `train_medias` (`train_id`, `media_id`) VALUES
 (203, 244),
 (204, 245),
 (205, 248),
-(206, 249);
+(206, 249),
+(207, 256),
+(207, 261),
+(208, 261),
+(209, 262),
+(210, 263),
+(210, 264),
+(210, 286),
+(211, 266),
+(212, 270),
+(212, 271),
+(213, 270),
+(213, 271),
+(214, 272),
+(215, 274),
+(215, 275),
+(216, 280),
+(217, 283),
+(217, 287),
+(217, 288),
+(218, 287),
+(218, 288);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `types_train`
+-- Structure de la table `types`
 --
 
-CREATE TABLE `types_train` (
+CREATE TABLE `types` (
   `id` int(11) NOT NULL,
-  `nom` varchar(100) NOT NULL,
-  `constructeur` varchar(100) DEFAULT NULL
+  `nom` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `types_train`
+-- Déchargement des données de la table `types`
 --
 
-INSERT INTO `types_train` (`id`, `nom`, `constructeur`) VALUES
-(1, 'Régiolis', 'Alstom'),
-(2, 'AGC', 'Bombardier'),
-(3, 'ATER', 'Alstom'),
-(4, 'TGV Duplex', 'Alstom'),
-(5, 'TGV Réseau', 'Alstom'),
-(6, 'TGV Réseau-Duplex', 'Alstom'),
-(7, 'TGV POS', 'Alstom'),
-(8, 'Corail réversible', 'Alstom'),
-(9, 'BB 26000', 'Alstom'),
-(10, 'BB 37000', 'Alstom'),
-(11, 'BB 37500', 'Alstom'),
-(12, 'BB 75000', 'Alstom'),
-(13, 'BB 60000', 'Vossloh');
+INSERT INTO `types` (`id`, `nom`) VALUES
+(1, 'Régiolis'),
+(2, 'AGC'),
+(3, 'ATER'),
+(4, 'TGV Duplex'),
+(5, 'TGV Réseau'),
+(6, 'TGV Réseau-Duplex'),
+(7, 'TGV POS'),
+(8, 'Corail réversible'),
+(9, 'BB 26000'),
+(10, 'BB 37000'),
+(11, 'BB 37500'),
+(12, 'BB 75000'),
+(13, 'BB 60000'),
+(14, 'TRAXX');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `type_constructeur`
+--
+
+CREATE TABLE `type_constructeur` (
+  `id_const` int(11) NOT NULL,
+  `id_type` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `type_constructeur`
+--
+
+INSERT INTO `type_constructeur` (`id_const`, `id_type`) VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(1, 3),
+(4, 3),
+(1, 4),
+(5, 4),
+(1, 6),
+(5, 6),
+(5, 5),
+(1, 7),
+(1, 14),
+(3, 14),
+(6, 14);
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `constructeur`
+--
+ALTER TABLE `constructeur`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `lieux`
@@ -1023,21 +1182,34 @@ ALTER TABLE `trains`
   ADD KEY `livree_id` (`livree_id`);
 
 --
--- Index pour la table `train_medias`
+-- Index pour la table `trains_medias`
 --
-ALTER TABLE `train_medias`
+ALTER TABLE `trains_medias`
   ADD PRIMARY KEY (`train_id`,`media_id`),
   ADD KEY `train_medias_ibfk_2` (`media_id`);
 
 --
--- Index pour la table `types_train`
+-- Index pour la table `types`
 --
-ALTER TABLE `types_train`
+ALTER TABLE `types`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `type_constructeur`
+--
+ALTER TABLE `type_constructeur`
+  ADD KEY `id_const` (`id_const`),
+  ADD KEY `id_type` (`id_type`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `constructeur`
+--
+ALTER TABLE `constructeur`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `lieux`
@@ -1049,25 +1221,25 @@ ALTER TABLE `lieux`
 -- AUTO_INCREMENT pour la table `livrees`
 --
 ALTER TABLE `livrees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `medias`
 --
 ALTER TABLE `medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=291;
 
 --
 -- AUTO_INCREMENT pour la table `trains`
 --
 ALTER TABLE `trains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
 
 --
--- AUTO_INCREMENT pour la table `types_train`
+-- AUTO_INCREMENT pour la table `types`
 --
-ALTER TABLE `types_train`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1084,15 +1256,22 @@ ALTER TABLE `medias`
 -- Contraintes pour la table `trains`
 --
 ALTER TABLE `trains`
-  ADD CONSTRAINT `trains_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `types_train` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `trains_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `trains_ibfk_2` FOREIGN KEY (`livree_id`) REFERENCES `livrees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `train_medias`
+-- Contraintes pour la table `trains_medias`
 --
-ALTER TABLE `train_medias`
-  ADD CONSTRAINT `train_medias_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `trains` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `train_medias_ibfk_2` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`) ON DELETE CASCADE;
+ALTER TABLE `trains_medias`
+  ADD CONSTRAINT `trains_medias_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `trains` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `trains_medias_ibfk_2` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `type_constructeur`
+--
+ALTER TABLE `type_constructeur`
+  ADD CONSTRAINT `type_constructeur_ibfk_1` FOREIGN KEY (`id_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `type_constructeur_ibfk_2` FOREIGN KEY (`id_const`) REFERENCES `constructeur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -12,7 +12,7 @@ function getMediaPath($db, $trains_id) {
     
     if (!$train_id) return 'images/';
     
-    $stmt = $db->prepare("SELECT types_train.nom FROM trains JOIN types_train ON trains.type_id = types_train.id WHERE trains.id = :id");
+    $stmt = $db->prepare("SELECT types.nom FROM trains JOIN types ON trains.type_id = types.id WHERE trains.id = :id");
     $stmt->execute([':id' => $train_id]);
     $type_nom = $stmt->fetchColumn();
     
@@ -53,7 +53,7 @@ function ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $i
     $media_id = $db->lastInsertId();
 
     foreach ((array)$trains_id as $train_id) {
-        $stmt2 = $db->prepare("INSERT INTO train_medias (train_id, media_id) VALUES (:train_id, :media_id)");
+        $stmt2 = $db->prepare("INSERT INTO trains_medias (train_id, media_id) VALUES (:train_id, :media_id)");
         $stmt2->execute([':train_id' => $train_id, ':media_id' => $media_id]);
     }
 
@@ -98,7 +98,7 @@ if ($method === 'GET') {
         $stmt = $db->query("SELECT id, nom FROM trains ORDER BY nom");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     } elseif ($action === 'types') {
-        $stmt = $db->query("SELECT * FROM types_train");
+        $stmt = $db->query("SELECT * FROM types");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }
@@ -120,7 +120,7 @@ elseif ($method === 'POST') {
     
     try {
         // Récupérer le nom du type
-        $stmtType = $db->prepare("SELECT nom FROM types_train WHERE id = :id");
+        $stmtType = $db->prepare("SELECT nom FROM types WHERE id = :id");
         $stmtType->execute([':id' => $type_id]);
         $type_nom = $stmtType->fetchColumn();
         

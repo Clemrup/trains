@@ -31,9 +31,9 @@
             livrees.color AS livrees_color
     
         FROM trains t
-        JOIN types_train ty ON t.type_id = ty.id
+        JOIN types ty ON t.type_id = ty.id
         LEFT JOIN livrees ON livrees.id = t.livree_id
-        LEFT JOIN train_medias tm ON t.id = tm.train_id
+        LEFT JOIN trains_medias tm ON t.id = tm.train_id
         LEFT JOIN medias m ON tm.media_id = m.id
         LEFT JOIN lieux l1 ON l1.id = m.id_lieu1
         LEFT JOIN lieux l2 ON l2.id = m.id_lieu2
