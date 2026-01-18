@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 16 jan. 2026 à 17:10
+-- Généré le : dim. 18 jan. 2026 à 16:31
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -183,7 +183,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (45, 'video', 'https://youtube.com/embed/rE1fleJZLlM', 3, NULL, '2025-04-04'),
 (46, 'image', 'images/TGV_D/291_1.jpg', 3, NULL, '2025-04-04'),
 (47, 'image', 'images/TGV_RD/606_1.jpg', 1, NULL, '2025-04-04'),
-(48, 'image', 'images/AGC/27868_1.jpg', 1, NULL, '2025-11-18'),
+(48, 'image', 'images/AGC/27868_1.jpg', 1, NULL, '2025-04-04'),
 (49, 'image', 'images/AGC/27867_1.jpg', 1, NULL, '2025-04-04'),
 (50, 'image', 'images/TGV_RD/619.jpg', 1, NULL, '2025-04-06'),
 (51, 'image', 'images/Régiolis/51627M.jpg', 3, NULL, '2025-04-06'),
@@ -195,9 +195,9 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (57, 'video', 'https://youtube.com/embed/vQUJR1PxokE', 7, NULL, '2025-04-15'),
 (58, 'video', 'https://youtube.com/embed/kxlMWr2egaA', 7, NULL, '2025-04-15'),
 (59, 'video', 'https://youtube.com/embed/GwWAXBiPvSw', 7, NULL, '2025-04-15'),
-(60, 'image', 'images/Régiolis/85549M.jpg', 7, NULL, '2025-04-15'),
+(60, 'image', 'images/Régiolis/85549M_1.jpg', 7, NULL, '2025-04-15'),
 (61, 'image', 'images/Corail/140_1.jpg', 1, NULL, '2025-04-15'),
-(62, 'image', 'images/TGV_D/4716.jpg', 1, NULL, '2025-04-15'),
+(62, 'image', 'images/TGV_D/4716_1.jpg', 1, NULL, '2025-04-15'),
 (63, 'image', 'images/Corail/001.jpg', 1, NULL, '2025-04-15'),
 (64, 'video', 'https://youtube.com/embed/zlUyGUi11X8', 1, NULL, '2025-04-15'),
 (65, 'image', 'images/TGV_D/824.jpg', 1, NULL, '2025-04-15'),
@@ -220,7 +220,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (82, 'video', 'https://youtube.com/embed/KIUELSdHVM4', 3, NULL, '2025-04-18'),
 (83, 'image', 'images/AGC/27870_1.jpg', 1, NULL, '2025-04-18'),
 (84, 'image', 'images/ATER/73905.jpg', 1, NULL, '2025-04-18'),
-(85, 'image', 'images/Régiolis/83569L.jpg', 1, NULL, '2025-04-18'),
+(85, 'image', 'images/Régiolis/83569L_1.jpg', 1, NULL, '2025-04-18'),
 (86, 'video', 'https://youtube.com/embed/HILzNVBbho4', 7, NULL, '2025-04-30'),
 (87, 'image', 'images/Régiolis/85553M_1.jpg', 9, NULL, '2025-04-30'),
 (88, 'image', 'images/Régiolis/83575L.jpg', 1, NULL, '2025-05-04'),
@@ -249,7 +249,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (111, 'image', 'images/AGC/76602.jpg', 1, NULL, '2025-05-12'),
 (112, 'video', 'https://youtube.com/embed/5xh445dF0_4', 1, NULL, '2025-05-12'),
 (113, 'image', 'images/TGV_D/823.jpg', 1, NULL, '2025-05-12'),
-(114, 'image', 'images/ATER/73907.jpg', 1, NULL, '2025-05-12'),
+(114, 'image', 'images/ATER/73907_1.jpg', 1, NULL, '2025-05-12'),
 (115, 'image', 'images/TGV_D/279.jpg', 1, NULL, '2025-05-12'),
 (116, 'image', 'images/BB/26141R.jpg', 1, NULL, '2025-05-12'),
 (117, 'video', 'https://youtube.com/embed/D1YisAqchtI', 1, NULL, '2025-05-12'),
@@ -331,7 +331,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (193, 'image', 'images/TGV_D/226_711_4730.jpg', 12, NULL, '2025-05-24'),
 (194, 'image', 'images/Régiolis/85545M_1.jpg', 1, NULL, '2025-05-24'),
 (195, 'video', 'https://youtube.com/embed/9Ijnlh6vOTI', 1, NULL, '2025-05-24'),
-(196, 'image', 'images/Corail/130.jpg', 1, NULL, '2025-05-24'),
+(196, 'image', 'images/Corail/130_1.jpg', 1, NULL, '2025-05-24'),
 (197, 'image', 'images/Corail/125_2.jpg', 1, NULL, '2025-05-24'),
 (198, 'image', 'images/Régiolis/85503M.jpg', 1, NULL, '2025-05-24'),
 (199, 'image', 'images/Régiolis/85539M_85545M.jpg', 1, NULL, '2025-05-24'),
@@ -358,14 +358,14 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (220, 'image', 'images/Régiolis/85555M.jpg', 1, NULL, '2025-06-03'),
 (221, 'image', 'images/AGC/27870_2.jpg', 1, NULL, '2025-06-03'),
 (222, 'image', 'images/Corail/125_3.jpg', 1, NULL, '2025-06-03'),
-(223, 'image', 'images/Corail/143.jpg', 1, NULL, '2025-06-03'),
+(223, 'image', 'images/Corail/143_1.jpg', 1, NULL, '2025-06-03'),
 (224, 'video', 'https://youtube.com/embed/Z1eKFADm-5I', 5, NULL, '2025-05-07'),
 (225, 'video', 'https://youtube.com/embed/0YR2ggW4Glg', 7, NULL, '2025-06-03'),
 (226, 'video', 'https://youtube.com/embed/NWhs1ldZuQU', 7, NULL, '2025-06-03'),
 (227, 'video', 'https://youtube.com/embed/oz5gJURPIY0', 1, NULL, '2025-06-03'),
 (228, 'video', 'https://youtube.com/embed/Cm4soaOf_lI', 1, NULL, '2025-06-03'),
 (229, 'image', 'images/TGV_D/4721.jpg', 1, NULL, '2025-06-03'),
-(230, 'image', 'images/AGC/27888.jpg', 1, NULL, '2025-06-03'),
+(230, 'image', 'images/AGC/27888_1.jpg', 1, NULL, '2025-06-03'),
 (231, 'video', 'https://youtube.com/embed/dnkGVrj7-9M', 1, NULL, '2025-06-03'),
 (232, 'video', 'https://youtube.com/embed/ubFuZmihcT8', 1, NULL, '2025-06-03'),
 (233, 'video', 'https://youtube.com/embed/CKdlrTujDjU', 1, NULL, '2025-06-03'),
@@ -455,13 +455,32 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (317, 'image', 'images/BB/26145R_2.jpg', 1, NULL, '2025-06-18'),
 (318, 'image', 'images/AGC/27877_141_76602.jpg', 1, NULL, '2025-06-18'),
 (319, 'image', 'images/AGC/27877_4.jpg', 1, NULL, '2025-06-18'),
-(320, 'image', 'images/BB/26167R.jpg', 1, NULL, '2025-06-18'),
+(320, 'image', 'images/BB/26167R_1.jpg', 1, NULL, '2025-06-18'),
 (321, 'image', 'images/AGC/76571_2.jpg', 1, NULL, '2025-06-18'),
 (322, 'image', 'images/TGV_R/508_537.jpg', 1, NULL, '2025-06-18'),
 (323, 'image', 'images/TGV_R/537.jpg', 1, NULL, '2025-06-18'),
 (324, 'image', 'images/TGV_D/857.jpg', 1, NULL, '2025-06-18'),
 (325, 'video', 'https://youtube.com/embed/o-yOH_iHoec', 7, NULL, '2025-06-18'),
-(326, 'video', 'https://youtube.com/embed/6CkDYmrVaYg', 7, NULL, '2025-06-18');
+(326, 'video', 'https://youtube.com/embed/6CkDYmrVaYg', 7, NULL, '2025-06-18'),
+(327, 'video', 'https://youtube.com/embed/uswyfAVN72g', 7, NULL, '2025-06-22'),
+(328, 'image', 'images/Corail/143_2.jpg', 7, NULL, '2025-06-22'),
+(329, 'image', 'images/BB/26167R_2.jpg', 7, NULL, '2025-06-22'),
+(330, 'image', 'images/BB/26148_3.jpg', 1, NULL, '2025-06-22'),
+(331, 'image', 'images/Régiolis/85549M_2.jpg', 1, NULL, '2025-06-22'),
+(332, 'image', 'images/Régiolis/85549M_85509M.jpg', 1, NULL, '2025-06-22'),
+(333, 'image', 'images/Régiolis/85545M_85509M_85549M.jpg', 1, NULL, '2025-06-22'),
+(334, 'image', 'images/Corail/130_2.jpg', 1, NULL, '2025-06-22'),
+(335, 'image', 'images/TGV_D/4716_2.jpg', 1, NULL, '2025-06-22'),
+(336, 'image', 'images/TGV_D/4723.jpg', 1, NULL, '2025-06-22'),
+(337, 'video', 'https://youtube.com/embed/ZHVQsPSB3Ig', 1, NULL, '2025-06-22'),
+(338, 'image', 'images/ATER/73907_2.jpg', 1, NULL, '2025-06-22'),
+(339, 'image', 'images/AGC/27858.jpg', 1, NULL, '2025-06-22'),
+(340, 'image', 'images/TGV_D/801.jpg', 1, NULL, '2025-06-22'),
+(341, 'image', 'images/Régiolis/83569L_2.jpg', 7, NULL, '2025-06-22'),
+(342, 'image', 'images/Régiolis/85533M.jpg', 7, NULL, '2025-06-23'),
+(343, 'image', 'images/Régiolis/85521M.jpg', 1, NULL, '2025-06-23'),
+(344, 'image', 'images/AGC/27888_2.jpg', 1, NULL, '2025-06-23'),
+(345, 'image', 'images/AGC/27867_3.jpg', 7, NULL, '2025-06-23');
 
 -- --------------------------------------------------------
 
@@ -664,7 +683,7 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (178, 9, 'BB 26142R', '26142R', NULL, '2025-12-05 11:38:03', 9),
 (179, 4, 'TGV-D 860', '860', NULL, '2025-12-05 11:39:42', 3),
 (180, 1, 'Régiolis 85555/56M', '85555', '56M', '2025-12-05 17:15:26', 8),
-(181, 8, 'Corail 143', '143', NULL, '2025-12-05 17:38:40', 2),
+(181, 8, 'Corail 143', '143', NULL, '2025-12-05 17:38:40', 9),
 (187, 9, 'BB 26131', '26131', NULL, '2025-12-08 15:43:51', 21),
 (188, 9, 'BB 26143', '26143', NULL, '2025-12-08 16:04:51', 9),
 (189, 8, 'Corail 126', '126', NULL, '2025-12-08 16:05:16', 2),
@@ -689,7 +708,7 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (208, 14, 'TRAXX 185 023-9', '185 023-9', NULL, '2026-01-16 13:24:14', 23),
 (209, 2, 'AGC 76571/72', '76571', '72', '2026-01-16 13:52:55', 14),
 (210, 4, 'TGV-D 256', '256', NULL, '2026-01-16 13:55:59', 3),
-(211, 8, 'Corail 143', '143', NULL, '2026-01-16 14:12:24', 9),
+(211, 4, 'TGV-D 4723', '4723', NULL, '2026-01-18 15:43:15', 7),
 (212, 1, 'Régiolis 83503/04L', '83503', '04L', '2026-01-16 14:20:39', 2),
 (213, 1, 'Régiolis 83567/68L', '83567', '68L', '2026-01-16 14:21:18', 2),
 (214, 6, 'TGV-RD 616', '616', NULL, '2026-01-16 14:26:57', 3),
@@ -706,7 +725,12 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (225, 1, 'Régiolis 84809/10M', '84809', '10M', '2026-01-16 16:12:48', 14),
 (226, 4, 'TGV-D 857', '857', NULL, '2026-01-16 16:20:51', 3),
 (227, 9, 'BB 26167R', '26167R', NULL, '2026-01-16 16:52:08', 9),
-(228, 10, 'BB 37000 37040/437040', '37040', '437040', '2026-01-16 17:06:06', 5);
+(228, 10, 'BB 37000', '37040', '437040', '2026-01-16 17:06:06', 5),
+(229, 4, 'TGV-D 4724', '4724', NULL, '2026-01-18 16:10:51', 7),
+(230, 2, 'AGC 27857/58', '27857', '58', '2026-01-18 16:15:32', 2),
+(231, 4, 'TGV-D 801', '801', NULL, '2026-01-18 16:16:44', 3),
+(232, 1, 'Régiolis 85533/34M', '85533', '34M', '2026-01-18 16:19:39', 8),
+(233, 1, 'Régiolis 85521/22M', '85521', '22M', '2026-01-18 16:21:59', 8);
 
 -- --------------------------------------------------------
 
@@ -792,6 +816,8 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (30, 30),
 (30, 311),
 (30, 314),
+(30, 332),
+(30, 333),
 (31, 32),
 (32, 34),
 (32, 100),
@@ -835,6 +861,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (45, 265),
 (45, 279),
 (45, 310),
+(45, 345),
 (46, 50),
 (47, 51),
 (47, 136),
@@ -855,10 +882,14 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (53, 155),
 (54, 59),
 (55, 60),
+(55, 331),
+(55, 332),
+(55, 333),
 (56, 61),
 (56, 235),
 (57, 62),
 (57, 151),
+(57, 335),
 (58, 63),
 (59, 64),
 (59, 322),
@@ -915,6 +946,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (77, 313),
 (78, 84),
 (79, 85),
+(79, 341),
 (80, 86),
 (80, 109),
 (81, 86),
@@ -968,6 +1000,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (104, 112),
 (105, 113),
 (106, 114),
+(106, 338),
 (107, 115),
 (108, 116),
 (108, 156),
@@ -1071,12 +1104,15 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (162, 188),
 (162, 298),
 (162, 299),
+(162, 330),
 (163, 189),
 (163, 196),
+(163, 334),
 (164, 189),
 (164, 194),
 (164, 199),
 (164, 291),
+(164, 333),
 (165, 190),
 (166, 191),
 (167, 199),
@@ -1103,6 +1139,8 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (179, 217),
 (180, 220),
 (181, 223),
+(181, 266),
+(181, 328),
 (187, 224),
 (188, 226),
 (188, 232),
@@ -1118,6 +1156,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (193, 250),
 (193, 293),
 (193, 296),
+(193, 344),
 (194, 234),
 (195, 236),
 (195, 278),
@@ -1133,6 +1172,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (201, 242),
 (201, 243),
 (201, 248),
+(201, 327),
 (202, 242),
 (202, 243),
 (202, 246),
@@ -1149,7 +1189,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (210, 263),
 (210, 264),
 (210, 286),
-(211, 266),
+(211, 336),
 (212, 270),
 (212, 271),
 (213, 270),
@@ -1175,7 +1215,13 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (226, 309),
 (226, 324),
 (227, 320),
-(228, 325);
+(227, 329),
+(228, 325),
+(229, 337),
+(230, 339),
+(231, 340),
+(232, 342),
+(233, 343);
 
 -- --------------------------------------------------------
 
@@ -1323,13 +1369,13 @@ ALTER TABLE `livrees`
 -- AUTO_INCREMENT pour la table `medias`
 --
 ALTER TABLE `medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 
 --
 -- AUTO_INCREMENT pour la table `trains`
 --
 ALTER TABLE `trains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
 
 --
 -- AUTO_INCREMENT pour la table `types`
