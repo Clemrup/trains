@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 20 jan. 2026 à 16:52
+-- Généré le : mar. 20 jan. 2026 à 17:23
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -500,7 +500,11 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (360, 'image', 'images/Régiolis/83571_85537M.jpg', 1, NULL, '2025-07-01'),
 (361, 'image', 'images/Régiolis/85537M_83571.jpg', 1, NULL, '2025-07-01'),
 (362, 'image', 'images/TGV_D/728.jpg', 1, NULL, '2025-07-01'),
-(363, 'image', 'images/TGV_D/4708_3.jpg', 1, NULL, '2025-07-01');
+(363, 'image', 'images/TGV_D/4708_3.jpg', 1, NULL, '2025-07-01'),
+(364, 'video', 'https://youtube.com/embed/500qi8pjLTY', 7, NULL, '2025-07-02'),
+(365, 'image', 'images/Régiolis/85543M_3.jpg', 7, NULL, '2025-07-02'),
+(366, 'image', 'images/Régiolis/85537M_85543M.jpg', 7, NULL, '2025-07-02'),
+(367, 'image', 'images/BB/26147_85543M_85537M.jpg', 7, NULL, '2025-07-02');
 
 -- --------------------------------------------------------
 
@@ -809,6 +813,9 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (15, 16),
 (15, 200),
 (15, 210),
+(15, 365),
+(15, 366),
+(15, 367),
 (16, 17),
 (16, 18),
 (17, 20),
@@ -1023,6 +1030,8 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (101, 108),
 (101, 360),
 (101, 361),
+(101, 366),
+(101, 367),
 (102, 109),
 (102, 360),
 (102, 361),
@@ -1188,6 +1197,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (190, 267),
 (191, 228),
 (191, 268),
+(191, 367),
 (192, 229),
 (193, 230),
 (193, 231),
@@ -1209,6 +1219,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (200, 251),
 (200, 326),
 (200, 355),
+(200, 364),
 (201, 242),
 (201, 243),
 (201, 248),
@@ -1269,6 +1280,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (235, 349),
 (236, 352),
 (237, 354),
+(237, 364),
 (238, 356),
 (238, 357),
 (239, 358),
@@ -1424,7 +1436,7 @@ ALTER TABLE `livrees`
 -- AUTO_INCREMENT pour la table `medias`
 --
 ALTER TABLE `medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=364;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=368;
 
 --
 -- AUTO_INCREMENT pour la table `trains`
