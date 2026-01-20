@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : dim. 18 jan. 2026 à 16:31
+-- Généré le : mar. 20 jan. 2026 à 16:52
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -42,7 +42,8 @@ INSERT INTO `constructeur` (`id`, `nom`) VALUES
 (3, 'Bombardier'),
 (4, 'Usine ferroviaire de Reichshoffen'),
 (5, 'GEC Alsthom'),
-(6, 'Adtranz');
+(6, 'Adtranz'),
+(7, 'Socofer');
 
 -- --------------------------------------------------------
 
@@ -114,7 +115,8 @@ INSERT INTO `livrees` (`id`, `nom`, `color`) VALUES
 (20, 'Infra', '#ffee00aa'),
 (21, 'Neutre Gris', '#11111125'),
 (22, 'InOui LGBT', 'linear-gradient(to bottom,#e4030388 0%,#e4030388 16.66%,#ff8c0088 16.66%,#ff8c0088 33.33%,#ffed0088 33.33%,#ffed0088 50%,#00802688 50%,#00802688 66.66%,#004dff88 66.66%,#004dff88 83.33%,#75078788 83.33%,#75078788 100%);'),
-(23, 'DB', '#ff111188');
+(23, 'DB', '#ff111188'),
+(24, 'Vigirail', '#FF6A0088');
 
 -- --------------------------------------------------------
 
@@ -386,7 +388,7 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (248, 'image', 'images/Régiolis/85547M_85505M.jpg', 1, NULL, '2025-06-08'),
 (249, 'image', 'images/ATER/73909.jpg', 1, NULL, '2025-06-08'),
 (250, 'image', 'images/AGC/27887_1.jpg', 1, NULL, '2025-06-08'),
-(251, 'image', 'images/Corail/002.jpg', 1, NULL, '2025-06-08'),
+(251, 'image', 'images/Corail/002_1.jpg', 1, NULL, '2025-06-08'),
 (252, 'video', 'https://youtube.com/embed/EAbza5n6Mwc', 1, NULL, '2025-06-08'),
 (253, 'video', 'https://youtube.com/embed/EnaoJmLNUio', 1, NULL, '2025-06-08'),
 (254, 'image', 'images/AGC/27867_27870.jpg', 1, NULL, '2025-06-08'),
@@ -480,7 +482,25 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (342, 'image', 'images/Régiolis/85533M.jpg', 7, NULL, '2025-06-23'),
 (343, 'image', 'images/Régiolis/85521M.jpg', 1, NULL, '2025-06-23'),
 (344, 'image', 'images/AGC/27888_2.jpg', 1, NULL, '2025-06-23'),
-(345, 'image', 'images/AGC/27867_3.jpg', 7, NULL, '2025-06-23');
+(345, 'image', 'images/AGC/27867_3.jpg', 7, NULL, '2025-06-23'),
+(346, 'image', 'images/Régiolis/85547M.jpg', 7, NULL, '2025-06-30'),
+(347, 'image', 'images/TGV_D/289.jpg', 1, NULL, '2025-06-30'),
+(348, 'image', 'images/ATER/73907_73516.jpg', 1, NULL, '2025-06-30'),
+(349, 'image', 'images/ATER/73516_73907.jpg', 1, NULL, '2025-06-30'),
+(350, 'image', 'images/Corail/130_26148.jpg', 1, NULL, '2025-06-30'),
+(351, 'image', 'images/BB/26148_4.jpg', 1, NULL, '2025-06-30'),
+(352, 'video', 'https://youtube.com/embed/KK97jo4CyqY', 1, NULL, '2025-06-30'),
+(353, 'image', 'images/AGC/76601.jpg', 1, NULL, '2025-06-30'),
+(354, 'image', 'images/BB/26151.jpg', 1, NULL, '2025-06-30'),
+(355, 'image', 'images/Corail/002_2.jpg', 1, NULL, '2025-06-30'),
+(356, 'video', 'https://youtube.com/embed/Ih5PWtAzd9U', 1, NULL, '2025-06-30'),
+(357, 'image', 'images/ESV/703_4723.jpg', 1, NULL, '2025-06-30'),
+(358, 'image', 'images/AGC/76677.jpg', 7, NULL, '2025-07-01'),
+(359, 'image', 'images/AGC/27887_3.jpg', 1, NULL, '2025-07-01'),
+(360, 'image', 'images/Régiolis/83571_85537M.jpg', 1, NULL, '2025-07-01'),
+(361, 'image', 'images/Régiolis/85537M_83571.jpg', 1, NULL, '2025-07-01'),
+(362, 'image', 'images/TGV_D/728.jpg', 1, NULL, '2025-07-01'),
+(363, 'image', 'images/TGV_D/4708_3.jpg', 1, NULL, '2025-07-01');
 
 -- --------------------------------------------------------
 
@@ -725,12 +745,19 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (225, 1, 'Régiolis 84809/10M', '84809', '10M', '2026-01-16 16:12:48', 14),
 (226, 4, 'TGV-D 857', '857', NULL, '2026-01-16 16:20:51', 3),
 (227, 9, 'BB 26167R', '26167R', NULL, '2026-01-16 16:52:08', 9),
-(228, 10, 'BB 37000', '37040', '437040', '2026-01-16 17:06:06', 5),
+(228, 10, 'BB 37040', '37040', '437040', '2026-01-16 17:06:06', 5),
 (229, 4, 'TGV-D 4724', '4724', NULL, '2026-01-18 16:10:51', 7),
 (230, 2, 'AGC 27857/58', '27857', '58', '2026-01-18 16:15:32', 2),
 (231, 4, 'TGV-D 801', '801', NULL, '2026-01-18 16:16:44', 3),
 (232, 1, 'Régiolis 85533/34M', '85533', '34M', '2026-01-18 16:19:39', 8),
-(233, 1, 'Régiolis 85521/22M', '85521', '22M', '2026-01-18 16:21:59', 8);
+(233, 1, 'Régiolis 85521/22M', '85521', '22M', '2026-01-18 16:21:59', 8),
+(234, 4, 'TGV-D 289', '289', NULL, '2026-01-20 15:34:33', 3),
+(235, 3, 'ATER 73516', '73516', NULL, '2026-01-20 15:36:16', 11),
+(236, 15, 'BB 27071', '27071', '427071', '2026-01-20 16:10:47', 5),
+(237, 9, 'BB 26151', '26151', NULL, '2026-01-20 16:14:01', 9),
+(238, 16, 'ESV 702', '702', NULL, '2026-01-20 16:33:31', 24),
+(239, 2, 'AGC 76677/78', '76677', '78', '2026-01-20 16:42:38', 15),
+(240, 4, 'TGV-D 728', '728', NULL, '2026-01-20 16:50:08', 3);
 
 -- --------------------------------------------------------
 
@@ -806,6 +833,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (25, 191),
 (26, 25),
 (26, 26),
+(26, 363),
 (27, 27),
 (27, 28),
 (28, 29),
@@ -993,14 +1021,21 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (100, 104),
 (100, 105),
 (101, 108),
+(101, 360),
+(101, 361),
 (102, 109),
+(102, 360),
+(102, 361),
 (103, 111),
 (103, 316),
 (103, 318),
+(103, 353),
 (104, 112),
 (105, 113),
 (106, 114),
 (106, 338),
+(106, 348),
+(106, 349),
 (107, 115),
 (108, 116),
 (108, 156),
@@ -1105,9 +1140,12 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (162, 298),
 (162, 299),
 (162, 330),
+(162, 350),
+(162, 351),
 (163, 189),
 (163, 196),
 (163, 334),
+(163, 350),
 (164, 189),
 (164, 194),
 (164, 199),
@@ -1157,6 +1195,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (193, 293),
 (193, 296),
 (193, 344),
+(193, 359),
 (194, 234),
 (195, 236),
 (195, 278),
@@ -1169,6 +1208,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (200, 241),
 (200, 251),
 (200, 326),
+(200, 355),
 (201, 242),
 (201, 243),
 (201, 248),
@@ -1180,6 +1220,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (203, 244),
 (204, 245),
 (205, 248),
+(205, 346),
 (206, 249),
 (207, 256),
 (207, 261),
@@ -1190,6 +1231,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (210, 264),
 (210, 286),
 (211, 336),
+(211, 357),
 (212, 270),
 (212, 271),
 (213, 270),
@@ -1221,7 +1263,16 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (230, 339),
 (231, 340),
 (232, 342),
-(233, 343);
+(233, 343),
+(234, 347),
+(235, 348),
+(235, 349),
+(236, 352),
+(237, 354),
+(238, 356),
+(238, 357),
+(239, 358),
+(240, 362);
 
 -- --------------------------------------------------------
 
@@ -1252,7 +1303,9 @@ INSERT INTO `types` (`id`, `nom`) VALUES
 (11, 'BB 37500'),
 (12, 'BB 75000'),
 (13, 'BB 60000'),
-(14, 'TRAXX');
+(14, 'TRAXX'),
+(15, 'BB 27000'),
+(16, 'ESV');
 
 -- --------------------------------------------------------
 
@@ -1283,7 +1336,9 @@ INSERT INTO `type_constructeur` (`id_const`, `id_type`) VALUES
 (1, 7),
 (1, 14),
 (3, 14),
-(6, 14);
+(6, 14),
+(1, 15),
+(7, 16);
 
 --
 -- Index pour les tables déchargées
@@ -1351,7 +1406,7 @@ ALTER TABLE `type_constructeur`
 -- AUTO_INCREMENT pour la table `constructeur`
 --
 ALTER TABLE `constructeur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `lieux`
@@ -1363,25 +1418,25 @@ ALTER TABLE `lieux`
 -- AUTO_INCREMENT pour la table `livrees`
 --
 ALTER TABLE `livrees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT pour la table `medias`
 --
 ALTER TABLE `medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=364;
 
 --
 -- AUTO_INCREMENT pour la table `trains`
 --
 ALTER TABLE `trains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT pour la table `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Contraintes pour les tables déchargées

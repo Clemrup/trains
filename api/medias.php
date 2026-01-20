@@ -21,13 +21,14 @@ function getMediaPath($db, $trains_id) {
         'TGV Réseau-Duplex' => 'images/TGV_RD/',
         'TGV POS' => 'images/TGV_POS/',
         'Corail réversible' => 'images/Corail/',
+        'ESV' => 'images/ESV/',
     ];
     
     if (isset($paths[$type_nom])) {
         return $paths[$type_nom];
     }
     
-    if (in_array($type_nom, ['BB 26000', 'BB 37000', 'BB 37500', 'BB 60000'])) {
+    if (str_contains($type_nom, 'BB')) {
         return 'images/BB/';
     }
     

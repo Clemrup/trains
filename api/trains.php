@@ -28,7 +28,7 @@ function getMediaPath($db, $trains_id) {
         return $paths[$type_nom];
     }
     
-    if (in_array($type_nom, ['BB 26000', 'BB 37000', 'BB 37500', 'BB 60000'])) {
+    if (str_contains($type_nom, 'BB')) {
         return 'images/BB/';
     }
     
@@ -63,7 +63,7 @@ function ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $i
 // Fonction pour déterminer le nom du train
 function getTrainName($type_nom, $numero_principal, $numero_secondaire = null) {
     if ($numero_secondaire) {
-        if ($type_nom == 'BB 75000' || $type_nom == 'BB 60000') {
+        if (str_contains($type_nom, 'BB')) {
             return "BB " . $numero_principal;
         } else {
             return $type_nom . " " . $numero_principal . "/" . $numero_secondaire;
@@ -78,7 +78,7 @@ function getTrainName($type_nom, $numero_principal, $numero_secondaire = null) {
         'Corail réversible' => 'Corail',
     ];
     
-    if (in_array($type_nom, ['BB 26000', 'BB 37000', 'BB 37500', 'BB 60000'])) {
+    if (str_contains($type_nom, 'BB')) {
         return 'BB ' . $numero_principal;
     }
     
@@ -95,10 +95,10 @@ $action = $_GET['action'] ?? null;
 // GET: Récupérer les trains
 if ($method === 'GET') {
     if ($action === 'list') {
-        $stmt = $db->query("SELECT id, nom FROM trains ORDER BY nom");
+        $stmt = $db->query("SELECT id, nom FROM trains ORDER BY nom ASC");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     } elseif ($action === 'types') {
-        $stmt = $db->query("SELECT * FROM types");
+        $stmt = $db->query("SELECT * FROM types ORDER BY nom ASC");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }
@@ -120,7 +120,7 @@ elseif ($method === 'POST') {
     
     try {
         // Récupérer le nom du type
-        $stmtType = $db->prepare("SELECT nom FROM types WHERE id = :id");
+        $stmtType = $db->prepare("SELECT nom FROM types WHERE id = :id ORDER BY nom ASC");
         $stmtType->execute([':id' => $type_id]);
         $type_nom = $stmtType->fetchColumn();
         

@@ -110,7 +110,7 @@
                                         echo '<h3>' . htmlspecialchars($type_nom) . '</h3>';
                                         echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '/'. htmlspecialchars($train['numero_secondaire']) .'</p>';
                                     }
-                                    elseif($type_nom == "BB 75000" || $type_nom == "BB 60000"){
+                                    elseif($type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
                                         echo '<h3> BB </h3>';
                                         echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
                                     }
