@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 20 jan. 2026 à 17:23
+-- Généré le : dim. 25 jan. 2026 à 12:51
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -43,7 +43,10 @@ INSERT INTO `constructeur` (`id`, `nom`) VALUES
 (4, 'Usine ferroviaire de Reichshoffen'),
 (5, 'GEC Alsthom'),
 (6, 'Adtranz'),
-(7, 'Socofer');
+(7, 'Socofer'),
+(8, 'Gaston Moyse'),
+(9, 'Établissements Fauvet Girel'),
+(10, 'MTE');
 
 -- --------------------------------------------------------
 
@@ -74,7 +77,8 @@ INSERT INTO `lieux` (`id`, `nom`) VALUES
 (11, 'École-Valentin'),
 (12, 'Paris Gare de Lyon'),
 (13, 'Altkirch'),
-(14, 'Dannemarie');
+(14, 'Dannemarie'),
+(15, 'Strasbourg');
 
 -- --------------------------------------------------------
 
@@ -85,38 +89,42 @@ INSERT INTO `lieux` (`id`, `nom`) VALUES
 CREATE TABLE `livrees` (
   `id` int(11) NOT NULL,
   `nom` varchar(255) NOT NULL,
-  `color` varchar(255) DEFAULT NULL
+  `MainColor` varchar(255) DEFAULT NULL,
+  `TextColor` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `livrees`
 --
 
-INSERT INTO `livrees` (`id`, `nom`, `color`) VALUES
-(1, 'Lorraine', '#ffff0055'),
-(2, 'Alsace', '#ff333355'),
-(3, 'InOui', '#bbbbbb55'),
-(4, 'Franche-Comté', '#00aa6655'),
-(5, 'FRET', '#2fba85dd'),
-(6, 'Carmillon', '#66666655'),
-(7, 'Lyria', '#ff000077'),
-(8, 'Transfrontalière', '#0022aa66'),
-(9, 'Grand Est', '#007bff55'),
-(10, 'Mobigo', '#66ff0055'),
-(11, 'Neutre', '#3366ff55'),
-(12, 'Bourgogne', '#ffdd0055'),
-(13, 'Europorte', '#ccccee55'),
-(14, 'Fluo', '#d7ff00aa'),
-(15, 'Champagne-Ardenne', '#f7b50088'),
-(16, 'Haute-Normandie', '#00a6d655'),
-(17, 'Ligne des Hirondelles', '#fffb0088'),
-(18, 'InOui Disneyland', '#00aa6699'),
-(19, 'Akiem', '#7a7c8099'),
-(20, 'Infra', '#ffee00aa'),
-(21, 'Neutre Gris', '#11111125'),
-(22, 'InOui LGBT', 'linear-gradient(to bottom,#e4030388 0%,#e4030388 16.66%,#ff8c0088 16.66%,#ff8c0088 33.33%,#ffed0088 33.33%,#ffed0088 50%,#00802688 50%,#00802688 66.66%,#004dff88 66.66%,#004dff88 83.33%,#75078788 83.33%,#75078788 100%);'),
-(23, 'DB', '#ff111188'),
-(24, 'Vigirail', '#FF6A0088');
+INSERT INTO `livrees` (`id`, `nom`, `MainColor`, `TextColor`) VALUES
+(1, 'Lorraine', '#ffff0055', '#666600'),
+(2, 'Alsace', '#ff333355', '#cc0000'),
+(3, 'InOui', '#bbbbbb55', '#c8102e'),
+(4, 'Franche-Comté', '#00aa6655', '#007a4d'),
+(5, 'FRET', '#2fba85dd', '#1a4d3c'),
+(6, 'Carmillon', '#66666655', '#4d4d4d'),
+(7, 'Lyria', '#ff000077', '#dddddd'),
+(8, 'Transfrontalière', '#0022aa66', '#001a80'),
+(9, 'Grand Est', '#007bff55', '#005bbf'),
+(10, 'Mobigo', '#66ff0055', '#339900'),
+(11, 'Neutre', '#3366ff55', '#0044cc'),
+(12, 'Bourgogne', '#ffdd0055', '#665500'),
+(13, 'Europorte', '#ccccee55', '#8888bb'),
+(14, 'Fluo', '#d7ff00aa', '#0033cc'),
+(15, 'Champagne-Ardenne', '#f7b50088', '#664400'),
+(16, 'Haute-Normandie', '#00a6d655', '#007299'),
+(17, 'Ligne des Hirondelles', '#fffb0088', '#666600'),
+(18, 'InOui Disneyland', '#00aa6699', '#c8102e'),
+(19, 'Akiem', '#7a7c8099', '#5a5c60'),
+(20, 'Infra Jaune', '#ffee00aa', '#666600'),
+(21, 'Neutre Gris', '#11111125', '#333333'),
+(22, 'InOui LGBT', 'linear-gradient(to bottom,#e4030388 0%,#e4030388 16.66%,#ff8c0088 16.66%,#ff8c0088 33.33%,#ffed0088 33.33%,#ffed0088 50%,#00802688 50%,#00802688 66.66%,#004dff88 66.66%,#004dff88 83.33%,#75078788 83.33%,#75078788 100%);', '#101010'),
+(23, 'DB', '#ff111188', '#bb0000'),
+(24, 'Vigirail', '#ff6a0088', '#cc3300'),
+(25, 'Infra orange', '#f05a28aa', '#663300'),
+(26, 'Béton', '#b0aea899', '#4d4d4d'),
+(27, 'VSOE', '#0b1c2ddd', '#c9a44c');
 
 -- --------------------------------------------------------
 
@@ -504,7 +512,15 @@ INSERT INTO `medias` (`id`, `type_media`, `media_url`, `id_lieu1`, `id_lieu2`, `
 (364, 'video', 'https://youtube.com/embed/500qi8pjLTY', 7, NULL, '2025-07-02'),
 (365, 'image', 'images/Régiolis/85543M_3.jpg', 7, NULL, '2025-07-02'),
 (366, 'image', 'images/Régiolis/85537M_85543M.jpg', 7, NULL, '2025-07-02'),
-(367, 'image', 'images/BB/26147_85543M_85537M.jpg', 7, NULL, '2025-07-02');
+(367, 'image', 'images/BB/26147_85543M_85537M.jpg', 7, NULL, '2025-07-02'),
+(368, 'image', 'images/TGV_D/823_4702_825.jpg', 15, NULL, '2025-07-02'),
+(369, 'image', 'images/TGV_D/4702_823_825.jpg', 15, NULL, '2025-07-02'),
+(370, 'image', 'images/TGV_D/823_825_564.jpg', 15, NULL, '2025-07-02'),
+(371, 'image', 'images/BB/26148.jpg', 15, NULL, '2025-07-02'),
+(372, 'image', 'images/Régiolis/83607L_823.jpg', 15, NULL, '2025-07-02'),
+(373, 'image', 'images/BB/26145R.jpg', 15, NULL, '2025-07-02'),
+(374, 'image', 'images/Corail/130_3.jpg', 15, NULL, '2025-07-02'),
+(375, 'image', 'images/TGV_D/4704.jpg', 15, NULL, '2025-07-02');
 
 -- --------------------------------------------------------
 
@@ -761,7 +777,12 @@ INSERT INTO `trains` (`id`, `type_id`, `nom`, `numero_principal`, `numero_second
 (237, 9, 'BB 26151', '26151', NULL, '2026-01-20 16:14:01', 9),
 (238, 16, 'ESV 702', '702', NULL, '2026-01-20 16:33:31', 24),
 (239, 2, 'AGC 76677/78', '76677', '78', '2026-01-20 16:42:38', 15),
-(240, 4, 'TGV-D 728', '728', NULL, '2026-01-20 16:50:08', 3);
+(240, 4, 'TGV-D 728', '728', NULL, '2026-01-20 16:50:08', 3),
+(241, 4, 'TGV-D 4702', '4702', NULL, '2026-01-23 16:05:21', 3),
+(242, 4, 'TGV-D 825', '825', NULL, '2026-01-23 16:05:52', 3),
+(243, 17, 'Y 8000 8024/608024', '8024', '608024', '2026-01-25 11:20:14', 25),
+(244, 2, 'AGC 76709/10', '76709', '10', '2026-01-25 11:22:56', 2),
+(245, 9, 'BB 26019', '26019', NULL, '2026-01-25 11:32:35', 27);
 
 -- --------------------------------------------------------
 
@@ -791,6 +812,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (7, 5),
 (7, 6),
 (7, 7),
+(7, 375),
 (8, 8),
 (9, 9),
 (10, 10),
@@ -835,6 +857,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (22, 22),
 (22, 45),
 (23, 22),
+(23, 370),
 (24, 23),
 (25, 24),
 (25, 191),
@@ -1041,6 +1064,10 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (103, 353),
 (104, 112),
 (105, 113),
+(105, 368),
+(105, 369),
+(105, 370),
+(105, 372),
 (106, 114),
 (106, 338),
 (106, 348),
@@ -1151,10 +1178,12 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (162, 330),
 (162, 350),
 (162, 351),
+(162, 371),
 (163, 189),
 (163, 196),
 (163, 334),
 (163, 350),
+(163, 374),
 (164, 189),
 (164, 194),
 (164, 199),
@@ -1211,6 +1240,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (195, 278),
 (195, 317),
 (195, 326),
+(195, 373),
 (196, 237),
 (197, 238),
 (198, 239),
@@ -1254,6 +1284,7 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (217, 283),
 (217, 287),
 (217, 288),
+(217, 372),
 (218, 287),
 (218, 288),
 (219, 293),
@@ -1284,7 +1315,12 @@ INSERT INTO `trains_medias` (`train_id`, `media_id`) VALUES
 (238, 356),
 (238, 357),
 (239, 358),
-(240, 362);
+(240, 362),
+(241, 368),
+(241, 369),
+(242, 368),
+(242, 369),
+(242, 370);
 
 -- --------------------------------------------------------
 
@@ -1317,7 +1353,9 @@ INSERT INTO `types` (`id`, `nom`) VALUES
 (13, 'BB 60000'),
 (14, 'TRAXX'),
 (15, 'BB 27000'),
-(16, 'ESV');
+(16, 'ESV'),
+(17, 'Y 8000'),
+(18, 'BB 22200');
 
 -- --------------------------------------------------------
 
@@ -1350,7 +1388,11 @@ INSERT INTO `type_constructeur` (`id_const`, `id_type`) VALUES
 (3, 14),
 (6, 14),
 (1, 15),
-(7, 16);
+(7, 16),
+(8, 17),
+(9, 17),
+(1, 18),
+(10, 18);
 
 --
 -- Index pour les tables déchargées
@@ -1418,37 +1460,37 @@ ALTER TABLE `type_constructeur`
 -- AUTO_INCREMENT pour la table `constructeur`
 --
 ALTER TABLE `constructeur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `lieux`
 --
 ALTER TABLE `lieux`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `livrees`
 --
 ALTER TABLE `livrees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT pour la table `medias`
 --
 ALTER TABLE `medias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=368;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
 
 --
 -- AUTO_INCREMENT pour la table `trains`
 --
 ALTER TABLE `trains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
 
 --
 -- AUTO_INCREMENT pour la table `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Contraintes pour les tables déchargées

@@ -28,7 +28,8 @@
             l2.nom AS lieu2,
     
             livrees.nom AS livrees_nom,
-            livrees.color AS livrees_color
+            livrees.MainColor AS livrees_MainColor,
+            livrees.TextColor AS livrees_TextColor
     
         FROM trains t
         JOIN types ty ON t.type_id = ty.id
@@ -55,7 +56,8 @@
                 'numero_principal' => $row['numero_principal'],
                 'numero_secondaire' => $row['numero_secondaire'],
                 'livrees_nom' => $row['livrees_nom'],
-                'livrees_color' => $row['livrees_color'],
+                'livrees_MainColor' => $row['livrees_MainColor'],
+                'livrees_TextColor' => $row['livrees_TextColor'],
                 'type_nom' => $row['type_nom'],
                 'medias' => []
             ];
@@ -100,25 +102,29 @@
                         echo "<h2 class='type-titre'>" . htmlspecialchars($type_nom) . "</h2>";
                         echo "<div class='train-groupe'>";
                         foreach ($trains_type as $train) {
-                            echo '<div class="train-card" style="background:'. htmlspecialchars($train['livrees_color']) .';">';
+                            echo '<div class="train-card" style="background:'. htmlspecialchars($train['livrees_MainColor']) .';">';
                                 echo '<div class="train-header">';
                                     if ($type_nom == "BB 37000" || $type_nom == "BB 37500"|| $type_nom == "BB 26000"){
-                                        echo '<h3> BB </h3>';
-                                        echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
+                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
+                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
                                     }
                                     elseif($type_nom == "AGC" || $type_nom == "Régiolis"){
-                                        echo '<h3>' . htmlspecialchars($type_nom) . '</h3>';
-                                        echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '/'. htmlspecialchars($train['numero_secondaire']) .'</p>';
+                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
+                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '/'. htmlspecialchars($train['numero_secondaire']) .'</p>';
                                     }
-                                    elseif($type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
-                                        echo '<h3> BB </h3>';
-                                        echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
+                                    elseif($type_nom == "BB 22200" || $type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
+                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
+                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
+                                    }
+                                    elseif($type_nom == "Y 8000"){
+                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> Y </h3>';
+                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
                                     }
                                     else{
-                                        echo '<h3>' . htmlspecialchars($type_nom) . '</h3>';
-                                        echo '<p class="train-numero">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
+                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
+                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
                                     }
-                                    echo '<p class="train-livree"> livrée ' . htmlspecialchars($train['livrees_nom']) . '</p>';
+                                    echo '<p class="train-livree" class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> livrée ' . htmlspecialchars($train['livrees_nom']) . '</p>';
                                 echo '</div>';
                             if (!empty($train['medias'])) {
                                 echo '<div class="medias-column ">';
@@ -173,7 +179,8 @@
         img.style.cursor = 'pointer';
         img.addEventListener('click', () => {
             lightboxImg.src = img.dataset.src || img.src;
-            const desc = img.closest('.train-card').querySelector('.media-lieu');
+            // Récupérer le texte qui suit directement le conteneur de l'image
+            const desc = img.closest('.media-container').nextElementSibling;
             lightboxDesc.textContent = desc ? desc.textContent : '';
             lightbox.classList.remove('hidden');
         });
