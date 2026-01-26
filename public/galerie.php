@@ -114,8 +114,13 @@
                                     }
                                     elseif($type_nom == "BB 22200" || $type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
                                         echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
-                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
-                                    }
+                                        if ($train['numero_secondaire']){
+                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
+                                        }
+                                        else{
+                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';}
+                                        }
+                                        
                                     elseif($type_nom == "Y 8000"){
                                         echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> Y </h3>';
                                         echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';

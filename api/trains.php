@@ -1,39 +1,18 @@
 <?php
+// Fonction utilitaire pour extraire les lieux depuis les données du formulaire
+function getLieuxFromData($data) {
+    if (($data['type_lieu'] ?? null) == "2") {
+        $id_lieu1 = $data['lieu1_double'] ?? null;
+        $id_lieu2 = $data['lieu2_double'] ?? null;
+    } else {
+        $id_lieu1 = $data['lieu1'] ?? null;
+        $id_lieu2 = null;
+    }
+    return [$id_lieu1, $id_lieu2];
+}
+
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
-
-// Fonction pour obtenir le chemin d'image en fonction du type de train
-function getMediaPath($db, $trains_id) {
-    if (is_array($trains_id)) {
-        $train_id = $trains_id[0] ?? null;
-    } else {
-        $train_id = $trains_id;
-    }
-    
-    if (!$train_id) return 'images/';
-    
-    $stmt = $db->prepare("SELECT types.nom FROM trains JOIN types ON trains.type_id = types.id WHERE trains.id = :id");
-    $stmt->execute([':id' => $train_id]);
-    $type_nom = $stmt->fetchColumn();
-    
-    $paths = [
-        'TGV Réseau' => 'images/TGV_R/',
-        'TGV Duplex' => 'images/TGV_D/',
-        'TGV Réseau-Duplex' => 'images/TGV_RD/',
-        'TGV POS' => 'images/TGV_POS/',
-        'Corail réversible' => 'images/Corail/',
-    ];
-    
-    if (isset($paths[$type_nom])) {
-        return $paths[$type_nom];
-    }
-    
-    if (str_contains($type_nom, 'BB')) {
-        return 'images/BB/';
-    }
-    
-    return 'images/' . str_replace(' ', '_', $type_nom) . '/';
-}
 
 // Fonction pour ajouter un média
 function ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $id_lieu1, $id_lieu2 = null) {
@@ -100,6 +79,11 @@ if ($method === 'GET') {
     } elseif ($action === 'types') {
         $stmt = $db->query("SELECT * FROM types ORDER BY nom ASC");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    } elseif ($action === 'list_by_type' && isset($_GET['type_id'])) {
+        $type_id = (int)$_GET['type_id'];
+        $stmt = $db->prepare("SELECT id, nom FROM trains WHERE type_id = :type_id ORDER BY nom ASC");
+        $stmt->execute([':type_id' => $type_id]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }
 
@@ -145,27 +129,17 @@ elseif ($method === 'POST') {
         // Gestion optionnelle du média
         $type_media = $data['type_media'] ?? null;
         if (!empty($type_media)) {
-            $type_lieu = $data['type_lieu'] ?? null;
             $date_ajout = $data['date_ajout'] ?? null;
-            
-            if ($type_lieu == "2") {
-                $id_lieu1 = $data['lieu1_double'] ?? null;
-                $id_lieu2 = $data['lieu2_double'] ?? null;
-            } else {
-                $id_lieu1 = $data['lieu1'] ?? null;
-                $id_lieu2 = null;
-            }
-        
+            list($id_lieu1, $id_lieu2) = getLieuxFromData($data);
             if ($type_media === 'image') {
                 $media_path = trim($data['media_path'] ?? '');
                 if ($media_path) {
-                    $debut_media_path = getMediaPath($db, $train_id);
-                    ajouterMedia($db, $train_id, $type_media, $debut_media_path . $media_path . '.jpg', $date_ajout, $id_lieu1, $id_lieu2);
+                    ajouterMedia($db, $train_id, $type_media, $media_path . '.jpg', $date_ajout, $id_lieu1, $id_lieu2);
                 }
             } elseif ($type_media === 'video') {
-                $media_path = trim($data['media_url'] ?? '');
-                if ($media_path) {
-                    ajouterMedia($db, $train_id, $type_media, $media_path, $date_ajout, $id_lieu1, $id_lieu2);
+                $media_url = trim($data['media_url'] ?? '');
+                if ($media_url) {
+                    ajouterMedia($db, $train_id, $type_media, $media_url, $date_ajout, $id_lieu1, $id_lieu2);
                 }
             }
         }

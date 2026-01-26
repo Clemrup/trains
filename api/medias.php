@@ -1,39 +1,17 @@
 <?php
+// Fonction utilitaire pour extraire les lieux depuis les données du formulaire
+function getLieuxFromData($data) {
+    if (($data['type_lieu'] ?? null) == "2") {
+        $id_lieu1 = $data['lieu1_double'] ?? null;
+        $id_lieu2 = $data['lieu2_double'] ?? null;
+    } else {
+        $id_lieu1 = $data['lieu1'] ?? null;
+        $id_lieu2 = null;
+    }
+    return [$id_lieu1, $id_lieu2];
+}
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
-
-function getMediaPath($db, $trains_id) {
-    if (is_array($trains_id)) {
-        $train_id = $trains_id[0] ?? null;
-    } else {
-        $train_id = $trains_id;
-    }
-    
-    if (!$train_id) return 'images/';
-    
-    $stmt = $db->prepare("SELECT types.nom FROM trains JOIN types ON trains.type_id = types.id WHERE trains.id = :id");
-    $stmt->execute([':id' => $train_id]);
-    $type_nom = $stmt->fetchColumn();
-    
-    $paths = [
-        'TGV Réseau' => 'images/TGV_R/',
-        'TGV Duplex' => 'images/TGV_D/',
-        'TGV Réseau-Duplex' => 'images/TGV_RD/',
-        'TGV POS' => 'images/TGV_POS/',
-        'Corail réversible' => 'images/Corail/',
-        'ESV' => 'images/ESV/',
-    ];
-    
-    if (isset($paths[$type_nom])) {
-        return $paths[$type_nom];
-    }
-    
-    if (str_contains($type_nom, 'BB')) {
-        return 'images/BB/';
-    }
-    
-    return 'images/' . str_replace(' ', '_', $type_nom) . '/';
-}
 
 function ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $id_lieu1, $id_lieu2 = null) {
     if (!$media_path) return false;
@@ -97,19 +75,11 @@ elseif ($method === 'POST') {
     }
     
     try {
-        if ($type_lieu == "2") {
-            $id_lieu1 = $data['lieu1_double'] ?? null;
-            $id_lieu2 = $data['lieu2_double'] ?? null;
-        } else {
-            $id_lieu1 = $data['lieu1'] ?? null;
-            $id_lieu2 = null;
-        }
-        
+        list($id_lieu1, $id_lieu2) = getLieuxFromData($data);
         if ($type_media === 'image') {
             $media_path = trim($media_path ?? '');
             if ($media_path) {
-                $debut_media_path = getMediaPath($db, $trains_id);
-                ajouterMedia($db, $trains_id, $type_media, $debut_media_path . $media_path . '.jpg', $date_ajout, $id_lieu1, $id_lieu2);
+                ajouterMedia($db, $trains_id, $type_media, $media_path . '.jpg', $date_ajout, $id_lieu1, $id_lieu2);
             }
         } elseif ($type_media === 'video') {
             $media_path = trim($media_url ?? '');
@@ -117,7 +87,6 @@ elseif ($method === 'POST') {
                 ajouterMedia($db, $trains_id, $type_media, $media_path, $date_ajout, $id_lieu1, $id_lieu2);
             }
         }
-        
         http_response_code(201);
         echo json_encode(['success' => true, 'message' => 'Média ajouté avec succès']);
     } catch (PDOException $e) {

@@ -23,19 +23,6 @@ selectSets.forEach(set => {
     });
 });
 
-// Activer/désactiver la sélection multiple de trains
-const train_id = document.getElementById("train_id");
-if (train_id) {
-    train_id.addEventListener("change", function() { 
-        if (train_id.value === "") {
-            train_id.multiple = false;
-            train_id.size = false;
-        } else { 
-            train_id.multiple = true; 
-            train_id.size = "6";
-        } 
-    });
-}
 
 // Gérer l'affichage des sélecteurs de lieu
 document.querySelectorAll('select[name="type_lieu"]').forEach(function(sel) {
@@ -90,23 +77,38 @@ document.getElementById('form-train')?.addEventListener('submit', async (e) => {
 // Soumettre le formulaire d'ajout de média via AJAX
 document.getElementById('form-media')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+    // Utiliser selectedTrains pour récupérer tous les trains sélectionnés (tous types)
+    let allSelected = [];
+    if (typeof selectedTrains !== 'undefined') {
+        Object.values(selectedTrains).forEach(set => set.forEach(id => allSelected.push(id)));
+    } else {
+        // fallback (ne devrait pas arriver)
+        const formData = new FormData(e.target);
+        allSelected = formData.getAll('train_id[]');
+    }
+        console.log('selectedTrains:', selectedTrains);
+        console.log('allSelected:', allSelected);
+
     const formData = new FormData(e.target);
-    const trains_id = formData.getAll('train_id[]');
-    
+    let media_path = formData.get('media_path');
+    if (formData.get('type_media') === 'image') {
+        const folder = formData.get('image_folder') || '';
+        media_path = folder + media_path;
+    }
     const data = {
-        trains_id: trains_id,
+        trains_id: allSelected,
         type_media: formData.get('type_media'),
         type_lieu: formData.get('type_lieu'),
         date_ajout: formData.get('date_ajout'),
-        media_path: formData.get('media_path'),
+        media_path: media_path,
         media_url: formData.get('media_url'),
         lieu1: formData.get('lieu1'),
         lieu2: formData.get('lieu2'),
         lieu1_double: formData.get('lieu1_double'),
         lieu2_double: formData.get('lieu2_double')
     };
-    
+
+    console.log('DATA ENVOYÉ:', data);
     try {
         const response = await fetch('../api/medias.php', {
             method: 'POST',
@@ -115,9 +117,9 @@ document.getElementById('form-media')?.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify(data)
         });
-        
+
         const result = await response.json();
-        
+
         if (response.ok) {
             alert('✅ ' + result.message);
             e.target.reset();
