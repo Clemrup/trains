@@ -1,3 +1,40 @@
+.train-groupe {
+    /* ...existing code... */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(.4,0,.2,1);
+    margin-bottom: 2.5rem;
+}
+.train-groupe.open {
+    max-height: calc((280px + 1rem + 30px) * 4 + 200px); /* 4 lignes + header + marge */
+    overflow-y: auto;
+}
+.type-header-on-group {
+    /* ...existing code... */
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+.type-header-on-group:hover {
+    background: #e3eaf6;
+}
+/* --- FAMILLE DISTINCTE --- */
+.famille-bloc {
+    background: linear-gradient(90deg, #f0f4fa 80%, #e3eaf6 100%);
+    border: 2.5px solid #0077b6;
+    border-radius: 22px;
+    margin-bottom: 3.5rem;
+    box-shadow: 0 2px 12px rgba(0,119,182,0.07);
+    padding: 2.5rem 2.5vw 2.5rem 2vw;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+.famille-titre {
+    font-size: 2.1rem;
+    color: #0a3d62;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #e3eaf6;
+}
 /* --- RESET / BASE --- */
 * {
     margin: 0;
@@ -153,9 +190,21 @@ nav {
     color: #1f2a44;
     border-left: 6px solid #0077b6;
     padding-left: 10px;
-    margin-top: 2rem;
+    margin-bottom: 10px;
 }
-
+.type-bloc {
+    background: #00000015;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 10px 20px 0 0;
+    margin-top: 30px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+.type-bloc:hover {
+    background: #e3eaf6;
+}
 /* ====== TRAIN-GROUPE : max 4 lignes → scroll si plus ====== */
 .train-groupe {
     display: flex;
@@ -163,10 +212,22 @@ nav {
     justify-content: center;
     gap: 1.5rem;
 
+    padding: 0;
+    border-radius: 0 20px 20px 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.4s cubic-bezier(.4,0,.2,1);
     background: #0001;
-    padding: 30px 0;
-    border-radius: 20px;
+}
 
+.train-groupe.open {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+
+    padding: 30px 0;
+    border-radius: 0 20px 20px 20px;
     max-height: calc((280px + 1rem + 30px) * 4); /* hauteur = 4 lignes */
     overflow-y: auto;
 }

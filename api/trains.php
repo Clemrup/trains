@@ -71,7 +71,7 @@ function getTrainName($type_nom, $numero_principal, $numero_secondaire = null) {
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
 
-// GET: Récupérer les trains
+// GET: Récupérer les trains, types, familles pour l'UI à onglets
 if ($method === 'GET') {
     if ($action === 'list') {
         $stmt = $db->query("SELECT id, nom FROM trains ORDER BY nom ASC");
@@ -84,6 +84,22 @@ if ($method === 'GET') {
         $stmt = $db->prepare("SELECT id, nom FROM trains WHERE type_id = :type_id ORDER BY nom ASC");
         $stmt->execute([':type_id' => $type_id]);
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    } elseif ($action === 'familles_types_trains') {
+        // Récupérer toutes les familles
+        $familles = $db->query("SELECT id, nom FROM famille_type ORDER BY nom ASC")->fetchAll(PDO::FETCH_ASSOC);
+        // Pour chaque famille, récupérer les types qui ont au moins un train
+        foreach ($familles as &$famille) {
+            $types = $db->prepare("
+                SELECT t.id, t.nom
+                FROM types t
+                WHERE t.id_famille = :id_famille
+                  AND EXISTS (SELECT 1 FROM trains tr WHERE tr.type_id = t.id)
+                ORDER BY t.nom ASC
+            ");
+            $types->execute([':id_famille' => $famille['id']]);
+            $famille['types'] = $types->fetchAll(PDO::FETCH_ASSOC);
+        }
+        echo json_encode($familles);
     }
 }
 

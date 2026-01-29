@@ -11,46 +11,58 @@
         die("Erreur : " . $e->getMessage());
     }
 
-    // --- Récupération des trains avec leurs médias ---
+    // --- Récupération des trains avec famille, type, description, médias ---
     $sql = "
         SELECT 
             t.id AS train_id, 
             t.nom AS train_nom,
             t.numero_principal,
             t.numero_secondaire, 
+            ty.id AS type_id,
             ty.nom AS type_nom,
-    
+            ty.description AS type_description,
+            f.id AS famille_id,
+            f.nom AS famille_nom,
             m.type_media, 
             m.media_url, 
             m.date_ajout,
-    
             l1.nom AS lieu1,
             l2.nom AS lieu2,
-    
             livrees.nom AS livrees_nom,
             livrees.MainColor AS livrees_MainColor,
             livrees.TextColor AS livrees_TextColor
-    
         FROM trains t
         JOIN types ty ON t.type_id = ty.id
+        JOIN famille_type f ON ty.id_famille = f.id
         LEFT JOIN livrees ON livrees.id = t.livree_id
         LEFT JOIN trains_medias tm ON t.id = tm.train_id
         LEFT JOIN medias m ON tm.media_id = m.id
         LEFT JOIN lieux l1 ON l1.id = m.id_lieu1
         LEFT JOIN lieux l2 ON l2.id = m.id_lieu2
-    
-        ORDER BY ty.nom, t.nom
-    ";
+        ORDER BY f.nom, ty.nom, t.nom";
 
     $stmt = $db->query($sql);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- Regrouper les médias par train ---
-    $trains = [];
+    // --- Regrouper les trains par famille > type ---
+    $trains_par_famille = [];
     foreach ($rows as $row) {
+        $famille_nom = $row['famille_nom'];
+        $type_nom = $row['type_nom'];
+        $type_description = $row['type_description'];
         $tid = $row['train_id'];
-        if (!isset($trains[$tid])) {
-            $trains[$tid] = [
+
+        if (!isset($trains_par_famille[$famille_nom])) {
+            $trains_par_famille[$famille_nom] = [];
+        }
+        if (!isset($trains_par_famille[$famille_nom][$type_nom])) {
+            $trains_par_famille[$famille_nom][$type_nom] = [
+                'description' => $type_description,
+                'trains' => []
+            ];
+        }
+        if (!isset($trains_par_famille[$famille_nom][$type_nom]['trains'][$tid])) {
+            $trains_par_famille[$famille_nom][$type_nom]['trains'][$tid] = [
                 'train_id' => $tid,
                 'train_nom' => $row['train_nom'],
                 'numero_principal' => $row['numero_principal'],
@@ -58,12 +70,12 @@
                 'livrees_nom' => $row['livrees_nom'],
                 'livrees_MainColor' => $row['livrees_MainColor'],
                 'livrees_TextColor' => $row['livrees_TextColor'],
-                'type_nom' => $row['type_nom'],
+                'type_nom' => $type_nom,
                 'medias' => []
             ];
         }
         if ($row['media_url']) {
-            $trains[$tid]['medias'][] = [
+            $trains_par_famille[$famille_nom][$type_nom]['trains'][$tid]['medias'][] = [
                 'type_media' => $row['type_media'],
                 'media_url' => $row['media_url'],
                 'lieu1' => $row['lieu1'],
@@ -71,12 +83,6 @@
                 'date_ajout' => $row['date_ajout']
             ];
         }
-    }
-
-    // --- Organiser par type de train ---
-    $trains_par_type = [];
-    foreach ($trains as $train) {
-        $trains_par_type[$train['type_nom']][] = $train;
     }
 ?>
     <head>
@@ -95,70 +101,83 @@
 
         <section class="galerie">
             <?php
-                if (!$trains_par_type) {
+                if (empty($trains_par_famille)) {
                     echo "<p style='text-align:center; font-size:1.1rem;'>Aucun train enregistré pour le moment.</p>";
                 } else {
-                    foreach ($trains_par_type as $type_nom => $trains_type) {
-                        echo "<h2 class='type-titre'>" . htmlspecialchars($type_nom) . "</h2>";
-                        echo "<div class='train-groupe'>";
-                        foreach ($trains_type as $train) {
-                            echo '<div class="train-card" style="background:'. htmlspecialchars($train['livrees_MainColor']) .';">';
-                                echo '<div class="train-header">';
-                                    if ($type_nom == "BB 37000" || $type_nom == "BB 37500"|| $type_nom == "BB 26000"){
-                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
-                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
-                                    }
-                                    elseif($type_nom == "AGC" || $type_nom == "Régiolis"){
-                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
-                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '/'. htmlspecialchars($train['numero_secondaire']) .'</p>';
-                                    }
-                                    elseif($type_nom == "BB 22200" || $type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
-                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
-                                        if ($train['numero_secondaire']){
+                    foreach ($trains_par_famille as $famille_nom => $types) {
+                        echo "<div class='famille-bloc'>";
+                        echo "<h1 class='famille-titre'>" . htmlspecialchars($famille_nom) . "</h1>";
+                        foreach ($types as $type_nom => $type_data) {
+                            echo "<div class='type-group'>";
+                            echo "<div class='type-bloc' tabindex='0'>";
+                            echo "<h2 class='type-titre'>" . htmlspecialchars($type_nom) . "</h2>";
+                            if (!empty($type_data['description'])) {
+                                echo "<p class='type-description'>" . nl2br(htmlspecialchars($type_data['description'])) . "</p>";
+                            }
+                            echo "</div>";
+                            echo "<div class='train-groupe'>";
+                            foreach ($type_data['trains'] as $train) {
+                                echo '<div class="train-card" style="background:'. htmlspecialchars($train['livrees_MainColor']) .';">';
+                                    echo '<div class="train-header">';
+                                        // Affichage du nom/numéro selon le type (reprend la logique précédente)
+                                        if ($type_nom == "BB 37000" || $type_nom == "BB 37500"|| $type_nom == "BB 26000"){
+                                            echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
+                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
+                                        }
+                                        elseif($type_nom == "AGC" || $type_nom == "Régiolis"){
+                                            echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
+                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '/'. htmlspecialchars($train['numero_secondaire']) .'</p>';
+                                        }
+                                        elseif($type_nom == "BB 22200" || $type_nom == "BB 27000" || $type_nom == "BB 60000" || $type_nom == "BB 75000"){
+                                            echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> BB </h3>';
+                                            if ($train['numero_secondaire']){
+                                                echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
+                                            }
+                                            else{
+                                                echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
+                                            }
+                                        }
+                                        elseif($type_nom == "Y 8000"){
+                                            echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> Y </h3>';
                                             echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
                                         }
                                         else{
-                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';}
+                                            echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
+                                            echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
                                         }
-                                        
-                                    elseif($type_nom == "Y 8000"){
-                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> Y </h3>';
-                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '<br>('. htmlspecialchars($train['numero_secondaire']) .')</p>';
+                                        echo '<p class="train-livree" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> livrée ' . htmlspecialchars($train['livrees_nom']) . '</p>';
+                                    echo '</div>';
+                                if (!empty($train['medias'])) {
+                                    echo '<div class="medias-column">';
+                                    foreach ($train['medias'] as $media) {
+                                        if ($media['type_media'] === 'image') {
+                                            echo '<div class="media-container">';
+                                            echo '<img data-src="' . htmlspecialchars($media['media_url']) . '" alt="Image du train">';
+                                            echo '</div>';
+                                        } elseif ($media['type_media'] === 'video') {
+                                            $url = htmlspecialchars($media['media_url']) . "?controls=1&modestbranding=1&rel=0&showinfo=0";
+                                            echo '<div class="media-container">';
+                                            echo '<iframe data-src="' . $url . '" allowfullscreen></iframe>';
+                                            echo '</div>';
+                                        }
+                                        $date = DateTime::createFromFormat('Y-m-d', htmlspecialchars($media['date_ajout']));
+                                        $dateFormatee = $date ? $date->format('d/m/Y') : '';
+                                        if (empty($media['lieu2'])) {
+                                            echo '<p class="media-lieu"> Vu à ' . htmlspecialchars($media['lieu1']) . ' le ' . $dateFormatee .'</p>';
+                                        } else {
+                                            echo '<p class="media-lieu"> Vu entre ' . htmlspecialchars($media['lieu1']) . ' et ' . htmlspecialchars($media['lieu2']) . ' le ' . $dateFormatee .'</p>';
+                                        }
                                     }
-                                    else{
-                                        echo '<h3 style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">' . htmlspecialchars($type_nom) . '</h3>';
-                                        echo '<p class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';">N° ' . htmlspecialchars($train['numero_principal']) . '</p>';
-                                    }
-                                    echo '<p class="train-livree" class="train-numero" style="color:'. htmlspecialchars($train['livrees_TextColor']) .';"> livrée ' . htmlspecialchars($train['livrees_nom']) . '</p>';
-                                echo '</div>';
-                            if (!empty($train['medias'])) {
-                                echo '<div class="medias-column ">';
-                                foreach ($train['medias'] as $media) {
-                                    if ($media['type_media'] === 'image') {
-                                        echo '<div class="media-container">';
-                                        echo '<img data-src="' . htmlspecialchars($media['media_url']) . '" alt="Image du train">';
-                                        echo '</div>';
-                                    } elseif ($media['type_media'] === 'video') {
-                                        $url = htmlspecialchars($media['media_url']) . "?controls=1&modestbranding=1&rel=0&showinfo=0";
-                                        echo '<div class="media-container">';
-                                        echo '<iframe data-src="' . $url . '" allowfullscreen></iframe>';
-                                        echo '</div>';
-                                    }
-                                    $date = DateTime::createFromFormat('Y-m-d', htmlspecialchars($media['date_ajout']));
-                                    $dateFormatee = $date->format('d/m/Y');
-                                    if (empty($media['lieu2'])) {
-                                        echo '<p class="media-lieu"> Vu à ' . htmlspecialchars($media['lieu1']) . ' le ' . $dateFormatee .'</p>';
-                                    } else {
-                                        echo '<p class="media-lieu"> Vu entre ' . htmlspecialchars($media['lieu1']) . ' et ' . htmlspecialchars($media['lieu2']) . ' le ' . $dateFormatee .'</p>';
-                                    }
+                                    echo '</div>';
+                                } else {
+                                    echo '<p class="no-media">Aucun média associé.</p>';
                                 }
-                                echo '</div>'; // ferme la colonne de médias
-                            } else {
-                                echo '<p class="no-media">Aucun média associé.</p>';
+                                echo '</div>';
                             }
-                            echo '</div>'; // ferme la carte train
+                            echo "</div>";
+                            echo "</div>";
                         }
-                        echo '</div>'; // ferme le groupe
+                        echo "</div>";
                     }
                 }
             ?>
@@ -230,6 +249,15 @@
                         }
                     });
                 }
+            });
+        });
+        document.querySelectorAll('.type-group').forEach(typeGroup => {
+            const typeBloc = typeGroup.querySelector('.type-bloc');
+            const trainGroupe = typeGroup.querySelector('.train-groupe');
+            if (!typeBloc || !trainGroupe) return;
+            trainGroupe.classList.remove('open'); // fermé par défaut
+            typeBloc.addEventListener('click', () => {
+                trainGroupe.classList.toggle('open');
             });
         });
     });
