@@ -262,7 +262,6 @@ nav {
 }
 .train-livree {
     font-size: 0.9rem;
-    color: #444;
     margin-bottom: 0.8rem;
 }
 
@@ -385,6 +384,7 @@ nav {
     padding: 2rem;
     margin: 2rem 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 1300px;
 }
 
 .famille-title {
@@ -411,18 +411,19 @@ nav {
 }
 
 .type-description {
-    color: #555;
+    color: #1a237e;
     font-size: 0.95rem;
+    font-weight: 500;
     margin: 0.5rem 0;
     font-style: italic;
     line-height: 1.4;
 }
 
-/* Grille de trains 3 par 3 */
+/* Grille de trains 4 par ligne */
 .trains-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -430,7 +431,7 @@ nav {
 .train-card {
     cursor: pointer;
     border-radius: 12px;
-    padding: 1.2rem;
+    padding: 0.9rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     transition: all 0.3s ease;
     display: flex;
@@ -445,37 +446,48 @@ nav {
 }
 
 .train-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    align-items: center;
+    position: relative;
 }
 
 .train-header h4 {
+    grid-column: 1;
     margin: 0;
-    color: #1a1a1a;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.1;
     word-wrap: break-word;
+    text-align: center;
 }
 
 .train-livree {
+    grid-column: 1;
     margin: 0;
-    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-width: 100%;
+    text-align: center;
 }
 
 .expand-icon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     font-size: 1.2rem;
-    color: #666;
     transition: transform 0.3s ease;
-    align-self: flex-end;
-    margin-top: 0.5rem;
 }
 
 /* Conteneur des médias */
 .medias-container {
     overflow: hidden;
+    color: inherit;
+}
+
+.medias-container p {
+    color: inherit;
 }
 
 .medias-container .medias {
