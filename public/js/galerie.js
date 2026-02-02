@@ -71,6 +71,8 @@ async function loadGallery() {
 
         // Générer le HTML
         let html = ''
+        let trainCardId = 0
+        
         for (const [famille, types] of Object.entries(grouped)) {
             html += `<h2>${famille}</h2>`
             for (const [type, typeTrains] of Object.entries(types)) {
@@ -78,33 +80,35 @@ async function loadGallery() {
                 typeTrains.forEach(train => {
                     const livree = train.livrees
                     const style = livree?.main_color ? `background: ${livree.main_color}; color: ${livree.text_color};` : ''
+                    const cardId = `train-card-${trainCardId++}`
                     
                     html += `
-                        <div class="train-card" style="${style}">
-                            <h4>${train.nom}</h4>
-                            <p><strong>N°:</strong> ${train.numero_principal}${train.numero_secondaire ? ' / ' + train.numero_secondaire : ''}</p>
-                            ${livree ? `<p><strong>Livrée:</strong> ${livree.nom}</p>` : ''}
-                            
-                            <div class="medias">
+                        <div class="train-card" id="${cardId}" style="${style}">
+                            <div class="train-header" style="cursor: pointer; user-select: none;">
+                                <h4 style="margin: 0;">${train.nom}</h4>
+                                <p style="margin: 5px 0;"><strong>N°:</strong> ${train.numero_principal}${train.numero_secondaire ? ' / ' + train.numero_secondaire : ''}</p>
+                                ${livree ? `<p style="margin: 5px 0;"><strong>Livrée:</strong> ${livree.nom}</p>` : ''}
+                                <span class="expand-icon" style="float: right; font-size: 18px;">▼</span>
+                            </div>
+                            <div class="medias-container" style="display: none; margin-top: 10px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 10px;" data-train-id="${train.id}">
+                                <div class="medias" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                                    <!-- Les médias seront chargés au clic -->
+                                </div>
+                            </div>
+                        </div>
                     `
-
-                    // Afficher les médias
-                    train.trains_medias?.forEach(tm => {
-                        const media = tm.medias
-                        if (media.type_media === 'image') {
-                            html += `<img src="${media.media_url}" alt="${train.nom}" loading="lazy">`
-                        } else if (media.type_media === 'video') {
-                            const videoId = media.media_url.split('/').pop()
-                            html += `<iframe width="300" height="169" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
-                        }
-                    })
-
-                    html += `</div></div>`
+                    
+                    // Stocker les données du train pour le chargement lazy
+                    if (!window.trainsData) window.trainsData = {}
+                    window.trainsData[cardId] = { train, livree }
                 })
             }
         }
 
         galerieDiv.innerHTML = html || '<p>Aucun train dans la galerie.</p>'
+        
+        // Ajouter les event listeners pour l'expansion
+        setupCardExpansion()
     } catch (error) {
         console.error('❌ Erreur complète:', error)
         galerieDiv.innerHTML = `<p>❌ Erreur: ${error.message}</p>`
@@ -112,3 +116,83 @@ async function loadGallery() {
 }
 
 document.addEventListener('DOMContentLoaded', loadGallery)
+
+// ==================== GESTION DE L'EXPANSION DES CARTES ====================
+
+function setupCardExpansion() {
+    document.querySelectorAll('.train-card').forEach(card => {
+        const header = card.querySelector('.train-header')
+        const container = card.querySelector('.medias-container')
+        const icon = card.querySelector('.expand-icon')
+        
+        header.addEventListener('click', async () => {
+            const isOpen = container.style.display !== 'none'
+            
+            if (isOpen) {
+                // Fermer la carte
+                container.style.display = 'none'
+                icon.style.transform = 'rotate(0deg)'
+                icon.style.transition = 'transform 0.3s'
+            } else {
+                // Ouvrir la carte
+                container.style.display = 'block'
+                icon.style.transform = 'rotate(180deg)'
+                icon.style.transition = 'transform 0.3s'
+                
+                // Charger les médias seulement à l'ouverture
+                await loadMediasForCard(card)
+            }
+        })
+    })
+}
+
+async function loadMediasForCard(card) {
+    const container = card.querySelector('.medias')
+    const trainId = card.querySelector('.medias-container').dataset.trainId
+    
+    // Si les médias sont déjà chargés, ne rien faire
+    if (container.dataset.loaded === 'true') return
+    
+    // Marquer comme en cours de chargement
+    container.innerHTML = '<p style="text-align: center; color: #666;">⏳ Chargement des médias...</p>'
+    
+    try {
+        const { data: mediasData, error } = await supabase
+            .from('trains_medias')
+            .select(`
+                medias(
+                    id,
+                    type_media,
+                    media_url,
+                    date_ajout
+                )
+            `)
+            .eq('train_id', parseInt(trainId))
+        
+        if (error) throw error
+        
+        if (!mediasData || mediasData.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #999;">Aucun média pour ce train</p>'
+            container.dataset.loaded = 'true'
+            return
+        }
+        
+        // Générer le HTML des médias
+        let html = ''
+        mediasData.forEach(tm => {
+            const media = tm.medias
+            if (media.type_media === 'image') {
+                html += `<img src="${media.media_url}" alt="Train" style="max-width: 100%; height: auto; max-height: 250px; object-fit: contain;">`
+            } else if (media.type_media === 'video') {
+                const videoId = media.media_url.split('/').pop()
+                html += `<iframe width="100%" height="250" style="max-width: 400px;" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+            }
+        })
+        
+        container.innerHTML = html
+        container.dataset.loaded = 'true'
+    } catch (error) {
+        console.error('Erreur chargement médias:', error)
+        container.innerHTML = `<p style="color: red;">❌ Erreur: ${error.message}</p>`
+    }
+}
