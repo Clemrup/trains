@@ -14,19 +14,27 @@
             <a href="galerie.html" class="nav-link">Retour à la galerie ➡</a>
         </nav>
     </header>
+    
+    <div class="formulaires-container">
         
     <!-- FORMULAIRE D'AJOUT DE TRAIN -->
     <section class="ajout-train">
         <h2>Ajouter un nouveau train</h2>
         <form id="form-train" method="POST">
-            <label for="famille_type_id">Type de train :</label>
-            <select name="famille_type_id" id="famille_type_id" required>
-                <option value="">-- Sélectionner une famille de type --</option>
-            </select>
-
-            <select name="type_id" id="type_id" required>
-                <option value="">-- Sélectionner un type --</option>
-            </select>
+            <label>Sélectionner une famille :</label>
+            <div id="train-familles-buttons" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;">
+                <!-- Les boutons seront générés par JS -->
+            </div>
+            
+            <div id="types-container1" style="display: none; margin-bottom: 1.5rem;">
+                <label>Sélectionner un type :</label>
+                <div id="train-types-buttons" style="display: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;">
+                    <!-- Les boutons seront générés par JS -->
+                </div>
+            </div>
+            
+            <input type="hidden" id="train-selected-famille" value="">
+            <input type="hidden" id="train-selected-type" value="">
                 
             <label for="numero_principal">Numéro principal :</label>
             <input type="text" id="numero_principal" name="numero_principal" required>
@@ -43,6 +51,116 @@
             <button type="submit">➕ Ajouter ce train</button>
         </form>
     </section>
+
+    <!-- FORMULAIRE D'AJOUT DE MÉDIAS -->
+    <section class="ajout-train">
+        <h2>Ajouter un média à un train existant</h2>
+        <form id="form-media" method="POST">
+            <label>Sélectionner une famille :</label>
+            <!-- Onglets des familles -->
+            <div id="familles-tabs" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; border-bottom: 2px solid #0077b6; padding-bottom: 1rem;">
+                <!-- Les onglets seront générés par JS -->
+            </div>
+
+            <!-- Sélection des types -->
+            <div id="types-container2" style="display: none; margin-bottom: 1.5rem;">
+                <label>Sélectionner un type :</label>
+                <div id="types-buttons-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem;">
+                    <!-- Les boutons de types seront générés par JS -->
+                </div>
+            </div>
+            <input type="hidden" id="media-selected-type" value="">
+
+            <!-- Checkboxes des trains -->
+            <div id="trains-container" style="display: none; margin-bottom: 1.5rem;">
+                <label>Sélectionner les trains :</label>
+                <div id="trains_select" style="border: 1px solid #adb5bd; border-radius: 8px; padding: 1rem; max-height: 250px; overflow-y: auto; background-color: #f8f9fa; display: grid; grid-template-columns: repeat(3, 1fr);">
+                    <!-- Les checkboxes seront générées par JS -->
+                </div>
+            </div>
+
+            <!-- Liste des trains sélectionnés -->
+            <div id="selected-trains-display" style="display: none; margin-bottom: 1.5rem; padding: 1rem; background-color: #e3f2fd; border-radius: 8px;">
+                <strong style="font-size: 1.1em;">Trains sélectionnés:</strong>
+                <div id="selected-trains-list" style="margin-top: 0.5rem; color: #0077b6;"></div>
+            </div>
+
+            <hr>
+
+            <!-- Type de média -->
+            <label for="type_media">Type de média :</label>
+            <select name="type_media" id="type_media" required>
+                <option value="">-- Sélectionner un type --</option>
+                <option value="image">Image</option>
+                <option value="video">Vidéo (YouTube)</option>
+            </select>
+
+            <!-- Bloc Image -->
+            <div id="bloc_image" style="display: none; margin: 1rem 0; padding: 1rem; background-color: #f5f5f5; border-radius: 8px;">
+                <label for="image_folder">Dossier d'images :</label>
+                <select name="image_folder" id="image_folder">
+                    <option value="">-- URL personnalisée --</option>
+                    <option value="images/AGC/">AGC</option>
+                    <option value="images/ATER/">ATER</option>
+                    <option value="images/BB/">BB</option>
+                    <option value="images/Corail/">Corail</option>
+                    <option value="images/ESV/">ESV</option>
+                    <option value="images/Régiolis/">Régiolis</option>
+                    <option value="images/TGV_D/">TGV_D</option>
+                    <option value="images/TGV_R/">TGV_R</option>
+                    <option value="images/TGV_RD/">TGV_RD</option>
+                </select>
+
+                <label for="image_filename">Nom du fichier (si dossier sélectionné) :</label>
+                <input type="text" id="image_filename" name="image_filename" placeholder="Ex: 245.jpg">
+            </div>
+
+            <!-- Bloc Vidéo -->
+            <div id="bloc_video" style="display: none; margin: 1rem 0; padding: 1rem; background-color: #f5f5f5; border-radius: 8px;">
+                <label for="video_url">URL YouTube :</label>
+                <input type="url" id="video_url" name="video_url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+
+            <hr>
+
+            <!-- Type de lieu -->
+            <label for="type_lieu">Type de lieu :</label>
+            <select name="type_lieu" id="type_lieu" required>
+                <option value="">-- Sélectionner un type de lieu --</option>
+                <option value="simple">Dans une gare</option>
+                <option value="double">Entre deux gares</option>
+            </select>
+
+            <!-- Lieu simple -->
+            <div id="lieux_simple_container" style="display: none;">
+                <label for="lieu1">Lieu :</label>
+                <select name="lieu1" id="lieu1" required>
+                    <option value="">-- Sélectionner un lieu --</option>
+                </select>
+            </div>
+
+            <!-- Lieux double -->
+            <div id="lieux_double_container" style="display: none;">
+                <label for="lieu1_double">Lieu 1 :</label>
+                <select name="lieu1_double" id="lieu1_double" required>
+                    <option value="">-- Sélectionner le premier lieu --</option>
+                </select>
+
+                <label for="lieu2_double">Lieu 2 :</label>
+                <select name="lieu2_double" id="lieu2_double" required>
+                    <option value="">-- Sélectionner le deuxième lieu --</option>
+                </select>
+            </div>
+
+            <label for="date_media">Date :</label>
+            <input type="date" id="date_media" name="date_media" required>
+
+            <hr>
+            <button type="submit">➕ Ajouter le(s) média(s)</button>
+        </form>
+    </section>
+    
+    </div>
 
     <!-- Config AVANT les autres scripts -->
     <script src="js/config.js"></script>

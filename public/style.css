@@ -77,8 +77,6 @@ nav {
 .ajout-train {
     background-color: #fff;
     padding: 2rem;
-    margin: 2rem auto;
-    max-width: 600px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
@@ -135,6 +133,25 @@ nav {
 .ajout-train button:hover {
     background-color: #005f8f;
 }
+
+/* Conteneur pour mettre les deux formulaires côte à côte */
+.formulaires-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Responsive: une colonne sur écrans petits */
+@media (max-width: 1024px) {
+    .formulaires-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 .success-msg {
     background-color: #d4edda;
     color: #155724;
