@@ -1,53 +1,89 @@
-# Catalogue des Trains 🚂
+# 🚂 Catalogue des Trains - Version Vercel + Supabase
 
 Un projet web pour gérer et afficher un catalogue de trains avec galerie de photos et vidéos.
 
+**✨ Nouveau : Complètement déployable sur Vercel sans serveur!**
+
 ## 📋 Table des matières
 
-- [Installation](#installation)
-- [Architecture du projet](#architecture-du-projet)
-- [Configuration](#configuration)
-- [Fonctionnalités](#fonctionnalités)
-- [Structure des fichiers](#structure-des-fichiers)
-- [Technologies utilisées](#technologies-utilisées)
-- [Utilisation](#utilisation)
+- [Vue d'ensemble](#vue-densemble)
+- [Déploiement rapide](#déploiement-rapide)
+- [Architecture](#architecture)
+- [Technologies](#technologies)
+- [Guide détaillé](#guide-détaillé)
 
-## 🚀 Installation
+## 👀 Vue d'ensemble
 
-### Prérequis
+Ce projet a été **totalement refactorisé** pour être statique et deployable sur Vercel :
 
-- PHP 7.4 ou supérieur
-- MySQL/MariaDB
-- Apache (avec mod_rewrite activé)
-- Accès XAMPP ou serveur Apache local
+- ❌ **Avant** : PHP + MySQL local + Apache requis
+- ✅ **Maintenant** : HTML/JS + Supabase + Zéro serveur
 
-### Étapes d'installation
+### Caractéristiques principales
+- 📸 Galerie de trains avec photos et vidéos
+- ➕ Formulaire pour ajouter de nouveaux trains
+- 🎨 Système de livrées (couleurs)
+- 📍 Gestion des lieux
+- 🚀 Déployable en 5 minutes sur Vercel
 
-1. **Cloner ou télécharger le projet**
-   
-   Avec SSH (recommandé) :
-   ```bash
-   cd /opt/lampp/htdocs/projet_perso/
-   git clone git@github.com:Clemrup/trains.git
-   cd trains
-   ```
-   
-   Ou avec HTTPS :
-   ```bash
-   cd /opt/lampp/htdocs/projet_perso/
-   git clone https://github.com/Clemrup/trains.git
-   cd trains
-   ```
+## 🚀 Déploiement Rapide
 
-2. **Importer la base de données**
-   ```bash
-   mysql -u root -p trains_db < trains_db.sql
-   ```
-   Ou via phpMyAdmin :
-   - Créer une base de données `trains_db`
-   - Importer le fichier `trains_db.sql`
+### 1. Prérequis
+- Compte GitHub
+- Compte Vercel (gratuit)
+- Compte Supabase (gratuit)
+- Node.js v18+ (LTS)
 
-3. **Configurer les accès**
+### 2. En 5 étapes
+```bash
+# 1. Cloner
+git clone https://github.com/Clemrup/trains.git
+cd trains
+
+# 2. Configurer Supabase (voir ACTIONS_CHECKLIST.md)
+# → Créer projet Supabase
+# → Copier clés dans .env.local
+# → Exécuter supabase_migration.sql
+
+# 3. Installer localement
+npm install
+
+# 4. Tester en local
+npm run dev
+# Ouvrir: http://localhost:3000/public/index.html
+
+# 5. Déployer sur Vercel
+# → Push sur GitHub
+# → Connecter Vercel
+# → Ajouter variables d'environnement
+# → Deploy!
+```
+
+## 🏗️ Architecture
+
+```
+Vercel (Frontend Statique)
+    ↓
+    index.html, galerie.html (HTML)
+    js/app.js, js/galerie.js (JavaScript)
+    ↓
+Supabase (Backend)
+    ↓
+    PostgreSQL (Données)
+    Auth (Optionnel)
+    Storage (Optionnel)
+```
+
+## 🛠️ Technologies
+
+| Ancien | Nouveau |
+|--------|---------|
+| PHP 8.2 | HTML5 / JavaScript (ES6) |
+| MySQL | PostgreSQL (Supabase) |
+| Apache | Vercel (serverless) |
+| XAMPP local | Cloud deployment |
+
+## 📖 Guide Détaillé
    - Éditer `config/database.php` si nécessaire (user/password)
    - Vérifier que les chemins d'accès sont corrects
 

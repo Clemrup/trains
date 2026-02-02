@@ -1,0 +1,23 @@
+{
+  "name": "trains-catalog",
+  "version": "1.0.0",
+  "description": "Catalogue de trains déployable sur Vercel avec Supabase",
+  "type": "module",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "build": "echo 'Static site - no build needed'",
+    "start": "python -m http.server 3000"
+  },
+  "keywords": [
+    "trains",
+    "catalog",
+    "supabase",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {}
+}
