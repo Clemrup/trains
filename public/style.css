@@ -377,14 +377,66 @@ nav {
     font-weight: bold;
 }
 /* ====== NOUVELLE VERSION AVEC EXPANSION AU CLIC ====== */
+
+/* Sections des familles */
+.famille-section {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.famille-title {
+    color: #0d47a1;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #0d47a1;
+    padding-bottom: 0.5rem;
+}
+
+/* Sections des types */
+.type-section {
+    margin-bottom: 2rem;
+}
+
+.type-header {
+    margin-bottom: 1rem;
+}
+
+.type-title {
+    color: #1a237e;
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.type-description {
+    color: #555;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Grille de trains 3 par 3 */
+.trains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Train cards */
 .train-card {
     cursor: pointer;
     border-radius: 12px;
     padding: 1.2rem;
-    margin: 0.8rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     transition: all 0.3s ease;
-    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .train-card:hover {
@@ -394,29 +446,31 @@ nav {
 
 .train-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .train-header h4 {
     margin: 0;
-    flex: 1;
-    text-align: left;
     color: #1a1a1a;
     font-size: 1.1rem;
+    word-wrap: break-word;
 }
 
-.train-header p {
-    margin: 0.3rem 0;
-    font-size: 0.9rem;
+.train-livree {
+    margin: 0;
+    font-size: 0.85rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 .expand-icon {
     font-size: 1.2rem;
     color: #666;
-    flex-shrink: 0;
     transition: transform 0.3s ease;
+    align-self: flex-end;
+    margin-top: 0.5rem;
 }
 
 /* Conteneur des médias */

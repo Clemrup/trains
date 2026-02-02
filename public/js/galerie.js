@@ -74,9 +74,22 @@ async function loadGallery() {
         let trainCardId = 0
         
         for (const [famille, types] of Object.entries(grouped)) {
-            html += `<h2>${famille}</h2>`
+            html += `<div class="famille-section"><h2 class="famille-title">${famille}</h2>`
+            
             for (const [type, typeTrains] of Object.entries(types)) {
-                html += `<h3>${type}</h3>`
+                // Chercher la description du type
+                const firstTrain = typeTrains[0]
+                const typeDescription = firstTrain.types?.description || ''
+                
+                html += `
+                    <div class="type-section">
+                        <div class="type-header">
+                            <h3 class="type-title">${type}</h3>
+                            ${typeDescription ? `<p class="type-description">${typeDescription}</p>` : ''}
+                        </div>
+                        <div class="trains-grid">
+                `
+                
                 typeTrains.forEach(train => {
                     const livree = train.livrees
                     const style = livree?.main_color ? `background: ${livree.main_color}; color: ${livree.text_color};` : ''
@@ -86,8 +99,7 @@ async function loadGallery() {
                         <div class="train-card" id="${cardId}" style="${style}">
                             <div class="train-header" style="cursor: pointer; user-select: none;">
                                 <h4 style="margin: 0;">${train.nom}</h4>
-                                <p style="margin: 5px 0;"><strong>N°:</strong> ${train.numero_principal}${train.numero_secondaire ? ' / ' + train.numero_secondaire : ''}</p>
-                                ${livree ? `<p style="margin: 5px 0;"><strong>Livrée:</strong> ${livree.nom}</p>` : ''}
+                                ${livree ? `<p class="train-livree"><strong>Livrée:</strong> ${livree.nom}</p>` : ''}
                                 <span class="expand-icon" style="float: right; font-size: 18px;">▼</span>
                             </div>
                             <div class="medias-container" style="display: none; margin-top: 10px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 10px;" data-train-id="${train.id}">
@@ -97,12 +109,12 @@ async function loadGallery() {
                             </div>
                         </div>
                     `
-                    
-                    // Stocker les données du train pour le chargement lazy
-                    if (!window.trainsData) window.trainsData = {}
-                    window.trainsData[cardId] = { train, livree }
                 })
+                
+                html += `</div></div>`
             }
+            
+            html += `</div>`
         }
 
         galerieDiv.innerHTML = html || '<p>Aucun train dans la galerie.</p>'
