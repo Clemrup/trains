@@ -810,6 +810,7 @@ async function handleAddMedia(e) {
     
     if (mediaError) {
       console.error('❌ Erreur insertion média:', mediaError)
+      console.error('   Details:', JSON.stringify(mediaError, null, 2))
       throw mediaError
     }
     
@@ -830,6 +831,7 @@ async function handleAddMedia(e) {
     
     if (linkError) {
       console.error('❌ Erreur création liens:', linkError)
+      console.error('   Details:', JSON.stringify(linkError, null, 2))
       throw linkError
     }
     
@@ -848,7 +850,9 @@ async function handleAddMedia(e) {
     submitBtn.style.opacity = '1'
     submitBtn.textContent = originalText
   } catch (error) {
-    console.error('❌ Erreur:', error)
+    console.error('❌ Erreur complète:', error)
+    console.error('   Message:', error.message)
+    console.error('   Details:', JSON.stringify(error, null, 2))
     alert(`❌ Erreur: ${error.message}`)
     submitBtn.disabled = false
     submitBtn.style.opacity = '1'
