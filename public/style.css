@@ -284,6 +284,7 @@ main#galerie {
     padding-top: 10px;
     overflow: hidden;
     color: inherit;
+    text-align: center;
 }
 
 .medias-container p {
@@ -514,7 +515,6 @@ main#galerie {
 /* Descriptions média */
 .media-description {
     font-size: 0.75rem;
-    margin-top: 0.5rem;
     margin-bottom: 0;
 }
 
