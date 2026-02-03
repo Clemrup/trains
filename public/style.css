@@ -278,6 +278,10 @@ main#galerie {
 }
 
 .medias-container {
+    display: none;
+    margin-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 10px;
     overflow: hidden;
     color: inherit;
 }
@@ -287,23 +291,10 @@ main#galerie {
 }
 
 .medias {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.medias img,
-.medias iframe {
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.medias p {
-    grid-column: 1 / -1;
-    font-size: 0.75rem;
-    color: #666;
-    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 /* ==================== RESPONSIVE DESIGN ==================== */
@@ -349,16 +340,7 @@ main#galerie {
     }
 
     .medias {
-        grid-template-columns: 1fr;
         padding: 0.8rem;
-    }
-
-    .medias img {
-        max-height: 250px;
-    }
-
-    .medias iframe {
-        height: 200px;
     }
 
     .famille-title {
@@ -397,14 +379,6 @@ main#galerie {
     .medias {
         gap: 0.5rem;
         padding: 0.6rem;
-    }
-
-    .medias img {
-        max-height: 200px;
-    }
-
-    .medias iframe {
-        height: 180px;
     }
 
     .famille-title {
@@ -480,23 +454,6 @@ main#galerie {
     max-height: 95%;
 }
 
-#lightbox-media img {
-    max-width: 95vw;
-    max-height: 95vh;
-    object-fit: contain;
-    border-radius: 8px;
-    animation: zoomIn 0.3s ease-in-out;
-}
-
-#lightbox-media iframe {
-    width: 90%;
-    height: 90vh;
-    max-width: 95vw;
-    border-radius: 8px;
-    border: none;
-    animation: zoomIn 0.3s ease-in-out;
-}
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -516,3 +473,67 @@ main#galerie {
         opacity: 1;
     }
 }
+
+/* ==================== CLASSES GALERIE OPTIMISÉES ==================== */
+
+/* Lightbox media (image/iframe) */
+.lightbox-media-img,
+.lightbox-media-iframe {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 8px;
+}
+
+/* Conteneur média + description */
+.media-block {
+    display: block;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* Images/vidéos dans la galerie */
+.gallery-media-img,
+.gallery-media-iframe {
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.gallery-media-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+.gallery-media-iframe {
+    max-width: 400px;
+    height: 250px;
+}
+
+/* Descriptions média */
+.media-description {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Train header */
+.train-header-clickable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.train-numero-secondary {
+    font-size: 0.85rem;
+}
+
+/* Messages de chargement/erreur */
+.loading-message {
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+}
+
