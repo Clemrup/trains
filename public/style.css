@@ -253,6 +253,7 @@ main#galerie {
     border-bottom: 1px solid #eee;
     min-height: 60px;
     position: relative;
+    text-align: center;
 }
 
 .train-header h4 {
@@ -268,7 +269,6 @@ main#galerie {
 .train-livree {
     margin: 0.5rem 0 0 0;
     font-size: 0.85em;
-    color: #555;
 }
 
 .expand-icon {
