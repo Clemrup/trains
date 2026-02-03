@@ -3,28 +3,12 @@
  * Gestion des données trains avec Supabase
  */
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-
 // Configuration Supabase - utiliser la config globale injectée par config.js
 const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co'
 const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
-let supabase = null
-
-// Initialiser Supabase
-function initSupabase() {
-  // Lire depuis les variables globales si disponibles (pour Vercel)
-  const url = window.SUPABASE_URL || SUPABASE_URL
-  const key = window.SUPABASE_KEY || SUPABASE_ANON_KEY
-
-  if (!url.includes('supabase') || key === 'your-anon-key') {
-    console.warn('⚠️ Clés Supabase non configurées. Vérifiez .env.local')
-    return null
-  }
-
-  supabase = createClient(url, key)
-  return supabase
-}
+// Créer le client Supabase à partir du CDN global
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // ==================== DONNÉES CACHE ====================
 let cache = {
@@ -454,9 +438,8 @@ async function loadAndRenderTrains(typeId) {
  * Initialiser l'application
  */
 async function init() {
-  const db = initSupabase()
-
-  if (!db) {
+  // Vérifier que Supabase est bien initialisé
+  if (!supabase) {
     console.error('Supabase non initialisé. Vérifiez vos clés.')
     document.body.innerHTML = '<h1>❌ Erreur de configuration. Vérifiez les variables d\'environnement.</h1>'
     return

@@ -1,12 +1,11 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-
 // Utiliser la configuration globale injectée par config.js
 const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co'
 const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
 console.log('🔗 Connexion Supabase:', SUPABASE_URL)
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+// Créer le client Supabase à partir du CDN global
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // Créer la lightbox au chargement de la page
 function initLightbox() {
