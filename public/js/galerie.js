@@ -1,25 +1,26 @@
-// Utiliser la configuration globale injectée par config.js
-const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co'
-const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
+// Galerie.js - Fichier auto-contenu dans une IIFE pour éviter les conflits de scope
+(function() {
+  'use strict'
+  
+  // Utiliser la configuration globale injectée par config.js
+  const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co'
+  const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
-console.log('🔗 Connexion Supabase:', SUPABASE_URL)
+  console.log('🔗 Connexion Supabase (galerie):', SUPABASE_URL)
 
-// Créer le client Supabase à partir du CDN global - DÉLAYÉ
-// Utiliser window.galerieSupabase pour éviter les conflits avec app.js
-if (!window.galerieSupabase) window.galerieSupabase = {}
-let supabase = null
+  // Créer le client Supabase à partir du CDN global - DÉLAYÉ
+  let supabase = null
 
-function initSupabaseClient() {
-  if (supabase) return supabase // Déjà initialisé
-  if (!window.supabase) {
-    console.error('❌ Supabase CDN non chargé')
-    return null
+  function initSupabaseClient() {
+    if (supabase) return supabase // Déjà initialisé
+    if (!window.supabase) {
+      console.error('❌ Supabase CDN non chargé')
+      return null
+    }
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    console.log('✅ Client Supabase initialisé (galerie.js)')
+    return supabase
   }
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  window.galerieSupabase.client = supabase
-  console.log('✅ Client Supabase initialisé (galerie.js)')
-  return supabase
-}
 
 // Créer la lightbox au chargement de la page
 function initLightbox() {
@@ -331,3 +332,5 @@ async function loadMediasForCard(card) {
         container.innerHTML = `<p style="color: red;">❌ Erreur: ${error.message}</p>`
     }
 }
+
+})() // Fin de la IIFE
