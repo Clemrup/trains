@@ -315,10 +315,10 @@ async function loadMediasForCard(card) {
                 html += `<iframe width="100%" height="250" style="max-width: 400px; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" class="media-clickable" data-src="${media.media_url}" data-type="video" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
             }
             if (media.lieux2?.nom){
-                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${dateFormatee}</p>`
+                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem; display: block;">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${dateFormatee}</p>`
             }
             else if (media.lieux1?.nom){
-                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu à ${media.lieux1?.nom} le ${dateFormatee}</p>`
+                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem; display: block;">Vu à ${media.lieux1?.nom} le ${dateFormatee}</p>`
             }
             
         })
