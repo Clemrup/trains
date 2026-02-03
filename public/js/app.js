@@ -8,6 +8,8 @@ const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supaba
 const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
 // Créer le client Supabase à partir du CDN global - DÉLAYÉ
+// Utiliser window.appSupabase pour éviter les conflits avec galerie.js
+if (!window.appSupabase) window.appSupabase = {}
 let supabase = null
 
 function initSupabaseClient() {
@@ -17,7 +19,8 @@ function initSupabaseClient() {
     return null
   }
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  console.log('✅ Client Supabase initialisé')
+  window.appSupabase.client = supabase
+  console.log('✅ Client Supabase initialisé (app.js)')
   return supabase
 }
 
