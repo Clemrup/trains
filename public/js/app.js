@@ -675,8 +675,25 @@ function toggleMediaBlocks() {
 
 function toggleLieuBlocks() {
   const typeLieu = document.getElementById('type_lieu').value
+  const lieu1 = document.getElementById('lieu1')
+  const lieu1Double = document.getElementById('lieu1_double')
+  const lieu2Double = document.getElementById('lieu2_double')
+  
   document.getElementById('lieux_simple_container').style.display = typeLieu === 'simple' ? 'block' : 'none'
   document.getElementById('lieux_double_container').style.display = typeLieu === 'double' ? 'block' : 'none'
+  
+  // Gérer les required selon le type de lieu
+  if (typeLieu === 'simple') {
+    // Dans une gare : required sur lieu1
+    lieu1.required = true
+    lieu1Double.required = false
+    lieu2Double.required = false
+  } else if (typeLieu === 'double') {
+    // Entre deux gares : required sur lieu1_double et lieu2_double
+    lieu1.required = false
+    lieu1Double.required = true
+    lieu2Double.required = true
+  }
 }
 
 async function handleAddMedia(e) {
