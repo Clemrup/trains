@@ -699,70 +699,96 @@ function toggleLieuBlocks() {
 async function handleAddMedia(e) {
   e.preventDefault()
   const formMedia = document.getElementById('form-media')
+  const submitBtn = formMedia.querySelector('button[type="submit"]')
   
-  // Récupérer tous les trains sélectionnés
-  let trainIds = []
-  Object.values(selectedTrains).forEach(set => {
-    set.forEach(id => trainIds.push(Number(id)))
-  })
-  
-  if (trainIds.length === 0) {
-    alert('⚠️ Sélectionnez au moins un train')
-    return
-  }
-  
-  const typeMedia = document.getElementById('type_media').value
-  const typeLieu = document.getElementById('type_lieu').value
-  const dateMedia = document.getElementById('date_media').value
-  
-  if (!typeMedia || !typeLieu || !dateMedia) {
-    alert('⚠️ Remplissez tous les champs obligatoires')
-    return
-  }
-  
-  let mediaUrl = ''
-  let lieu1 = null
-  let lieu2 = null
-  
-  // Récupérer l'URL du média
-  if (typeMedia === 'image') {
-    const folder = document.getElementById('image_folder').value
-    const filename = document.getElementById('image_filename').value
-    const customUrl = document.getElementById('image_url').value
-    
-    if (customUrl) {
-      mediaUrl = customUrl
-    } else if (folder && filename) {
-      mediaUrl = folder + filename
-    } else {
-      alert('⚠️ Fournir une URL ou un dossier + nom de fichier')
-      return
-    }
-  } else if (typeMedia === 'video') {
-    mediaUrl = document.getElementById('video_url').value
-    if (!mediaUrl) {
-      alert('⚠️ Fournir l\'URL YouTube')
-      return
-    }
-  }
-  
-  // Récupérer les lieux
-  if (typeLieu === 'simple') {
-    lieu1 = parseInt(document.getElementById('lieu1').value)
-    if (!lieu1) {
-      alert('⚠️ Sélectionner un lieu')
-      return
-    }
-  } else if (typeLieu === 'double') {
-    lieu1 = parseInt(document.getElementById('lieu1_double').value)
-    lieu2 = parseInt(document.getElementById('lieu2_double').value)
-    if (!lieu1 || !lieu2) {
-      alert('⚠️ Sélectionner les deux lieux')
-      return
-    }
-  }
+  // Bloquer les soumissions doubles
+  if (submitBtn.disabled) return
+  submitBtn.disabled = true
+  submitBtn.style.opacity = '0.5'
+  const originalText = submitBtn.textContent
+  submitBtn.textContent = '⏳ Traitement...'
   
   try {
+    // Récupérer tous les trains sélectionnés
+    let trainIds = []
+    Object.values(selectedTrains).forEach(set => {
+      set.forEach(id => trainIds.push(Number(id)))
+    })
+    
+    if (trainIds.length === 0) {
+      alert('⚠️ Sélectionnez au moins un train')
+      submitBtn.disabled = false
+      submitBtn.style.opacity = '1'
+      submitBtn.textContent = originalText
+      return
+    }
+    
+    const typeMedia = document.getElementById('type_media').value
+    const typeLieu = document.getElementById('type_lieu').value
+    const dateMedia = document.getElementById('date_media').value
+    
+    if (!typeMedia || !typeLieu || !dateMedia) {
+      alert('⚠️ Remplissez tous les champs obligatoires')
+      submitBtn.disabled = false
+      submitBtn.style.opacity = '1'
+      submitBtn.textContent = originalText
+      return
+    }
+    
+    let mediaUrl = ''
+    let lieu1 = null
+    let lieu2 = null
+    
+    // Récupérer l'URL du média
+    if (typeMedia === 'image') {
+      const folder = document.getElementById('image_folder').value
+      const filename = document.getElementById('image_filename').value
+      const customUrl = document.getElementById('image_url').value
+      
+      if (customUrl) {
+        mediaUrl = customUrl
+      } else if (folder && filename) {
+        mediaUrl = folder + filename
+      } else {
+        alert('⚠️ Fournir une URL ou un dossier + nom de fichier')
+        submitBtn.disabled = false
+        submitBtn.style.opacity = '1'
+        submitBtn.textContent = originalText
+        return
+      }
+    } else if (typeMedia === 'video') {
+      mediaUrl = document.getElementById('video_url').value
+      if (!mediaUrl) {
+        alert('⚠️ Fournir l\'URL YouTube')
+        submitBtn.disabled = false
+        submitBtn.style.opacity = '1'
+        submitBtn.textContent = originalText
+        return
+      }
+    }
+    
+    // Récupérer les lieux
+    if (typeLieu === 'simple') {
+      lieu1 = parseInt(document.getElementById('lieu1').value)
+      if (!lieu1) {
+        alert('⚠️ Sélectionner un lieu')
+        submitBtn.disabled = false
+        submitBtn.style.opacity = '1'
+        submitBtn.textContent = originalText
+        return
+      }
+    } else if (typeLieu === 'double') {
+      lieu1 = parseInt(document.getElementById('lieu1_double').value)
+      lieu2 = parseInt(document.getElementById('lieu2_double').value)
+      if (!lieu1 || !lieu2) {
+        alert('⚠️ Sélectionner les deux lieux')
+        submitBtn.disabled = false
+        submitBtn.style.opacity = '1'
+        submitBtn.textContent = originalText
+        return
+      }
+    }
+    
     // Insérer le média
     const { data: newMedia, error: mediaError } = await supabase
       .from('medias')
@@ -801,9 +827,16 @@ async function handleAddMedia(e) {
     updateSelectedTrainsList()
     document.getElementById('trains-container').style.display = 'none'
     document.getElementById('types-container2').style.display = 'none'
+    
+    submitBtn.disabled = false
+    submitBtn.style.opacity = '1'
+    submitBtn.textContent = originalText
   } catch (error) {
     console.error('❌ Erreur:', error)
     alert(`❌ Erreur: ${error.message}`)
+    submitBtn.disabled = false
+    submitBtn.style.opacity = '1'
+    submitBtn.textContent = originalText
   }
 }
 
