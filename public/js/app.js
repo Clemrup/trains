@@ -702,7 +702,10 @@ async function handleAddMedia(e) {
   const submitBtn = formMedia.querySelector('button[type="submit"]')
   
   // Bloquer les soumissions doubles
-  if (submitBtn.disabled) return
+  if (submitBtn.disabled) {
+    console.warn('⚠️ Soumission bloquée : le bouton est déjà désactivé')
+    return
+  }
   submitBtn.disabled = true
   submitBtn.style.opacity = '0.5'
   const originalText = submitBtn.textContent
@@ -714,6 +717,8 @@ async function handleAddMedia(e) {
     Object.values(selectedTrains).forEach(set => {
       set.forEach(id => trainIds.push(Number(id)))
     })
+    
+    console.log('📍 Trains sélectionnés:', trainIds)
     
     if (trainIds.length === 0) {
       alert('⚠️ Sélectionnez au moins un train')
@@ -803,8 +808,12 @@ async function handleAddMedia(e) {
       ])
       .select()
     
-    if (mediaError) throw mediaError
+    if (mediaError) {
+      console.error('❌ Erreur insertion média:', mediaError)
+      throw mediaError
+    }
     
+    console.log('✅ Média créé:', newMedia[0].id)
     const mediaId = newMedia[0].id
     
     // Lier le média à chaque train sélectionné
@@ -813,11 +822,18 @@ async function handleAddMedia(e) {
       media_id: mediaId
     }))
     
+    console.log('📎 Liens à créer:', trainMediaLinks)
+    
     const { error: linkError } = await supabase
       .from('trains_medias')
       .insert(trainMediaLinks)
     
-    if (linkError) throw linkError
+    if (linkError) {
+      console.error('❌ Erreur création liens:', linkError)
+      throw linkError
+    }
+    
+    console.log(`✅ Liens créés pour ${trainIds.length} train(s)`)
     
     alert(`✅ Média ajouté à ${trainIds.length} train(s)!`)
     formMedia.reset()
