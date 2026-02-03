@@ -317,7 +317,9 @@ async function setupTrainForm() {
     e.preventDefault()
     
     const familleId = selectedFamilleInput.value
+    const familleNom = famillesButtonsContainer.querySelector(`button[data-famille-id="${familleId}"]`)?.textContent || ''
     const typeId = selectedTypeInput.value
+    const typeName = typesButtonsContainer.querySelector(`button[data-type-id="${typeId}"]`)?.textContent || ''
     const numeroPrincipal = document.getElementById('numero_principal').value
     const numeroSecondaire = document.getElementById('numero_secondaire').value
     const livreeId = document.getElementById('livree').value
@@ -326,9 +328,55 @@ async function setupTrainForm() {
       alert('Veuillez remplir tous les champs obligatoires')
       return
     }
+    if (!familleNom || !typeName) {
+      alert('⚠️ Erreur : impossible de récupérer le nom de la famille ou du type')
+      return
+    }
+    let nom
+    if (numeroSecondaire) {
+      if (familleNom === 'BB' || typeName === 'Y 8000') {
+        nom = `${familleNom} ${numeroPrincipal}(${numeroSecondaire})`
+      }
+      else {
+        nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
+      }
+    } 
+    else if (familleNom === 'TGV'){
+        if(typeName === 'Rames 100'){
+          nom = `TGV-SE ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 300'){
+          nom = `TGV-A ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 500' || typeName === 'Rames 4500'){
+          nom = `TGV-R ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 600'){
+          nom = `TGV-RD ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 900'){
+          nom = `TGV-POSTAL ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 3000' || typeName === 'Rames 3100' || typeName === 'Rames 3200'){
+          nom = `TGV-TMST ${numeroPrincipal}`  
+        }
+        else if (typeName === 'Rames 4300'){
+          nom = `TGV-PBKA ${numeroPrincipal}`
+        }
+        else if (typeName === 'Rames 4400'){
+          nom = `TGV-POS ${numeroPrincipal}`
+        }
+        else {
+          nom = `TGV-D ${numeroPrincipal}`
+        }
+    }
+    else {
+      nom = `${familleNom} ${numeroPrincipal}`
+    }
     
+    // Puis appeler addTrain avec l'objet correct
     await addTrain({
-      nom: `Train ${numeroPrincipal}`,
+      nom: nom,
       type_id: typeId,
       numero_principal: numeroPrincipal,
       numero_secondaire: numeroSecondaire || null,
