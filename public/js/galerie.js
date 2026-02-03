@@ -303,6 +303,11 @@ async function loadMediasForCard(card) {
         let html = ''
         mediasData.forEach(tm => {
             const media = tm.medias
+            
+            // Formater la date en JJ/MM/AAAA
+            const dateObj = new Date(media.date_ajout + 'T00:00:00')
+            const dateFormatee = dateObj.toLocaleDateString('fr-FR')
+            
             if (media.type_media === 'image') {
                 html += `<img src="${media.media_url}" alt="Train" style="max-width: 100%; height: auto; max-height: 250px; object-fit: contain; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" class="media-clickable" data-src="${media.media_url}" data-type="image">`
             } else if (media.type_media === 'video') {
@@ -310,10 +315,10 @@ async function loadMediasForCard(card) {
                 html += `<iframe width="100%" height="250" style="max-width: 400px; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" class="media-clickable" data-src="${media.media_url}" data-type="video" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
             }
             if (media.lieux2?.nom){
-                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${media.date_ajout}</p>`
+                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${dateFormatee}</p>`
             }
             else if (media.lieux1?.nom){
-                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu à ${media.lieux1?.nom} le ${media.date_ajout}</p>`
+                html += `<p style="font-size: 0.75rem; margin-bottom: 1.5rem;">Vu à ${media.lieux1?.nom} le ${dateFormatee}</p>`
             }
             
         })
