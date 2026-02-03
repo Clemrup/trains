@@ -7,8 +7,19 @@
 const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co'
 const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
-// Créer le client Supabase à partir du CDN global
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+// Créer le client Supabase à partir du CDN global - DÉLAYÉ
+let supabase = null
+
+function initSupabaseClient() {
+  if (supabase) return supabase // Déjà initialisé
+  if (!window.supabase) {
+    console.error('❌ Supabase CDN non chargé')
+    return null
+  }
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  console.log('✅ Client Supabase initialisé')
+  return supabase
+}
 
 // ==================== DONNÉES CACHE ====================
 let cache = {
@@ -438,6 +449,9 @@ async function loadAndRenderTrains(typeId) {
  * Initialiser l'application
  */
 async function init() {
+  // Initialiser le client Supabase d'abord
+  initSupabaseClient()
+  
   // Vérifier que Supabase est bien initialisé
   if (!supabase) {
     console.error('Supabase non initialisé. Vérifiez vos clés.')

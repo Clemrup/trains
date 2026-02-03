@@ -4,8 +4,19 @@ const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key'
 
 console.log('🔗 Connexion Supabase:', SUPABASE_URL)
 
-// Créer le client Supabase à partir du CDN global
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+// Créer le client Supabase à partir du CDN global - DÉLAYÉ
+let supabase = null
+
+function initSupabaseClient() {
+  if (supabase) return supabase // Déjà initialisé
+  if (!window.supabase) {
+    console.error('❌ Supabase CDN non chargé')
+    return null
+  }
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  console.log('✅ Client Supabase initialisé (galerie)')
+  return supabase
+}
 
 // Créer la lightbox au chargement de la page
 function initLightbox() {
@@ -56,6 +67,14 @@ function closeLightbox() {
 
 async function loadGallery() {
     const galerieDiv = document.getElementById('galerie')
+    
+    // Initialiser Supabase si ce n'est pas déjà fait
+    initSupabaseClient()
+    
+    if (!supabase) {
+        galerieDiv.innerHTML = '<p>❌ Erreur: Supabase non connecté</p>'
+        return
+    }
 
     try {
         // D'abord, vérifier qu'on peut se connecter et récupérer les trains simples
