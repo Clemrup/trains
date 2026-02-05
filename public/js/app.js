@@ -801,7 +801,7 @@ async function handleAddMedia(e) {
       const filename = document.getElementById('image_filename').value
       
       if (folder && filename) {
-        mediaUrl = folder + filename
+        mediaUrl = folder + filename + '.jpg'
       } else {
         alert('⚠️ Sélectionner un dossier et entrer le nom du fichier')
         submitBtn.disabled = false
