@@ -799,14 +799,11 @@ async function handleAddMedia(e) {
     if (typeMedia === 'image') {
       const folder = document.getElementById('image_folder').value
       const filename = document.getElementById('image_filename').value
-      const customUrl = document.getElementById('image_url').value
       
-      if (customUrl) {
-        mediaUrl = customUrl
-      } else if (folder && filename) {
+      if (folder && filename) {
         mediaUrl = folder + filename
       } else {
-        alert('⚠️ Fournir une URL ou un dossier + nom de fichier')
+        alert('⚠️ Sélectionner un dossier et entrer le nom du fichier')
         submitBtn.disabled = false
         submitBtn.style.opacity = '1'
         submitBtn.textContent = originalText
