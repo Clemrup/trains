@@ -75,6 +75,28 @@ async function getTypesByFamille(familleId) {
   return data
 }
 
+/**
+ * Récupérer uniquement les types d'une famille qui ont des trains enregistrés
+ */
+async function getTypesWithTrainsByFamille(familleId) {
+  const { data, error } = await supabase
+    .from('types')
+    .select(`
+      *,
+      trains(id)
+    `)
+    .eq('id_famille', familleId)
+    .order('nom', { ascending: true })
+
+  if (error) {
+    console.error('Erreur récupération types avec trains:', error)
+    return []
+  }
+
+  // Filtrer uniquement les types qui ont au moins un train
+  return data.filter(type => type.trains && type.trains.length > 0)
+}
+
 
 
 /**
@@ -623,8 +645,9 @@ async function loadFamillesTabs() {
       selectedFamilleId = famille.id
       selectedTypeId = null
       
-      // Afficher les types du 2e formulaire
-      renderTypeButtons(famille.types || [], 'types-container2', 'types-buttons-container', 'media-selected-type')
+      // Charger et afficher uniquement les types qui ont des trains
+      const typesWithTrains = await getTypesWithTrainsByFamille(famille.id)
+      renderTypeButtons(typesWithTrains, 'types-container2', 'types-buttons-container', 'media-selected-type')
     })
     
     tabsContainer.appendChild(btn)

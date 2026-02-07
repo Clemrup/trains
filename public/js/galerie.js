@@ -182,7 +182,7 @@ async function loadGallery() {
                                 html += `${livree ? `<p class="train-livree"><strong>Livrée:</strong> ${livree.nom}</p>` : ''}
                                 <span class="expand-icon">▼</span>
                             </div>
-                            <div class="medias-container" data-train-id="${train.id}">
+                            <div class="medias-container" data-train-id="${train.id}" style="display: none;">
                                 <div class="medias medias-wrapper">
                                     <!-- Les médias seront chargés au clic -->
                                 </div>
@@ -298,6 +298,9 @@ async function loadMediasForCard(card) {
             container.dataset.loaded = 'true'
             return
         }
+        
+        // Trier les médias du plus récent au plus ancien
+        mediasData.sort((a, b) => new Date(b.medias.date_ajout) - new Date(a.medias.date_ajout))
         
         // Générer le HTML des médias
         let html = ''
