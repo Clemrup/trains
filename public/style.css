@@ -642,3 +642,15 @@ main#galerie {
         gap: 0.5rem;
     }
 }
+
+
+
+footer{
+    width: 100%;
+    background-color: #1f2a44;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    margin-top: auto;
+    font-style: italic;
+}

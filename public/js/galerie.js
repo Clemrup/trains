@@ -147,7 +147,7 @@ async function loadGallery() {
             <h2>Bienvenue sur ma galerie ferroviaire ! 🚂</h2>
             <p class="intro-description">
                 Depuis septembre 2024, je photographie les trains croisés lors de mes différents voyages à travers la France.
-                Cette collection regroupe actuellement <br><strong>${allTrains.length} trains</strong> et <strong>${totalMedias} médias</strong> (photos et vidéos).
+                Cette collection regroupe actuellement <br><strong>${allTrains.length} trains</strong> et <strong>${totalMedias} médias</strong>.
             </p>
             
             <div class="intro-howto">
