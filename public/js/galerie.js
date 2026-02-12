@@ -129,6 +129,7 @@ async function loadGallery() {
 
         // Grouper par famille > type
         const grouped = {}
+        let totalMedias = 0
         allTrains.forEach(train => {
             const famille = train.types?.famille_type?.nom || 'Inconnu'
             const type = train.types?.nom || 'Inconnu'
@@ -136,10 +137,39 @@ async function loadGallery() {
             if (!grouped[famille]) grouped[famille] = {}
             if (!grouped[famille][type]) grouped[famille][type] = []
             grouped[famille][type].push(train)
+            
+            // Compter les médias
+            totalMedias += train.trains_medias?.length || 0
         })
 
-        // Générer le HTML
-        let html = ''
+        // Générer le HTML avec le message de bienvenue
+        let html = `<div class="galerie-intro">
+            <h2>Bienvenue sur ma galerie ferroviaire ! 🚂</h2>
+            <p class="intro-description">
+                Depuis septembre 2024, je photographie les trains croisés lors de mes différents voyages à travers la France.
+                Cette collection regroupe actuellement <br><strong>${allTrains.length} trains</strong> et <strong>${totalMedias} médias</strong> (photos et vidéos).
+            </p>
+            
+            <div class="intro-howto">
+                <h3>📖 Comment naviguer ?</h3>
+                <p>Les trains sont organisés par <strong>famille</strong> (TGV, Locomotives, Automoteurs...) puis par <strong>type</strong>. 
+                Cliquez sur un type pour afficher les trains, puis sur un train pour voir ses photos et vidéos.</p>
+            </div>
+            
+            <div class="intro-updates">
+                <span class="update-badge">🔄 Mise à jour régulière</span>
+                <p>De nouveaux trains et médias sont ajoutés au fil de mes voyages !</p>
+            </div>
+            
+            <div class="intro-roadmap">
+                <h3>🚧 Fonctionnalités à venir</h3>
+                <ul>
+                    <li>Tri par lieu, livrée ou date</li>
+                    <li>Recherche avancée</li>
+                    <li>Carte des observations</li>
+                </ul>
+            </div>
+        </div>`
         let trainCardId = 0
         
         for (const [famille, types] of Object.entries(grouped)) {
