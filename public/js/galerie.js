@@ -142,7 +142,6 @@ async function loadGallery() {
             totalMedias += train.trains_medias?.length || 0
         })
 
-        // Générer le HTML avec le message de bienvenue
         let html = ``
         let trainCardId = 0
         

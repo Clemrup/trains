@@ -70,22 +70,20 @@ async function logoutAdmin() {
  */
 function updateAuthUI(session) {
   const loginFormContainer = document.getElementById('login-form-container')
-  const loggedInContainer = document.getElementById('logged-in-container')
   const formsContainer = document.getElementById('forms-container')
-  const userEmailSpan = document.getElementById('user-email')
+  const authSection = document.getElementById('auth-section')
   
   if (!loginFormContainer || !formsContainer) return // Pas sur la page formulaire
   
   if (session) {
     // Connecté : afficher les formulaires
     loginFormContainer.style.display = 'none'
-    loggedInContainer.style.display = 'block'
-    formsContainer.style.display = 'block'
-    userEmailSpan.textContent = session.user.email
+    authSection.style.display = 'none'
+    formsContainer.style.display = ''
   } else {
     // Non connecté : cacher les formulaires
     loginFormContainer.style.display = 'block'
-    loggedInContainer.style.display = 'none'
+    authSection.style.display = 'block'
     formsContainer.style.display = 'none'
   }
 }
@@ -443,6 +441,13 @@ async function setupTrainForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
     
+    // Désactiver le bouton pendant le traitement
+    const submitBtn = form.querySelector('button[type="submit"]')
+    const originalText = submitBtn.textContent
+    submitBtn.disabled = true
+    submitBtn.style.opacity = '0.6'
+    submitBtn.textContent = '⏳ Traitement en cours...'
+    
     const familleId = selectedFamilleInput.value
     const familleNom = famillesButtonsContainer.querySelector(`button[data-famille-id="${familleId}"]`)?.textContent || ''
     const typeId = selectedTypeInput.value
@@ -453,76 +458,94 @@ async function setupTrainForm() {
     
     if (!familleId || !typeId || !numeroPrincipal || !livreeId) {
       alert('Veuillez remplir tous les champs obligatoires')
+      submitBtn.disabled = false
+      submitBtn.style.opacity = '1'
+      submitBtn.textContent = originalText
       return
     }
     if (!familleNom || !typeName) {
       alert('⚠️ Erreur : impossible de récupérer le nom de la famille ou du type')
+      submitBtn.disabled = false
+      submitBtn.style.opacity = '1'
+      submitBtn.textContent = originalText
       return
     }
-    let nom
-    if (numeroSecondaire) {
-      if (familleNom === 'BB') {
-        nom = `${familleNom} ${numeroPrincipal}(${numeroSecondaire})`
-      }
-      else if (typeName === 'Y 8000'){
-        nom = `${typeName} ${numeroPrincipal}(${numeroSecondaire})`
+
+    try{
+      let nom
+        if (numeroSecondaire) {
+          if (familleNom === 'BB') {
+            nom = `${familleNom} ${numeroPrincipal}(${numeroSecondaire})`
+          }
+          else if (typeName === 'Y 8000'){
+            nom = `${typeName} ${numeroPrincipal}(${numeroSecondaire})`
+          }
+          else {
+            nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
+          }
+        } 
+        else if (familleNom === 'TGV'){
+          if(typeName === 'Rames 100'){
+            nom = `TGV-SE ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 300'){
+            nom = `TGV-A ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 500' || typeName === 'Rames 4500'){
+            nom = `TGV-R ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 600'){
+            nom = `TGV-RD ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 900'){
+            nom = `TGV-POSTAL ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 3000' || typeName === 'Rames 3100' || typeName === 'Rames 3200'){
+            nom = `TGV-TMST ${numeroPrincipal}`  
+          }
+          else if (typeName === 'Rames 4300'){
+            nom = `TGV-PBKA ${numeroPrincipal}`
+          }
+          else if (typeName === 'Rames 4400'){
+            nom = `TGV-POS ${numeroPrincipal}`
+          }
+          else {
+            nom = `TGV-D ${numeroPrincipal}`
+          }
       }
       else {
-        nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
+        nom = `${familleNom} ${numeroPrincipal}`
       }
-    } 
-    else if (familleNom === 'TGV'){
-        if(typeName === 'Rames 100'){
-          nom = `TGV-SE ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 300'){
-          nom = `TGV-A ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 500' || typeName === 'Rames 4500'){
-          nom = `TGV-R ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 600'){
-          nom = `TGV-RD ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 900'){
-          nom = `TGV-POSTAL ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 3000' || typeName === 'Rames 3100' || typeName === 'Rames 3200'){
-          nom = `TGV-TMST ${numeroPrincipal}`  
-        }
-        else if (typeName === 'Rames 4300'){
-          nom = `TGV-PBKA ${numeroPrincipal}`
-        }
-        else if (typeName === 'Rames 4400'){
-          nom = `TGV-POS ${numeroPrincipal}`
-        }
-        else {
-          nom = `TGV-D ${numeroPrincipal}`
-        }
+
+      // Puis appeler addTrain avec l'objet correct
+      await addTrain({
+        nom: nom,
+        type_id: typeId,
+        numero_principal: numeroPrincipal,
+        numero_secondaire: numeroSecondaire || null,
+        livree_id: livreeId
+            })
+      
+      alert(`✅ Train "${nom}" ajouté avec succès!`)
+      
+      // Réinitialiser le formulaire
+      form.reset()
+      selectedFamilleInput.value = ''
+      selectedTypeInput.value = ''
+      typesButtonsContainer.innerHTML = ''
+      typesButtonsContainer.style.display = 'none'
+      document.querySelectorAll('.train-famille-btn').forEach(b => {
+        b.style.backgroundColor = 'white'
+        b.style.color = '#0077b6'
+      })
+    } catch (error) {
+      console.error('❌ Erreur:', error)
+      alert(`❌ Erreur: ${error.message}`)
+    } finally {
+      submitBtn.disabled = false
+      submitBtn.style.opacity = '1'
+      submitBtn.textContent = originalText
     }
-    else {
-      nom = `${familleNom} ${numeroPrincipal}`
-    }
-    
-    // Puis appeler addTrain avec l'objet correct
-    await addTrain({
-      nom: nom,
-      type_id: typeId,
-      numero_principal: numeroPrincipal,
-      numero_secondaire: numeroSecondaire || null,
-      livree_id: livreeId
-    })
-    
-    // Réinitialiser le formulaire
-    form.reset()
-    selectedFamilleInput.value = ''
-    selectedTypeInput.value = ''
-    typesButtonsContainer.innerHTML = ''
-    typesButtonsContainer.style.display = 'none'
-    document.querySelectorAll('.train-famille-btn').forEach(b => {
-      b.style.backgroundColor = 'white'
-      b.style.color = '#0077b6'
-    })
   })
 }
 
