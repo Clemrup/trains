@@ -142,6 +142,12 @@ async function loadGallery() {
             totalMedias += train.trains_medias?.length || 0
         })
 
+        // Mettre à jour les statistiques dans l'intro
+        const statsTrains = document.getElementById('stats-trains')
+        const statsMedias = document.getElementById('stats-medias')
+        if (statsTrains) statsTrains.textContent = allTrains.length
+        if (statsMedias) statsMedias.textContent = totalMedias
+
         let html = ``
         let trainCardId = 0
         
