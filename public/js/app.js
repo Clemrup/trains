@@ -25,6 +25,111 @@
     return supabase
   }
 
+// ==================== AUTHENTIFICATION ADMIN ====================
+
+/**
+ * Vérifier si l'utilisateur est connecté
+ */
+async function checkAuthStatus() {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session
+}
+
+/**
+ * Connexion admin
+ */
+async function loginAdmin(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  })
+  
+  if (error) {
+    console.error('❌ Erreur connexion:', error.message)
+    throw error
+  }
+  
+  console.log('✅ Connecté:', data.user.email)
+  return data
+}
+
+/**
+ * Déconnexion
+ */
+async function logoutAdmin() {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.error('❌ Erreur déconnexion:', error.message)
+    throw error
+  }
+  console.log('✅ Déconnecté')
+}
+
+/**
+ * Mettre à jour l'interface selon l'état de connexion
+ */
+function updateAuthUI(session) {
+  const loginFormContainer = document.getElementById('login-form-container')
+  const loggedInContainer = document.getElementById('logged-in-container')
+  const formsContainer = document.getElementById('forms-container')
+  const userEmailSpan = document.getElementById('user-email')
+  
+  if (!loginFormContainer || !formsContainer) return // Pas sur la page formulaire
+  
+  if (session) {
+    // Connecté : afficher les formulaires
+    loginFormContainer.style.display = 'none'
+    loggedInContainer.style.display = 'block'
+    formsContainer.style.display = 'block'
+    userEmailSpan.textContent = session.user.email
+  } else {
+    // Non connecté : cacher les formulaires
+    loginFormContainer.style.display = 'block'
+    loggedInContainer.style.display = 'none'
+    formsContainer.style.display = 'none'
+  }
+}
+
+/**
+ * Initialiser les événements d'authentification
+ */
+function setupAuthEvents() {
+  const loginForm = document.getElementById('login-form')
+  const logoutBtn = document.getElementById('logout-btn')
+  const loginError = document.getElementById('login-error')
+  
+  if (!loginForm) return // Pas sur la page formulaire
+  
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    loginError.style.display = 'none'
+    
+    const email = document.getElementById('login-email').value
+    const password = document.getElementById('login-password').value
+    
+    try {
+      const { session } = await loginAdmin(email, password)
+      updateAuthUI(session)
+    } catch (error) {
+      loginError.textContent = '❌ ' + error.message
+      loginError.style.display = 'block'
+    }
+  })
+  
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      await logoutAdmin()
+      updateAuthUI(null)
+    })
+  }
+  
+  // Écouter les changements d'état d'authentification
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log('🔄 Auth state changed:', event)
+    updateAuthUI(session)
+  })
+}
+
 // ==================== DONNÉES CACHE ====================
 let cache = {
   familles: null,
@@ -934,6 +1039,12 @@ async function handleAddMedia(e) {
 // Initialiser au chargement
 document.addEventListener('DOMContentLoaded', async () => {
   await init()
+  
+  // Initialiser l'authentification (uniquement sur la page formulaire)
+  setupAuthEvents()
+  const session = await checkAuthStatus()
+  updateAuthUI(session)
+  
   await setupMediaForm()
 })
 
