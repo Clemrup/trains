@@ -51,17 +51,14 @@ function initLightbox() {
     document.getElementById('lightbox-close').addEventListener('click', closeLightbox)
 }
 
-function openLightbox(src, type) {
+function openLightbox(src, type, description) {
     const lightbox = document.getElementById('lightbox')
     const mediaDiv = document.getElementById('lightbox-media')
     
     if (type === 'image') {
         mediaDiv.innerHTML = `<img src="${src}" class="lightbox-media-img">`
-        if (media.lieux2?.nom){
-            html += `<p class="media-description">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${dateFormatee}</p>`
-        }
-        else if (media.lieux1?.nom){
-            html += `<p class="media-description">Vu à ${media.lieux1?.nom} le ${dateFormatee}</p>`
+        if (description) {
+            mediaDiv.innerHTML += `<p class="media-description">${description}</p>`
         }
     } else if (type === 'video') {
         const videoId = src.split('/').pop()
@@ -353,7 +350,7 @@ async function loadMediasForCard(card) {
         // Ajouter les event listeners pour la lightbox
         container.querySelectorAll('.media-clickable').forEach(el => {
             el.addEventListener('click', () => {
-                openLightbox(el.dataset.src, el.dataset.type)
+                openLightbox(el.dataset.src, el.dataset.type, el.closest('.media-block').querySelector('.media-description')?.textContent || '')
             })
         })
     } catch (error) {
