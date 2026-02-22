@@ -454,6 +454,7 @@ main#galerie {
 
 #lightbox-media {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     max-width: 95%;

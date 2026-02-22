@@ -57,12 +57,14 @@ function openLightbox(src, type, description) {
     
     if (type === 'image') {
         mediaDiv.innerHTML = `<img src="${src}" class="lightbox-media-img">`
-        if (description) {
-            mediaDiv.innerHTML += `<p class="media-description">${description}</p>`
-        }
     } else if (type === 'video') {
         const videoId = src.split('/').pop()
         mediaDiv.innerHTML = `<iframe class="lightbox-media-iframe" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+    }
+    
+    // Ajouter la description en dessous du média (image ou vidéo)
+    if (description) {
+        mediaDiv.innerHTML += `<p class="media-description">${description}</p>`
     }
     
     lightbox.classList.remove('hidden')
