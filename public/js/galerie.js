@@ -57,6 +57,12 @@ function openLightbox(src, type) {
     
     if (type === 'image') {
         mediaDiv.innerHTML = `<img src="${src}" class="lightbox-media-img">`
+        if (media.lieux2?.nom){
+            html += `<p class="media-description">Vu entre ${media.lieux1?.nom} et ${media.lieux2?.nom} le ${dateFormatee}</p>`
+        }
+        else if (media.lieux1?.nom){
+            html += `<p class="media-description">Vu à ${media.lieux1?.nom} le ${dateFormatee}</p>`
+        }
     } else if (type === 'video') {
         const videoId = src.split('/').pop()
         mediaDiv.innerHTML = `<iframe class="lightbox-media-iframe" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
