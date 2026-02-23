@@ -509,6 +509,9 @@ async function setupTrainForm() {
           else if (typeName === 'Rames 4400'){
             nom = `TGV-POS ${numeroPrincipal}`
           }
+          else if (typeName === 'TGV M'){
+            nom = `TGV-M ${numeroPrincipal}`
+          }
           else {
             nom = `TGV-D ${numeroPrincipal}`
           }
