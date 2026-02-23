@@ -522,6 +522,7 @@ main#galerie {
 .media-description {
     font-size: 0.75rem;
     margin-bottom: 0;
+    color: white;
 }
 
 /* Train header */
