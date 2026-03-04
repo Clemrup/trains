@@ -478,7 +478,7 @@ async function setupTrainForm() {
             nom = `${familleNom} ${numeroPrincipal} (${numeroSecondaire})`
           }
           else if (typeName === 'Y 8000'){
-            nom = `${typeName} ${numeroPrincipal} (${numeroSecondaire})`
+            nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
           }
           else {
             nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
@@ -515,6 +515,9 @@ async function setupTrainForm() {
           else {
             nom = `TGV-D ${numeroPrincipal}`
           }
+      }
+      else if (typeName === 'Y 8000'){
+        nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
       }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
