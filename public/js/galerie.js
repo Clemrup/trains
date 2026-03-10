@@ -182,16 +182,16 @@ async function loadGallery() {
                     html += `
                         <div class="train-card" id="${cardId}" style="${style_background}${style_color}">
                         <div class="train-header train-header-clickable">`
-                                if (famille == "Train réversible"){
+                                if (famille.includes('Train réversible')){
                                     if (type.includes('Rames réversibles régionales (RRR)')) {
-                                        `<h4>RRR</h4>`
+                                        html += `<h4>RRR</h4>`
                                     }
                                     else if (type.includes('Corail réversible')) {
-                                        `<h4>Corail </h4>`
+                                        html += `<h4>Corail </h4>`
                                     }
                                 }
                                 else{
-                                    `<h4>${famille}</h4>`
+                                    html += `<h4>${famille}</h4>`
                                 }
                                 if(train.nom.includes('BB') || train.nom.includes('Y')) { 
                                     html += `
