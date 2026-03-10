@@ -517,7 +517,10 @@ async function setupTrainForm() {
           }
       }
       else if (typeName === 'Y 8000'){
-        nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
+        nom = `Y ${numeroPrincipal}`
+      }
+      else if (typeName === 'rames réversibles régionales (RRR)'){
+        nom = `RRR ${numeroPrincipal}`
       }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
