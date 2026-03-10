@@ -181,8 +181,13 @@ async function loadGallery() {
                     
                     html += `
                         <div class="train-card" id="${cardId}" style="${style_background}${style_color}">
-                        <div class="train-header train-header-clickable">
-                                <h4>${famille}</h4>`
+                        <div class="train-header train-header-clickable">`
+                                if (famille == "Train réversible"){
+                                    `<h4>${type}</h4>`
+                                }
+                                else{
+                                    `<h4>${famille}</h4>`
+                                }
                                 if(train.nom.includes('BB') || train.nom.includes('Y')) { 
                                     html += `
                                         <h4>N° ${train.numero_principal}${train.numero_secondaire ? `</h4>
