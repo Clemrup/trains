@@ -480,6 +480,9 @@ async function setupTrainForm() {
           else if (typeName === 'Y 8000'){
             nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
           }
+          else if (typeName === 'Z 20500'){
+            nom = `Z ${numeroPrincipal} (${numeroSecondaire})`
+          }
           else {
             nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
           }

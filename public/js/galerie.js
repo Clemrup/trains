@@ -183,7 +183,7 @@ async function loadGallery() {
                         <div class="train-card" id="${cardId}" style="${style_background}${style_color}">
                         <div class="train-header train-header-clickable">`
                                 if (famille.includes('Train réversible')){
-                                    if (type.includes('Rames réversibles régionales (RRR)')) {
+                                    if (type.includes('Rames Réversibles Régionales (RRR)')) {
                                         html += `<h4>RRR</h4>`
                                     }
                                     else if (type.includes('Corail réversible')) {
@@ -193,7 +193,7 @@ async function loadGallery() {
                                 else{
                                     html += `<h4>${famille}</h4>`
                                 }
-                                if(train.nom.includes('BB') || train.nom.includes('Y')) { 
+                                if(train.nom.includes('BB') || train.nom.includes('Y') || train.nom.includes('Z 20')) { 
                                     html += `
                                         <h4>N° ${train.numero_principal}${train.numero_secondaire ? `</h4>
                                             <h4 class="train-numero-secondary">(${train.numero_secondaire})`: ''}</h4>`
