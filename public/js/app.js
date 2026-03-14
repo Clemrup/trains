@@ -483,6 +483,9 @@ async function setupTrainForm() {
           else if (typeName === 'Z 20500'){
             nom = `Z ${numeroPrincipal} (${numeroSecondaire})`
           }
+          else if (familleNom === 'Regio 2N'){
+            nom = `Z ${numeroPrincipal} (${numeroSecondaire})`
+          }
           else {
             nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
           }
