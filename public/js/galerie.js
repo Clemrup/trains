@@ -196,7 +196,7 @@ async function loadGallery() {
                                 else{
                                     html += `<h4>${famille}</h4>`
                                 }
-                                if(train.nom.includes('BB') || train.nom.includes('Y') || train.nom.includes('Z 20') || train.nom.includes('Regio 2N')) { 
+                                if(train.nom.includes('BB') || train.nom.includes('Y') || train.nom.includes('Z 20') || train.nom.includes('Regio 2N') || train.nom.includes('ancienne livrée')) { 
                                     html += `
                                         <h4>N° ${train.numero_principal}${train.numero_secondaire ? `</h4>
                                             <h4 class="train-numero-secondary">(${train.numero_secondaire})`: ''}</h4>`
