@@ -190,6 +190,9 @@ async function loadGallery() {
                                         html += `<h4>Corail </h4>`
                                     }
                                 }
+                                else if (type.includes('E 37500')) {
+                                    html += `<h4>E</h4>`
+                                }
                                 else{
                                     html += `<h4>${famille}</h4>`
                                 }

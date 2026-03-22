@@ -475,7 +475,12 @@ async function setupTrainForm() {
       let nom
         if (numeroSecondaire) {
           if (familleNom === 'BB') {
-            nom = `${familleNom} ${numeroPrincipal} (${numeroSecondaire})`
+              if (typeName === 'E 37500'){
+                nom = `E ${numeroPrincipal} (${numeroSecondaire})`
+              }
+              else{
+                nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
+              }
           }
           else if (typeName === 'Y 8000'){
             nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
