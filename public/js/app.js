@@ -533,7 +533,7 @@ async function setupTrainForm() {
       else if (typeName === 'Y 8000'){
         nom = `Y ${numeroPrincipal}`
       }
-      else if (typeName === 'rames réversibles régionales (RRR)'){
+      else if (typeName === 'Rames Réversibles Régionales (RRR)'){
         nom = `RRR ${numeroPrincipal}`
       }
       else {
