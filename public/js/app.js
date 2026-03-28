@@ -537,7 +537,7 @@ async function setupTrainForm() {
         nom = `RRR ${numeroPrincipal}`
       }
       else if (familleNom === 'Autorail'){
-        nom = ` ${typeName} ${numeroPrincipal}`
+        nom = `${typeName} ${numeroPrincipal}`
       }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
