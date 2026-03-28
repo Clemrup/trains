@@ -537,7 +537,12 @@ async function setupTrainForm() {
         nom = `RRR ${numeroPrincipal}`
       }
       else if (familleNom === 'Autorail'){
-        nom = `${typeName} ${numeroPrincipal}`
+        if (typeName === 'Stadler Regio-Shuttle RS1'){
+          nom = `RS1 ${numeroPrincipal}`
+        }
+        else{
+          nom = `${typeName} ${numeroPrincipal}`
+        }
       }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
