@@ -536,6 +536,9 @@ async function setupTrainForm() {
       else if (typeName === 'Rames Réversibles Régionales (RRR)'){
         nom = `RRR ${numeroPrincipal}`
       }
+      else if (familleNom === 'Autorail'){
+        nom = ` ${typeName} ${numeroPrincipal}`
+      }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
       }
