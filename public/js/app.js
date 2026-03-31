@@ -545,7 +545,10 @@ async function setupTrainForm() {
         }
       }
       else if (typeName === 'E 37500'){
-        nom = `E ${numeroPrincipal} (${numeroSecondaire})`
+        nom = `E ${numeroPrincipal}`
+      }
+      else if (typeName === 'Corail'){
+        nom = `${typeName} ${numeroPrincipal}`
       }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
