@@ -550,6 +550,9 @@ async function setupTrainForm() {
       else if (typeName === 'Corail'){
         nom = `${typeName} ${numeroPrincipal}`
       }
+      else if (familleNom === 'Class 66'){
+        nom = `Class ${numeroPrincipal}`
+      }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
       }
