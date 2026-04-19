@@ -530,7 +530,7 @@ async function setupTrainForm() {
             nom = `TGV-D ${numeroPrincipal}`
           }
       }
-      else if (typeName === 'Y 8000'){
+      else if (typeName === 'Y 8000' || typeName === 'Y 8400' || typeName === 'Y 9000'){
         nom = `Y ${numeroPrincipal}`
       }
       else if (typeName === 'Rames Réversibles Régionales (RRR)'){
