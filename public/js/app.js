@@ -482,14 +482,17 @@ async function setupTrainForm() {
                 nom = `${familleNom} ${numeroPrincipal} (${numeroSecondaire})`
               }
           }
-          else if (typeName === 'Y 8000'){
+          else if (typeName === 'Y 8000' || typeName === 'Y 8400' || typeName === 'Y 9000'){
             nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
           }
-          else if (typeName === 'Z 20500'){
+          else if (typeName === 'Z 20500' || familleNom === 'Z2'){
             nom = `Z ${numeroPrincipal} (${numeroSecondaire})`
           }
           else if (familleNom === 'Regio 2N'){
             nom = `${familleNom} ${numeroPrincipal} (${numeroSecondaire})`
+          }
+          else if (familleNom === 'TER 2N NG'){
+            nom = `${typeName} ${numeroPrincipal}/${numeroSecondaire}`
           }
           else {
             nom = `${familleNom} ${numeroPrincipal}/${numeroSecondaire}`
