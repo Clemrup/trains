@@ -1,0 +1,1 @@
+INSERT INTO "public"."constructeur" ("id", "nom") VALUES (1, 'Alstom'), (2, 'CAF France'), (3, 'Bombardier'), (4, 'Usine ferroviaire de Reichshoffen'), (5, 'GEC Alsthom'), (6, 'Adtranz'), (7, 'Socofer'), (8, 'Gaston Moyse'), (9, 'Établissements Fauvet Girel'), (10, 'MTE');

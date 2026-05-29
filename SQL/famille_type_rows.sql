@@ -1,0 +1,1 @@
+INSERT INTO "public"."famille_type" ("id", "nom") VALUES (1, 'AGC'), (2, 'ATER'), (3, 'Autorail'), (4, 'BB'), (5, 'Train réversible'), (6, 'Locotracteur'), (7, 'Régiolis'), (8, 'TGV'), (9, 'TRAXX'), (10, 'SNCB'), (11, 'ICE'), (12, 'Z2N'), (13, 'Regio 2N'), (14, 'Euro'), (15, 'Class 66'), (16, 'CFL'), (17, 'TER 2N NG'), (18, 'Z2');
