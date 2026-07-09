@@ -485,10 +485,10 @@ async function setupTrainForm() {
           else if (typeName === 'Y 8000' || typeName === 'Y 8400' || typeName === 'Y 9000'){
             nom = `Y ${numeroPrincipal} (${numeroSecondaire})`
           }
-          else if (typeName === 'Z 20500' || familleNom === 'Z2'){
+          else if (typeName === 'Z 20500' || familleNom === 'Z2' || familleNom === 'NAT'){
             nom = `Z ${numeroPrincipal} (${numeroSecondaire})`
           }
-          else if (familleNom === 'Regio 2N' || familleNom === 'NAT'){
+          else if (familleNom === 'Regio 2N'){
             nom = `${familleNom} ${numeroPrincipal} (${numeroSecondaire})`
           }
           else if (familleNom === 'TER 2N NG'){
