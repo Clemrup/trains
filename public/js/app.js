@@ -556,6 +556,9 @@ async function setupTrainForm() {
       else if (familleNom === 'Class 66'){
         nom = `Class ${numeroPrincipal}`
       }
+      else if (typeName === 'CDG Express'){
+        nom = `CDG Express ${numeroPrincipal}`
+      }
       else {
         nom = `${familleNom} ${numeroPrincipal}`
       }
