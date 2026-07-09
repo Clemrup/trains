@@ -193,6 +193,9 @@ async function loadGallery() {
                                 else if (type.includes('E 37500')) {
                                     html += `<h4>E${train.nom.includes('ancienne livrée') ? ` (ancienne livrée)`: ''}</h4>`
                                 }
+                                else if (type.includes('CDG Express')) {
+                                    html += `<h4>CDG Express${train.nom.includes('ancienne livrée') ? ` (ancienne livrée)`: ''}</h4>`
+                                }
                                 else{
                                     html += `<h4>${famille}${train.nom.includes('ancienne livrée') ? ` (ancienne livrée)`: ''}</h4>`
                                 }
