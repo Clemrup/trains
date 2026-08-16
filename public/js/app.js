@@ -526,7 +526,7 @@ async function setupTrainForm() {
           else if (typeName === 'Eurostar e320'){
             nom = `TGV-E ${numeroPrincipal}`
           }
-          else if (typeName === 'TGV M'){
+          else if (typeName === 'TGV-M'){
             nom = `TGV-M ${numeroPrincipal}`
           }
           else {
