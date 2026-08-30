@@ -1,25 +1,62 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trains Archive</title>
-    <meta
-      name="description"
-      content="Catalogue ferroviaire statique et autonome"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="app"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <title>Galerie - Trains</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-optim.css">
+</head>
+<body>
+    <header>
+        <h1>Catalogue des trains</h1>
+        <nav style="text-align:center; margin-top: 20px;">
+            <a href="formulaire.html" class="nav-link">⬅ Ajouter un train</a>
+        </nav>
+    </header>
+    <article>
+        <div class="galerie-intro">
+            <h2>Bienvenue sur ma galerie ferroviaire ! 🚂</h2>
+            <p class="intro-description">
+                Depuis septembre 2024, je photographie les trains croisés lors de mes différents voyages à travers la France.
+                Cette collection regroupe actuellement <br><strong><span id="stats-trains">...</span> trains</strong> et <strong><span id="stats-medias">...</span> médias</strong>.
+            </p>
+            
+            <div class="intro-howto">
+                <h3>📖 Comment naviguer ?</h3>
+                <p>Les trains sont organisés par <strong>famille</strong> (TGV, AGC, Régiolis...) puis par <strong>type</strong>. 
+                Cliquez sur un type pour afficher les trains, puis sur un train pour voir ses photos et vidéos.</p>
+            </div>
+            
+            <div class="intro-updates">
+                <span class="update-badge">🔄 Mise à jour régulière</span>
+                <p>De nouveaux trains et médias sont ajoutés régulièrement et au fil de mes différents voyages !</p>
+            </div>
+            
+            <div class="intro-roadmap">
+                <h3>🚧 Fonctionnalités à venir</h3>
+                <ul>
+                    <li>Tri par lieu, livrée ou date</li>
+                    <li>Barre de navigation</li>
+                    <li>Recherche avancée</li>
+                    <li>historique du train</li>
+                    <li>Carte des observations</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <main id="galerie">
+        <p style="text-align: center; font-size: 18px;">⏳ Chargement de la galerie...</p>
+    </main>
+    <footer class="footer">
+        <p>© 2026 Clément RUPERT. Tous droits réservés.</p>
+    </footer>
+    <!-- Config AVANT les autres scripts -->
     <script src="js/config.js"></script>
+    <!-- Supabase CDN (format global, pas modules) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="ProjetV2/app.js"></script>
-  </body>
+    <script src="js/galerie.js"></script>
+</body>
 </html>
