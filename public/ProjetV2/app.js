@@ -24,17 +24,17 @@ const state = {
 const SUPABASE_URL = window.CONFIG?.SUPABASE_URL || 'https://your-project.supabase.co';
 const SUPABASE_ANON_KEY = window.CONFIG?.SUPABASE_ANON_KEY || 'your-anon-key';
 
-let supabase = null;
+let supabaseClient = null;
 
 function initSupabaseClient() {
-  if (supabase) return supabase;
+  if (supabaseClient) return supabaseClient;
   if (!window.supabase) {
     console.error('❌ Supabase CDN non chargé');
     return null;
   }
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   console.log('✅ Client Supabase initialisé (ProjetV2)');
-  return supabase;
+  return supabaseClient;
 }
 
 const MAP_MIN_ZOOM = 1;
