@@ -1,62 +1,298 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <title>Galerie - Trains</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style-optim.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trains Archive — Catalogue ferroviaire</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Catalogue des trains</h1>
-        <nav style="text-align:center; margin-top: 20px;">
-            <a href="formulaire.html" class="nav-link">⬅ Ajouter un train</a>
-        </nav>
-    </header>
-    <article>
-        <div class="galerie-intro">
-            <h2>Bienvenue sur ma galerie ferroviaire ! 🚂</h2>
-            <p class="intro-description">
-                Depuis septembre 2024, je photographie les trains croisés lors de mes différents voyages à travers la France.
-                Cette collection regroupe actuellement <br><strong><span id="stats-trains">...</span> trains</strong> et <strong><span id="stats-medias">...</span> médias</strong>.
-            </p>
-            
-            <div class="intro-howto">
-                <h3>📖 Comment naviguer ?</h3>
-                <p>Les trains sont organisés par <strong>famille</strong> (TGV, AGC, Régiolis...) puis par <strong>type</strong>. 
-                Cliquez sur un type pour afficher les trains, puis sur un train pour voir ses photos et vidéos.</p>
-            </div>
-            
-            <div class="intro-updates">
-                <span class="update-badge">🔄 Mise à jour régulière</span>
-                <p>De nouveaux trains et médias sont ajoutés régulièrement et au fil de mes différents voyages !</p>
-            </div>
-            
-            <div class="intro-roadmap">
-                <h3>🚧 Fonctionnalités à venir</h3>
-                <ul>
-                    <li>Tri par lieu, livrée ou date</li>
-                    <li>Barre de navigation</li>
-                    <li>Recherche avancée</li>
-                    <li>historique du train</li>
-                    <li>Carte des observations</li>
-                </ul>
-            </div>
-        </div>
-    </article>
 
-    <main id="galerie">
-        <p style="text-align: center; font-size: 18px;">⏳ Chargement de la galerie...</p>
-    </main>
-    <footer class="footer">
-        <p>© 2026 Clément RUPERT. Tous droits réservés.</p>
-    </footer>
-    <!-- Config AVANT les autres scripts -->
-    <script src="js/config.js"></script>
-    <!-- Supabase CDN (format global, pas modules) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/galerie.js"></script>
+<!-- ─── Loader ───────────────────────────────────────────────────────────────── -->
+<div id="loader">
+  <div class="loader-dots">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+  <p class="font-mono" style="color:var(--muted);font-size:.75rem;margin-top:.5rem">Chargement du catalogue…</p>
+</div>
+
+<!-- ─── Header ───────────────────────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <div class="logo">
+      <div class="logo-badge">TR</div>
+      <div>
+        <div class="logo-name">Trains Archive</div>
+        <div class="logo-sub">CATALOGUE FERROVIAIRE</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="site-nav">
+      <button class="nav-tab active" data-view="galerie">Galerie</button>
+      <button class="nav-tab" data-view="recherche">Recherche</button>
+      <button class="nav-tab" data-view="carte">Carte</button>
+      <button class="nav-tab" data-view="lieux">Lieux</button>
+      <button class="nav-tab" data-view="dates">Dates</button>
+      <button class="nav-tab" data-view="arborescence">Arborescence</button>
+    </nav>
+
+    <!-- Stats -->
+    <div class="header-stats">
+      <div class="stat-item">
+        <div class="stat-val" id="stat-trains">—</div>
+        <div class="stat-lbl">TRAINS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-medias">—</div>
+        <div class="stat-lbl">MÉDIAS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-lieux">—</div>
+        <div class="stat-lbl">LIEUX</div>
+      </div>
+    </div>
+
+    <!-- Bouton Ajouter -->
+    <a href="formulaire.html" class="btn-add">
+      <span class="btn-add-plus">+</span>
+      <span>Ajouter</span>
+    </a>
+  </div>
+</header>
+
+<!-- ─── Hero (Galerie) ────────────────────────────────────────────────────────── -->
+<div id="hero">
+  <img src="https://images.unsplash.com/photo-1673086636059-0f4abc8b853b?w=1600&h=480&fit=crop&auto=format" alt="Trains Archive">
+  <div class="hero-overlay">
+    <p class="hero-tag">ARCHIVE PERSONNELLE · FRANCE · DEPUIS 2024</p>
+    <h1 class="hero-title font-display">Journal ferroviaire</h1>
+    <p class="hero-sub">Documentation photographique des trains rencontrés au fil des voyages.</p>
+  </div>
+</div>
+
+<!-- Bande de livrées -->
+<div id="livery-strip"></div>
+
+<!-- ─── Main ──────────────────────────────────────────────────────────────────── -->
+<main class="site-main">
+
+  <!-- ── Galerie ── -->
+  <section id="view-galerie" class="view-section active">
+    <div class="view-header">
+      <h2 class="view-title">Galerie</h2>
+      <span class="view-count">— médias</span>
+    </div>
+    <div class="gallery-container"></div>
+  </section>
+
+  <!-- ── Recherche avancée ── -->
+  <section id="view-recherche" class="view-section">
+    <div class="view-header">
+      <h2 class="view-title">Recherche avancée</h2>
+      <span class="view-count"></span>
+    </div>
+    <div class="search-layout">
+
+      <!-- Sidebar filtres -->
+      <aside class="search-sidebar">
+        <p class="search-sidebar-title">Filtres</p>
+
+        <div class="filter-group">
+          <label class="filter-label">Recherche libre</label>
+          <input id="f-query" class="ctrl" type="text" placeholder="Numéro, livrée, lieu…">
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Famille</label>
+          <select id="f-famille" class="ctrl">
+            <option value="">Toutes les familles</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Type</label>
+          <select id="f-type" class="ctrl">
+            <option value="">Tous les types</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Train</label>
+          <select id="f-train" class="ctrl">
+            <option value="">Tous les trains</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Livrée</label>
+          <select id="f-livree" class="ctrl">
+            <option value="">Toutes les livrées</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Lieu</label>
+          <select id="f-lieu" class="ctrl">
+            <option value="">Tous les lieux</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Type de média</label>
+          <div class="kind-toggle">
+            <button class="kind-btn active" data-kind="">Tout</button>
+            <button class="kind-btn" data-kind="image">Photo</button>
+            <button class="kind-btn" data-kind="video">Vidéo</button>
+          </div>
+          <!-- select caché pour sync JS -->
+          <select id="f-kind" style="display:none">
+            <option value=""></option>
+            <option value="image">image</option>
+            <option value="video">video</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Période</label>
+          <input id="f-datefrom" class="ctrl" type="date" style="margin-bottom:.5rem">
+          <input id="f-dateto" class="ctrl" type="date">
+        </div>
+
+        <button id="filter-reset" class="reset-btn">Réinitialiser</button>
+      </aside>
+
+      <!-- Résultats -->
+      <div class="search-results results-container"></div>
+    </div>
+  </section>
+
+  <!-- ── Carte ── -->
+  <section id="view-carte" class="view-section">
+    <div class="view-header">
+      <h2 class="view-title">Carte des prises de vue</h2>
+    </div>
+    <div class="map-layout">
+      <!-- SVG France -->
+      <div class="map-box">
+        <svg id="france-map" viewBox="0 0 450 490">
+          <!-- Fond France -->
+          <path d="M 222 38 L 245 32 L 278 46 L 310 62 L 339 112 L 375 148 L 382 190 L 365 230 L 382 270 L 378 320 L 362 358 L 345 392 L 312 420 L 275 448 L 247 455 L 210 445 L 170 440 L 135 420 L 118 400 L 114 370 L 124 340 L 132 305 L 134 272 L 120 240 L 104 218 L 78 200 L 52 184 L 34 165 L 54 144 L 80 134 L 110 128 L 130 108 L 154 97 L 168 100 L 196 78 L 210 50 Z"
+                fill="#191920" stroke="#27272f" stroke-width="1.5"/>
+          <!-- Corse -->
+          <path d="M 385 395 L 392 380 L 401 390 L 398 408 L 390 415 Z"
+                fill="#191920" stroke="#27272f" stroke-width="1"/>
+          <!-- LGV (stylisées) -->
+          <path d="M 229 143 L 297 293 L 312 412" stroke="#c4372a22" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <path d="M 229 143 L 249 57"              stroke="#c4372a22" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <path d="M 229 143 L 150 337"             stroke="#c4372a22" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <path d="M 229 143 L 377 156"             stroke="#c4372a22" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <path d="M 229 143 L 205 397"             stroke="#c4372a22" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <!-- Les pins sont injectés par gallery.js -->
+        </svg>
+        <div class="map-legend">
+          <div class="map-legend-dot"></div>
+          <span class="map-legend-text">Taille du point = nombre de médias · Tirets = axes LGV principaux</span>
+        </div>
+      </div>
+
+      <!-- Panneau latéral -->
+      <div id="carte-panel" class="map-panel">
+        <div class="map-panel-empty">
+          <div class="map-panel-icon">⊕</div>
+          <p class="font-mono" style="font-size:.7rem;color:var(--muted)">Cliquez sur un point<br>pour voir les médias du lieu</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Lieux ── -->
+  <section id="view-lieux" class="view-section">
+    <div class="view-header">
+      <h2 class="view-title">Lieux</h2>
+      <span class="view-count"></span>
+    </div>
+    <div id="lieux-list" class="lieux-list"></div>
+  </section>
+
+  <!-- ── Dates ── -->
+  <section id="view-dates" class="view-section">
+    <div class="view-header">
+      <h2 class="view-title">Chronologie</h2>
+    </div>
+    <div id="year-tabs" class="year-tabs"></div>
+    <div class="month-chart">
+      <p id="month-chart-label" class="month-chart-label"></p>
+      <div id="month-bars" class="month-bars"></div>
+    </div>
+    <div class="dates-results-header">
+      <span id="active-month-chip" class="active-month-chip" style="display:none"></span>
+      <span id="dates-result-count" class="font-mono text-muted" style="font-size:.75rem"></span>
+    </div>
+    <div id="dates-grid" class="media-grid"></div>
+  </section>
+
+  <!-- ── Arborescence ── -->
+  <section id="view-arborescence" class="view-section">
+    <div class="view-header">
+      <h2 class="view-title">Arborescence</h2>
+    </div>
+    <div id="arbo-tree" class="tree"></div>
+  </section>
+
+</main>
+
+<!-- ─── Footer ───────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="site-footer">
+    <span class="footer-text">© 2026 · Trains Archive · Clément Rupert</span>
+    <span class="footer-text" id="footer-stats"></span>
+  </div>
+</footer>
+
+<!-- ─── Lightbox ─────────────────────────────────────────────────────────────── -->
+<div id="lightbox">
+  <div class="lightbox-inner">
+    <img id="lb-img" class="lightbox-img" src="" alt="">
+    <div id="lb-livree-band" class="lightbox-livree">
+      <div class="lightbox-meta">
+        <div>
+          <p id="lb-tag" class="lightbox-tag"></p>
+          <h2 id="lb-title" class="lightbox-title"></h2>
+          <p id="lb-sub" class="lightbox-sub"></p>
+        </div>
+        <div>
+          <p id="lb-loc" class="lightbox-loc font-mono" style="font-size:.75rem"></p>
+          <p id="lb-date" class="lightbox-loc font-mono" style="font-size:.75rem;opacity:.7;margin-top:2px"></p>
+        </div>
+      </div>
+    </div>
+    <div class="lightbox-body">
+      <div class="lightbox-desc">
+        <p class="lightbox-desc-label">DESCRIPTION DU TYPE</p>
+        <p id="lb-desc" class="lightbox-desc-text"></p>
+      </div>
+      <div class="lightbox-aside">
+        <div class="lightbox-aside-item">
+          <p class="lightbox-aside-label">CONSTRUCTEUR</p>
+          <p id="lb-constructeur" class="lightbox-aside-val"></p>
+        </div>
+        <div id="lb-trains-section" class="lightbox-aside-item" style="display:none">
+          <p class="lightbox-aside-label">TRAINS SUR CE MÉDIA</p>
+          <p id="lb-trains" class="lightbox-aside-val font-mono" style="font-size:.8rem"></p>
+        </div>
+      </div>
+    </div>
+    <button id="lightbox-close" class="lightbox-close">×</button>
+  </div>
+</div>
+
+<!-- ─── Scripts ───────────────────────────────────────────────────────────────── -->
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/gallery.js"></script>
 </body>
 </html>

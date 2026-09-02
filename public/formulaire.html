@@ -1,203 +1,376 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <title>Trains - Ajouter</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style-optim.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter — Trains Archive</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Catalogue des trains</h1>
-        <nav style="text-align:center; margin-top: 20px;">
-            <a href="index.html" class="nav-link">Retour à la galerie ➡</a>
-        </nav>
-    </header>
-    
-    <!-- Section Authentification Admin -->
-    <div id="auth-section" class="formulaires-container" style="max-width: 400px; margin: 2rem auto;">
-        <section class="ajout-train">
-            <h2>🔐 Connexion Admin</h2>
-            <div id="login-form-container">
-                <form id="login-form">
-                    <label for="login-email">Email :</label>
-                    <input type="email" id="login-email" required placeholder="admin@exemple.com">
-                    
-                    <label for="login-password">Mot de passe :</label>
-                    <input type="password" id="login-password" required placeholder="••••••••">
-                    
-                    <button type="submit" style="margin-top: 1rem;">🔓 Se connecter</button>
-                </form>
-                <p id="login-error" style="color: #dc3545; margin-top: 1rem; display: none;"></p>
-            </div>
-        </section>
+
+<!-- ─── Header ───────────────────────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-badge">TR</div>
+      <div>
+        <div class="logo-name">Trains Archive</div>
+        <div class="logo-sub">CATALOGUE FERROVIAIRE</div>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html" class="nav-tab">← Galerie</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ─── Main ──────────────────────────────────────────────────────────────────── -->
+<main class="form-page-main">
+
+  <!-- Titre de page -->
+  <div style="margin-bottom:2.5rem">
+    <p class="font-mono text-gold" style="font-size:.7rem;letter-spacing:.15em;margin-bottom:.5rem">ADMINISTRATION</p>
+    <h1 class="font-display" style="font-size:2.5rem;font-style:italic;color:var(--text)">Ajouter au catalogue</h1>
+  </div>
+
+  <!-- ── Connexion admin ── -->
+  <div id="auth-section">
+    <div class="form-card auth-card">
+      <div class="form-card-header">
+        <span class="form-card-title">Connexion admin</span>
+        <span class="form-card-sub">ACCÈS RESTREINT</span>
+      </div>
+      <div id="login-form-container" class="form-body">
+        <form id="login-form">
+          <div class="form-field">
+            <label class="form-label">Adresse e-mail</label>
+            <input id="login-email" class="ctrl" type="email" required placeholder="admin@example.com">
+          </div>
+          <div class="form-field">
+            <label class="form-label">Mot de passe</label>
+            <input id="login-password" class="ctrl" type="password" required placeholder="••••••••">
+          </div>
+          <p id="login-error" class="error-msg"></p>
+          <button type="submit" class="submit-btn submit-btn-primary" style="margin-top:.75rem">
+            Se connecter →
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Formulaires (cachés jusqu'à connexion) ── -->
+  <div id="forms-container" class="container-hidden">
+
+    <!-- Barre de déconnexion -->
+    <div class="logout-bar" style="margin-bottom:2rem;border-radius:var(--radius);border:1px solid var(--border)">
+      <span class="logout-bar-text">Connecté en tant qu'administrateur</span>
+      <button id="logout-btn" class="logout-btn">Déconnexion</button>
     </div>
 
-    <div class="formulaires-container" id="forms-container" style="display: none;">
-        
-    <!-- FORMULAIRE D'AJOUT DE TRAIN -->
-    <section class="ajout-train">
-        <h2>Ajouter un nouveau train</h2>
-        <form id="form-train" method="POST">
-            <label>Sélectionner une famille :</label>
-            <div id="train-familles-buttons" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;">
-                <!-- Les boutons seront générés par JS -->
+    <!-- ══════════════════════════════════════
+         FORMULAIRE 1 — Nouveau train
+    ══════════════════════════════════════ -->
+    <div class="form-card" style="margin-bottom:2rem">
+      <div class="form-card-header">
+        <span class="form-card-title">Nouveau train</span>
+        <span class="form-card-sub">ENREGISTRER UN ENGIN</span>
+      </div>
+      <div class="form-body">
+        <form id="form-train">
+          <input type="hidden" id="train-selected-famille">
+          <input type="hidden" id="train-selected-type">
+
+          <!-- Famille -->
+          <div class="form-field">
+            <label class="form-label">Famille *</label>
+            <div id="train-familles-buttons" class="btn-group"></div>
+          </div>
+
+          <!-- Type (affiché après sélection famille) -->
+          <div id="types-container1" style="display:none">
+            <div class="form-field">
+              <label class="form-label">Type *</label>
+              <div id="train-types-buttons" class="btn-group"></div>
             </div>
-            
-            <div id="types-container1" style="display: none; margin-bottom: 1.5rem;">
-                <label>Sélectionner un type :</label>
-                <div id="train-types-buttons" style="display: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;">
-                    <!-- Les boutons seront générés par JS -->
-                </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- Numéros -->
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="form-label" for="numero_principal">Numéro principal *</label>
+              <input id="numero_principal" class="ctrl" type="text" required placeholder="Ex : 508">
             </div>
-            
-            <input type="hidden" id="train-selected-famille" value="">
-            <input type="hidden" id="train-selected-type" value="">
-                
-            <label for="numero_principal">Numéro principal :</label>
-            <input type="text" id="numero_principal" name="numero_principal" required>
-                
-            <label for="numero_secondaire">Numéro secondaire :</label>
-            <input type="text" id="numero_secondaire" name="numero_secondaire">
-                
-            <label for="livree">Livrée :</label>
-            <select name="livree_id" id="livree" required>
-                <option value="">-- Sélectionner une livrée --</option>
+            <div class="form-field">
+              <label class="form-label" for="numero_secondaire">Numéro secondaire</label>
+              <input id="numero_secondaire" class="ctrl" type="text" placeholder="Ex : 006-9">
+            </div>
+          </div>
+
+          <!-- Livrée -->
+          <div class="form-field">
+            <label class="form-label" for="livree">Livrée</label>
+            <select id="livree" class="ctrl">
+              <option value="">— Sélectionner une livrée —</option>
             </select>
-                
-            <hr>
-            <button type="submit">➕ Ajouter ce train</button>
+            <!-- Aperçu livrée (injecté par JS) -->
+            <div id="livree-preview" style="display:none" class="livree-preview">
+              <div id="lp-swatch" class="livree-swatch"></div>
+              <div>
+                <p id="lp-name" class="livree-name"></p>
+                <p id="lp-hex" class="livree-hex"></p>
+              </div>
+              <div class="livree-swatches">
+                <div id="lp-main" class="livree-swatch-sm"></div>
+                <div id="lp-text" class="livree-swatch-sm"></div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn submit-btn-primary" id="train-submit-btn">
+            Ajouter le train →
+          </button>
         </form>
-    </section>
-
-    <!-- FORMULAIRE D'AJOUT DE MÉDIAS -->
-    <section class="ajout-train">
-        <h2>Ajouter un média à un train existant</h2>
-        <form id="form-media" method="POST">
-            <label>Sélectionner une famille :</label>
-            <!-- Onglets des familles -->
-            <div id="familles-tabs" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; border-bottom: 2px solid #0077b6; padding-bottom: 1rem;">
-                <!-- Les onglets seront générés par JS -->
-            </div>
-
-            <!-- Sélection des types -->
-            <div id="types-container2" style="display: none; margin-bottom: 1.5rem;">
-                <label>Sélectionner un type :</label>
-                <div id="types-buttons-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.5rem;">
-                    <!-- Les boutons de types seront générés par JS -->
-                </div>
-            </div>
-            <input type="hidden" id="media-selected-type" value="">
-
-            <!-- Checkboxes des trains -->
-            <div id="trains-container" style="display: none; margin-bottom: 1.5rem;">
-                <label>Sélectionner les trains :</label>
-                <div id="trains_select" style="border: 1px solid #adb5bd; border-radius: 8px; padding: 1rem; max-height: 250px; overflow-y: auto; background-color: #f8f9fa; display: grid; grid-template-columns: repeat(3, 1fr);">
-                    <!-- Les checkboxes seront générées par JS -->
-                </div>
-            </div>
-
-            <!-- Liste des trains sélectionnés -->
-            <div id="selected-trains-display" style="display: none; margin-bottom: 1.5rem; padding: 1rem; background-color: #e3f2fd; border-radius: 8px;">
-                <strong style="font-size: 1.1em;">Trains sélectionnés:</strong>
-                <div id="selected-trains-list" style="margin-top: 0.5rem; color: #0077b6;"></div>
-            </div>
-
-            <hr>
-
-            <!-- Type de média -->
-            <label for="type_media">Type de média :</label>
-            <select name="type_media" id="type_media" required>
-                <option value="">-- Sélectionner un type --</option>
-                <option value="image">Image</option>
-                <option value="video">Vidéo (YouTube)</option>
-            </select>
-
-            <!-- Bloc Image -->
-            <div id="bloc_image" style="display: none; margin: 1rem 0; padding: 1rem; background-color: #f5f5f5; border-radius: 8px;">
-                <label for="image_folder">Dossier d'images :</label>
-                <select name="image_folder" id="image_folder">
-                    <option value="">-- URL personnalisée --</option>
-                    <option value="images/AGC/">AGC</option>
-                    <option value="images/ATER/">ATER</option>
-                    <option value="images/BB/">BB</option>
-                    <option value="images/Corail/">Corail</option>
-                    <option value="images/RRR/">RRR</option>
-                    <option value="images/Autorail/">Autorail</option>
-                    <option value="images/Régiolis/">Régiolis</option>
-                    <option value="images/Régio_2N/">Régio 2N</option>
-                    <option value="images/TGV_D/">TGV D</option>
-                    <option value="images/TGV_R/">TGV R</option>
-                    <option value="images/TGV_RD/">TGV RD</option>
-                    <option value="images/TGV_M/">TGV M</option>
-                    <option value="images/TGV_POS/">TGV POS</option>
-                    <option value="images/TGV_PBKA/">TGV PBKA</option>
-                    <option value="images/TGV_TMST/">TGV TMST</option>
-                    <option value="images/TRAXX/">TRAXX</option>
-                    <option value="images/SNCB/">SNCB</option>
-                    <option value="images/Y/">Y</option>
-                    <option value="images/Z2/">Z2</option>
-                </select>
-
-                <label for="image_filename">Nom du fichier (si dossier sélectionné) :</label>
-                <input type="text" id="image_filename" name="image_filename" placeholder="Ex: 245.jpg">
-            </div>
-
-            <!-- Bloc Vidéo -->
-            <div id="bloc_video" style="display: none; margin: 1rem 0; padding: 1rem; background-color: #f5f5f5; border-radius: 8px;">
-                <label for="video_url">URL YouTube :</label>
-                <input type="url" id="video_url" name="video_url" placeholder="https://youtube.com/watch?v=...">
-            </div>
-
-            <hr>
-
-            <!-- Type de lieu -->
-            <label for="type_lieu">Type de lieu :</label>
-            <select name="type_lieu" id="type_lieu" required>
-                <option value="">-- Sélectionner un type de lieu --</option>
-                <option value="simple">Dans une gare</option>
-                <option value="double">Entre deux gares</option>
-            </select>
-
-            <!-- Lieu simple -->
-            <div id="lieux_simple_container" style="display: none;">
-                <label for="lieu1">Lieu :</label>
-                <select name="lieu1" id="lieu1">
-                    <option value="">-- Sélectionner un lieu --</option>
-                </select>
-            </div>
-
-            <!-- Lieux double -->
-            <div id="lieux_double_container" style="display: none;">
-                <label for="lieu1_double">Lieu 1 :</label>
-                <select name="lieu1_double" id="lieu1_double">
-                    <option value="">-- Sélectionner le premier lieu --</option>
-                </select>
-
-                <label for="lieu2_double">Lieu 2 :</label>
-                <select name="lieu2_double" id="lieu2_double">
-                    <option value="">-- Sélectionner le deuxième lieu --</option>
-                </select>
-            </div>
-
-            <label for="date_media">Date :</label>
-            <input type="date" id="date_media" name="date_media" required>
-
-            <hr>
-            <button type="submit">➕ Ajouter le média</button>
-        </form>
-    </section>
-    
+      </div>
     </div>
-    <footer class="footer">
-        <p>© 2026 Clément RUPERT. Tous droits réservés.</p>
-    </footer>
-    <!-- Config AVANT les autres scripts -->
-    <script src="js/config.js"></script>
-    <!-- Supabase CDN (format global, pas modules) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/app.js"></script>
+
+    <!-- ══════════════════════════════════════
+         FORMULAIRE 2 — Nouveau média
+    ══════════════════════════════════════ -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="form-card-title">Nouveau média</span>
+        <span class="form-card-sub">ASSOCIER UNE PHOTO OU VIDÉO</span>
+      </div>
+      <div class="form-body">
+        <form id="form-media">
+          <input type="hidden" id="media-selected-type">
+
+          <!-- Sélection des trains -->
+          <div class="form-card" style="margin-bottom:1.5rem;border-color:var(--subtle)">
+            <div class="form-card-header" style="background:transparent">
+              <span class="form-card-sub" style="font-size:.65rem">SÉLECTION DES TRAINS</span>
+            </div>
+            <div class="form-body" style="padding-top:.75rem">
+
+              <!-- Famille -->
+              <div class="form-field">
+                <label class="form-label">Filtrer par famille</label>
+                <div id="familles-tabs" class="btn-group"></div>
+              </div>
+
+              <!-- Types (affiché après famille) -->
+              <div id="types-container2" style="display:none">
+                <div class="form-field">
+                  <label class="form-label">Filtrer par type</label>
+                  <div id="types-buttons-container" class="btn-group"></div>
+                </div>
+              </div>
+
+              <!-- Liste des trains à cocher -->
+              <div id="trains-container" style="display:none">
+                <div class="form-field">
+                  <label class="form-label">Trains sur ce média * (sélection multiple)</label>
+                  <div id="trains_select" class="trains-checkbox-list"></div>
+                </div>
+              </div>
+
+              <!-- Récapitulatif trains sélectionnés -->
+              <div id="selected-trains-display" style="display:none" class="selected-trains-display">
+                <p class="selected-trains-label">TRAINS SÉLECTIONNÉS</p>
+                <div id="selected-trains-list" class="selected-trains-tags"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Détails du média -->
+          <div class="form-card" style="margin-bottom:1.5rem;border-color:var(--subtle)">
+            <div class="form-card-header" style="background:transparent">
+              <span class="form-card-sub" style="font-size:.65rem">DÉTAILS DU MÉDIA</span>
+            </div>
+            <div class="form-body" style="padding-top:.75rem">
+
+              <!-- Type photo/vidéo -->
+              <div class="form-field">
+                <label class="form-label">Type de média *</label>
+                <div class="type-media-toggle">
+                  <button type="button" class="type-media-btn active" data-kind="image" onclick="selectMediaKind('image')">⬜ Photo</button>
+                  <button type="button" class="type-media-btn" data-kind="video" onclick="selectMediaKind('video')">▶ Vidéo</button>
+                </div>
+                <select id="type_media" style="display:none">
+                  <option value="image" selected>image</option>
+                  <option value="video">video</option>
+                </select>
+              </div>
+
+              <!-- Bloc image -->
+              <div id="bloc_image">
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="image_folder">Dossier *</label>
+                    <select id="image_folder" class="ctrl">
+                      <option value="">— Sélectionner un dossier —</option>
+                      <!-- Adaptez ces dossiers à votre structure de stockage -->
+                      <option value="medias/TGV/">TGV</option>
+                      <option value="medias/TGV/Reseau/">TGV Réseau</option>
+                      <option value="medias/TGV/Duplex/">TGV Duplex</option>
+                      <option value="medias/TGV/Atlantique/">TGV Atlantique</option>
+                      <option value="medias/TGV/PBKA/">TGV PBKA</option>
+                      <option value="medias/TGV/POS/">TGV POS</option>
+                      <option value="medias/TGV/M/">TGV-M</option>
+                      <option value="medias/AGC/">AGC</option>
+                      <option value="medias/Regiolis/">Régiolis</option>
+                      <option value="medias/Z2/">Z 2</option>
+                      <option value="medias/NAT/">NAT</option>
+                      <option value="medias/Regio2N/">Regio 2N</option>
+                      <option value="medias/BB/">BB</option>
+                      <option value="medias/Autorail/">Autorail</option>
+                      <option value="medias/Corail/">Corail</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="image_filename">Nom du fichier * (sans extension)</label>
+                    <input id="image_filename" class="ctrl" type="text" placeholder="Ex : IMG_2045">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bloc vidéo -->
+              <div id="bloc_video" style="display:none">
+                <div class="form-field">
+                  <label class="form-label" for="video_url">URL YouTube *</label>
+                  <input id="video_url" class="ctrl" type="url" placeholder="https://youtube.com/watch?v=…">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Lieu et date -->
+          <div class="form-card" style="margin-bottom:1.5rem;border-color:var(--subtle)">
+            <div class="form-card-header" style="background:transparent">
+              <span class="form-card-sub" style="font-size:.65rem">LIEU ET DATE</span>
+            </div>
+            <div class="form-body" style="padding-top:.75rem">
+
+              <div class="form-field">
+                <label class="form-label">Type de lieu *</label>
+                <div class="type-media-toggle">
+                  <button type="button" class="type-media-btn active" data-lieu="simple" onclick="selectLieuKind('simple')">Dans une gare</button>
+                  <button type="button" class="type-media-btn" data-lieu="double" onclick="selectLieuKind('double')">Entre deux gares</button>
+                </div>
+                <select id="type_lieu" style="display:none">
+                  <option value="simple" selected>simple</option>
+                  <option value="double">double</option>
+                </select>
+              </div>
+
+              <!-- Lieu simple -->
+              <div id="lieux_simple_container">
+                <div class="form-field">
+                  <label class="form-label" for="lieu1">Gare / lieu *</label>
+                  <select id="lieu1" class="ctrl" required>
+                    <option value="">— Sélectionner un lieu —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Deux lieux -->
+              <div id="lieux_double_container" style="display:none">
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="lieu1_double">Premier lieu *</label>
+                    <select id="lieu1_double" class="ctrl">
+                      <option value="">— Sélectionner —</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="lieu2_double">Deuxième lieu *</label>
+                    <select id="lieu2_double" class="ctrl">
+                      <option value="">— Sélectionner —</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="date_media">Date de prise de vue *</label>
+                <input id="date_media" class="ctrl" type="date" required>
+              </div>
+
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn submit-btn-primary" id="media-submit-btn">
+            Ajouter le média →
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /forms-container -->
+</main>
+
+<!-- ─── Scripts ───────────────────────────────────────────────────────────────── -->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+
+<!-- Helpers pour les toggles inline du formulaire -->
+<script>
+function selectMediaKind(kind) {
+  document.getElementById('type_media').value = kind
+  document.querySelectorAll('.type-media-btn[data-kind]').forEach(b => b.classList.toggle('active', b.dataset.kind === kind))
+  document.getElementById('bloc_image').style.display = kind === 'image' ? 'block' : 'none'
+  document.getElementById('bloc_video').style.display = kind === 'video' ? 'block' : 'none'
+}
+
+function selectLieuKind(kind) {
+  document.getElementById('type_lieu').value = kind
+  document.querySelectorAll('.type-media-btn[data-lieu]').forEach(b => b.classList.toggle('active', b.dataset.lieu === kind))
+  document.getElementById('lieux_simple_container').style.display = kind === 'simple' ? 'block' : 'none'
+  document.getElementById('lieux_double_container').style.display = kind === 'double' ? 'block' : 'none'
+  // Sync required
+  document.getElementById('lieu1').required = kind === 'simple'
+  document.getElementById('lieu1_double').required = kind === 'double'
+  document.getElementById('lieu2_double').required = kind === 'double'
+}
+
+// Aperçu de livrée
+document.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('livree')
+  if (!sel) return
+  sel.addEventListener('change', () => {
+    const opt = sel.options[sel.selectedIndex]
+    // Les options sont enrichies par app.js — on lit les data-* si disponibles
+    const preview = document.getElementById('livree-preview')
+    if (!sel.value) { preview.style.display = 'none'; return }
+    // Fallback si pas de data attributes : on cache juste le preview
+    preview.style.display = opt.dataset.main ? 'flex' : 'none'
+    if (opt.dataset.main) {
+      document.getElementById('lp-swatch').style.background = opt.dataset.main
+      document.getElementById('lp-main').style.background = opt.dataset.main
+      document.getElementById('lp-text').style.background = opt.dataset.text || '#fff'
+      document.getElementById('lp-name').textContent = opt.textContent
+      document.getElementById('lp-name').style.color = opt.dataset.main
+      document.getElementById('lp-hex').textContent = opt.dataset.main + ' · ' + (opt.dataset.text || '')
+    }
+  })
+
+  // Patcher setupTrainForm pour enrichir les options de livrée avec les couleurs
+  const _orig = window.trains
+  // On observe le select livrée une fois que app.js l'a rempli
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('#livree option').forEach(opt => {
+      // Les couleurs ne sont pas disponibles ici sans les avoir en JS
+      // Pour activer l'aperçu, ajoutez les couleurs dans app.js :
+      // opt.dataset.main = l.main_color; opt.dataset.text = l.text_color
+    })
+  })
+  observer.observe(sel, { childList: true })
+})
+</script>
 </body>
 </html>

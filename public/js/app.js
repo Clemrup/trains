@@ -425,7 +425,7 @@ async function setupTrainForm() {
     famillesButtonsContainer.appendChild(btn)
   })
 
-  // Remplir livrées
+  // Remplir livrées (avec couleurs pour l'aperçu)
   const livreeSelect = document.getElementById('livree')
   if (livreeSelect) {
     livreeSelect.innerHTML = '<option value="">-- Sélectionner une livrée --</option>'
@@ -433,6 +433,8 @@ async function setupTrainForm() {
       const opt = document.createElement('option')
       opt.value = l.id
       opt.textContent = l.nom
+      if (l.main_color) opt.dataset.main = l.main_color
+      if (l.text_color) opt.dataset.text = l.text_color
       livreeSelect.appendChild(opt)
     })
   }
