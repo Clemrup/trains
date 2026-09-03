@@ -105,7 +105,7 @@
   // ─── Chargement Supabase ──────────────────────────────────────────────────────
 
   async function loadData() {
-    const [mRes, fRes, lRes, lvRes] = await Promise.all([
+    const [mRes, tRes, fRes, lRes, lvRes] = await Promise.all([
       db.from('medias').select(`
         *,
         lieux_1:lieux!medias_id_lieu1_fkey(*),
@@ -117,13 +117,15 @@
             types(*, famille_type(*), constructeur(*))
           )
         )
-      `).order('date_ajout', { ascending: false }),
+      `, { count: 'exact' }).order('date_ajout', { ascending: false }),
+      db.from('trains').select('*', { count: 'exact', head: true }),
       db.from('famille_type').select('*').order('nom'),
       db.from('lieux').select('*').order('nom'),
       db.from('livrees').select('*').order('nom'),
     ])
 
     if (mRes.error) throw mRes.error
+    if (tRes.error) throw tRes.error
     if (fRes.error) throw fRes.error
 
     familles = fRes.data || []
@@ -132,10 +134,8 @@
     allMedias = processMedias(mRes.data || [])
 
     // Mettre à jour les compteurs du header
-    const trainSet = new Set()
-    allMedias.forEach(em => em.trains.forEach(t => trainSet.add(t.id)))
-    setInner('stat-trains', trainSet.size)
-    setInner('stat-medias', allMedias.length)
+    setInner('stat-trains', tRes.count ?? 0)
+    setInner('stat-medias', mRes.count ?? 0)
     setInner('stat-lieux', lieux.length)
 
     // Bande de livrées

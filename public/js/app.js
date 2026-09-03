@@ -79,12 +79,12 @@ function updateAuthUI(session) {
     // Connecté : afficher les formulaires
     loginFormContainer.style.display = 'none'
     authSection.style.display = 'none'
-    formsContainer.style.display = ''
+    formsContainer.classList.remove('container-hidden')
   } else {
     // Non connecté : cacher les formulaires
     loginFormContainer.style.display = 'block'
     authSection.style.display = 'block'
-    formsContainer.style.display = 'none'
+    formsContainer.classList.add('container-hidden')
   }
 }
 
