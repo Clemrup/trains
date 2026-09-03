@@ -145,21 +145,32 @@
     // Pré-remplir les selects de recherche (même appel)
   }
 
+  function getYouTubeId(url) {
+    if (!url) return null
+    const m = url.match(/(?:youtube\.com\/embed\/|youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+    return m ? m[1] : null
+  }
+
   function processMedias(raw) {
-    return raw.map(m => {
+    const result = []
+    raw.forEach(m => {
       const trains = (m.trains_medias || []).map(tm => tm.trains).filter(Boolean)
-      const first = trains[0]
-      return {
-        media: m,
-        trains,
-        lieu1: m.lieux_1,
-        lieu2: m.lieux_2,
-        train: first,
-        type: first?.types,
-        famille: first?.types?.famille_type,
-        livree: first?.livrees,
-      }
+      if (trains.length === 0) return
+      trains.forEach(train => {
+        result.push({
+          key: `${m.id}_${train.id}`,
+          media: m,
+          trains,
+          lieu1: m.lieux_1,
+          lieu2: m.lieux_2,
+          train,
+          type: train.types,
+          famille: train.types?.famille_type,
+          livree: train.livrees,
+        })
+      })
     })
+    return result
   }
 
   // ─── Navigation ──────────────────────────────────────────────────────────────
@@ -225,23 +236,28 @@
   // ─── Card HTML ────────────────────────────────────────────────────────────────
 
   function cardHTML(em) {
-    const { media, train, type, famille, livree, lieu1, lieu2 } = em
+    const { key, media, train, type, famille, livree, lieu1, lieu2 } = em
     if (!train) return ''
     const mc = livree?.main_color || '#1c1c22'
     const tc = livree?.text_color || '#e6e0d4'
     const fc = FAMILLE_COLORS[famille?.nom] || '#888'
     const rgb = hexToRgb(mc)
     const locStr = lieu1?.nom + (lieu2 ? ' · ' + lieu2.nom : '')
+    const isVideo = media.type_media === 'video'
+    const ytId = isVideo ? getYouTubeId(media.media_url) : null
+    const thumbSrc = ytId
+      ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+      : media.media_url
 
     return `
-      <div class="media-card" data-id="${media.id}">
+      <div class="media-card" data-key="${key}">
         <div class="card-img-wrap">
-          <img src="${media.media_url}" alt="${famille?.nom || ''} ${train.numero_principal}" loading="lazy">
+          <img src="${thumbSrc}" alt="${famille?.nom || ''} ${train.numero_principal}" loading="lazy">
           <div class="card-overlay" style="background:linear-gradient(to top,rgba(${rgb},.96) 0%,rgba(${rgb},.4) 55%,transparent 100%)">
             <span class="card-overlay-lieu" style="color:${tc}">${locStr}</span>
             <span class="card-overlay-date" style="color:${tc}">${formatDate(media.date_ajout)}</span>
           </div>
-          ${media.type_media === 'video' ? '<div class="card-vid-badge"><span>▶</span> VID</div>' : ''}
+          ${isVideo ? '<div class="card-vid-badge"><span>▶</span> VID</div>' : ''}
         </div>
         <div class="card-livree-band" style="background:${mc}">
           <span class="card-num" style="color:${tc}">
@@ -263,8 +279,7 @@
     grid.innerHTML = medias.map(cardHTML).join('')
     grid.querySelectorAll('.media-card').forEach(card => {
       card.addEventListener('click', () => {
-        const id = parseInt(card.dataset.id)
-        openLightbox(allMedias.find(em => em.media.id === id))
+        openLightbox(allMedias.find(em => em.key === card.dataset.key))
       })
     })
     container.innerHTML = ''
@@ -275,7 +290,7 @@
 
   function renderGalerie() {
     const el = document.getElementById('view-galerie')
-    el.querySelector('.view-count').textContent = allMedias.length + ' médias'
+    el.querySelector('.view-count').textContent = new Set(allMedias.map(em => em.media.id)).size + ' médias'
     const container = el.querySelector('.gallery-container')
     renderGrid(allMedias, container, false)
   }
@@ -611,7 +626,7 @@
       const familleTypes = allTypes.filter(t => t.id_famille === famille.id)
       if (familleTypes.length === 0) return ''
       const familleTrains = allTrains.filter(t => familleTypes.some(ft => ft.id === t.type_id))
-      const familleMediaCount = allMedias.filter(em => em.famille?.id === famille.id).length
+      const familleMediaCount = new Set(allMedias.filter(em => em.famille?.id === famille.id).map(em => em.media.id)).size
       const fc = FAMILLE_COLORS[famille.nom] || '#888'
       const isOpen = state.openFamilies.has(famille.id)
 
@@ -628,7 +643,7 @@
           <div class="tree-types">
             ${familleTypes.map(type => {
               const typeTrains = allTrains.filter(t => t.type_id === type.id)
-              const typeMediaCount = allMedias.filter(em => em.trains.some(t => t.type_id === type.id)).length
+              const typeMediaCount = new Set(allMedias.filter(em => em.type?.id === type.id).map(em => em.media.id)).size
               const isTypeOpen = state.openTypes.has(type.id)
               const constructeur = type.constructeur?.nom || ''
               return `
@@ -647,7 +662,7 @@
                       const livree = train.livrees
                       const mc = livree?.main_color || '#1c1c22'
                       const tc = livree?.text_color || '#e6e0d4'
-                      const trainMedias = allMedias.filter(em => em.trains.some(t => t.id === train.id))
+                      const trainMedias = allMedias.filter(em => em.train?.id === train.id)
                       const isTrainOpen = state.openTrains.has(train.id)
                       return `
                         <div class="tree-train-row${isTrainOpen ? ' open' : ''}" data-train-id="${train.id}">
@@ -662,17 +677,21 @@
                             <span class="tree-train-count">${trainMedias.length} médias</span>
                           </button>
                           <div class="tree-media-strip">
-                            ${trainMedias.map(em => `
-                              <div class="tree-media-thumb" data-media-id="${em.media.id}">
+                            ${trainMedias.map(em => {
+                              const emYtId = em.media.type_media === 'video' ? getYouTubeId(em.media.media_url) : null
+                              const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : em.media.media_url
+                              return `
+                              <div class="tree-media-thumb" data-key="${em.key}">
                                 <div class="tree-thumb-wrap">
-                                  <img src="${em.media.media_url}" alt="" style="width:100%;height:72px;object-fit:cover">
+                                  <img src="${emThumb}" alt="" style="width:100%;height:72px;object-fit:cover">
                                   ${em.media.type_media === 'video' ? `<div class="tree-play-overlay"><div class="tree-play-btn">▶</div></div>` : ''}
                                 </div>
                                 <div class="tree-media-info" style="background:${mc};padding:5px 8px">
                                   <span class="tree-media-loc" style="color:${tc}">${em.lieu1?.nom || ''}</span>
                                   <span class="tree-media-date" style="color:${tc}">${em.media.date_ajout}</span>
                                 </div>
-                              </div>`).join('')}
+                              </div>`
+                            }).join('')}
                           </div>
                         </div>`
                     }).join('')}
@@ -707,8 +726,7 @@
     })
     tree.querySelectorAll('.tree-media-thumb').forEach(el => {
       el.addEventListener('click', () => {
-        const id = parseInt(el.dataset.mediaId)
-        openLightbox(allMedias.find(em => em.media.id === id))
+        openLightbox(allMedias.find(em => em.key === el.dataset.key))
       })
     })
   }
@@ -730,7 +748,21 @@
     const tc = livree?.text_color || '#e6e0d4'
     const locStr = lieu1?.nom + (lieu2 ? ' · ' + lieu2.nom : '')
 
-    document.getElementById('lb-img').src = media.media_url
+    const isVideo = media.type_media === 'video'
+    const ytId = isVideo ? getYouTubeId(media.media_url) : null
+    const imgEl = document.getElementById('lb-img')
+    const iframeEl = document.getElementById('lb-iframe')
+    if (isVideo && ytId) {
+      imgEl.style.display = 'none'
+      iframeEl.style.display = 'block'
+      iframeEl.src = `https://www.youtube.com/embed/${ytId}?autoplay=1`
+    } else {
+      iframeEl.style.display = 'none'
+      iframeEl.src = ''
+      imgEl.style.display = 'block'
+      imgEl.src = media.media_url
+    }
+
     document.getElementById('lb-livree-band').style.background = mc
     document.getElementById('lb-tag').style.color = tc
     document.getElementById('lb-tag').textContent = (famille?.nom || '') + ' · ' + (type?.nom || '')
@@ -759,6 +791,8 @@
 
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open')
+    const iframeEl = document.getElementById('lb-iframe')
+    if (iframeEl) iframeEl.src = ''
   }
 
   // ─── Livrée strip ─────────────────────────────────────────────────────────────
