@@ -21,6 +21,11 @@
     bottom: 836.8,
   }
 
+  const MAP_VIEW = { width: 1000, height: 960, maxZoom: 10 }
+  let mapZoom = 1
+  let mapViewX = 0
+  let mapViewY = 0
+
   function gpsToSvg(latitude, longitude) {
     const lat = Number(latitude)
     const lon = Number(longitude)
@@ -34,6 +39,81 @@
 
   function lieuToSvg(lieu) {
     return gpsToSvg(lieu.latitude, lieu.longitude)
+  }
+
+  function clampMapView() {
+    const visibleWidth = MAP_VIEW.width / mapZoom
+    const visibleHeight = MAP_VIEW.height / mapZoom
+    mapViewX = Math.max(0, Math.min(MAP_VIEW.width - visibleWidth, mapViewX))
+    mapViewY = Math.max(0, Math.min(MAP_VIEW.height - visibleHeight, mapViewY))
+  }
+
+  function updateMapView() {
+    const svg = document.getElementById('france-map')
+    if (!svg) return
+    clampMapView()
+    svg.setAttribute('viewBox', `${mapViewX} ${mapViewY} ${MAP_VIEW.width / mapZoom} ${MAP_VIEW.height / mapZoom}`)
+    svg.dataset.zoom = String(mapZoom)
+  }
+
+  function setMapZoom(nextZoom) {
+    const oldZoom = mapZoom
+    mapZoom = Math.max(1, Math.min(MAP_VIEW.maxZoom, nextZoom))
+    if (mapZoom === oldZoom) return
+
+    const oldWidth = MAP_VIEW.width / oldZoom
+    const oldHeight = MAP_VIEW.height / oldZoom
+    const centerX = mapViewX + oldWidth / 2
+    const centerY = mapViewY + oldHeight / 2
+    mapViewX = centerX - MAP_VIEW.width / mapZoom / 2
+    mapViewY = centerY - MAP_VIEW.height / mapZoom / 2
+    updateMapView()
+  }
+
+  function setupMapControls() {
+    const svg = document.getElementById('france-map')
+    if (!svg || svg.dataset.controlsReady === 'true') return
+
+    document.getElementById('map-zoom-in')?.addEventListener('click', () => setMapZoom(mapZoom + 1))
+    document.getElementById('map-zoom-out')?.addEventListener('click', () => setMapZoom(mapZoom - 1))
+    document.getElementById('map-zoom-reset')?.addEventListener('click', () => {
+      mapZoom = 1
+      mapViewX = 0
+      mapViewY = 0
+      updateMapView()
+    })
+
+    let pointerId = null
+    let lastX = 0
+    let lastY = 0
+    svg.addEventListener('pointerdown', event => {
+      if (event.button !== 0 && event.pointerType !== 'touch') return
+      pointerId = event.pointerId
+      lastX = event.clientX
+      lastY = event.clientY
+      svg.setPointerCapture(pointerId)
+      svg.classList.add('is-panning')
+    })
+    svg.addEventListener('pointermove', event => {
+      if (event.pointerId !== pointerId) return
+      const rect = svg.getBoundingClientRect()
+      const visibleWidth = MAP_VIEW.width / mapZoom
+      const visibleHeight = MAP_VIEW.height / mapZoom
+      mapViewX -= (event.clientX - lastX) * visibleWidth / rect.width
+      mapViewY -= (event.clientY - lastY) * visibleHeight / rect.height
+      lastX = event.clientX
+      lastY = event.clientY
+      updateMapView()
+    })
+    const stopPanning = event => {
+      if (event.pointerId !== pointerId) return
+      pointerId = null
+      svg.classList.remove('is-panning')
+    }
+    svg.addEventListener('pointerup', stopPanning)
+    svg.addEventListener('pointercancel', stopPanning)
+    svg.dataset.controlsReady = 'true'
+    updateMapView()
   }
 
   const FAMILLE_COLORS = {
@@ -113,6 +193,7 @@
       return
     }
     setupNav()
+    setupMapControls()
     setupLightbox()
     state.selectedYear = getAvailableYears()[0] || new Date().getFullYear().toString()
     state.openFamilies = new Set(familles.slice(0, 1).map(f => f.id))
@@ -140,7 +221,7 @@
             types(*, famille_type(*), constructeur(*))
           )
         )
-      `, { count: 'exact' }).order('date_ajout', { ascending: false }).range(offset, offset + pageSize - 1)
+      `, { count: 'exact' }).order('date_ajout', { ascending: false }).order('id', { ascending: true }).range(offset, offset + pageSize - 1)
 
       if (response.error) throw response.error
 
