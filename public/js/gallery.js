@@ -562,6 +562,7 @@
       svg.appendChild(g)
     })
 
+    updateMapView()
     renderCartePanel()
   }
 
