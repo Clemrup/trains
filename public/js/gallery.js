@@ -90,11 +90,22 @@
       updateMapView()
     })
 
+    svg.addEventListener('click', event => {
+      const pin = event.target.closest('.map-pin')
+      if (!pin) return
+      const nom = pin.dataset.lieuNom
+      if (!nom) return
+      state.selectedLieuNom = state.selectedLieuNom === nom ? null : nom
+      renderCarte()
+      renderCartePanel()
+    })
+
     let pointerId = null
     let lastX = 0
     let lastY = 0
     svg.addEventListener('pointerdown', event => {
       if (event.button !== 0 && event.pointerType !== 'touch') return
+      if (event.target.closest('.map-pin')) return
       pointerId = event.pointerId
       lastX = event.clientX
       lastY = event.clientY
@@ -539,7 +550,7 @@
       const r = 4 + (count / max) * 10
       const isSel = state.selectedLieuNom === nom
 
-      const g = svgEl('g', { class: 'map-pin', 'data-map-x': x, 'data-map-y': y })
+      const g = svgEl('g', { class: 'map-pin', 'data-map-x': x, 'data-map-y': y, 'data-lieu-nom': nom })
       g.appendChild(svgEl('circle', { cx: x, cy: y, r: r + 5, fill: isSel ? '#e8a02018' : 'transparent' }))
       const mainCircle = svgEl('circle', { cx: x, cy: y, r, fill: isSel ? '#e8a020' : '#e8a02077', stroke: isSel ? '#e8a020bb' : '#e8a02044', 'stroke-width': 1.5 })
       g.appendChild(mainCircle)
@@ -548,11 +559,6 @@
       txt.textContent = count
       g.appendChild(txt)
 
-      g.addEventListener('click', () => {
-        state.selectedLieuNom = (state.selectedLieuNom === nom) ? null : nom
-        renderCarte()
-        renderCartePanel()
-      })
       svg.appendChild(g)
     })
 
