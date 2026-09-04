@@ -53,6 +53,13 @@
     if (!svg) return
     clampMapView()
     svg.setAttribute('viewBox', `${mapViewX} ${mapViewY} ${MAP_VIEW.width / mapZoom} ${MAP_VIEW.height / mapZoom}`)
+    svg.querySelectorAll('.map-pin').forEach(pin => {
+      const x = Number(pin.dataset.mapX)
+      const y = Number(pin.dataset.mapY)
+      if (Number.isFinite(x) && Number.isFinite(y)) {
+        pin.setAttribute('transform', `translate(${x} ${y}) scale(${1 / mapZoom}) translate(${-x} ${-y})`)
+      }
+    })
     svg.dataset.zoom = String(mapZoom)
   }
 
@@ -532,7 +539,7 @@
       const r = 4 + (count / max) * 10
       const isSel = state.selectedLieuNom === nom
 
-      const g = svgEl('g', { class: 'map-pin' })
+      const g = svgEl('g', { class: 'map-pin', 'data-map-x': x, 'data-map-y': y })
       g.appendChild(svgEl('circle', { cx: x, cy: y, r: r + 5, fill: isSel ? '#e8a02018' : 'transparent' }))
       const mainCircle = svgEl('circle', { cx: x, cy: y, r, fill: isSel ? '#e8a020' : '#e8a02077', stroke: isSel ? '#e8a020bb' : '#e8a02044', 'stroke-width': 1.5 })
       g.appendChild(mainCircle)
