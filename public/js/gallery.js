@@ -21,7 +21,7 @@
     bottom: 836.8,
   }
 
-  const MAP_VIEW = { width: 1000, height: 960, maxZoom: 25 }
+  const MAP_VIEW = { width: 1000, height: 960, maxZoom: 30 }
   let mapZoom = 1
   let mapViewX = 0
   let mapViewY = 0
@@ -344,31 +344,64 @@
   // ─── Filtrage ─────────────────────────────────────────────────────────────────
 
   function applyFilters(medias, f) {
-    return medias.filter(em => {
-      if (f.familleId && !em.trains.some(t => t.types?.famille_type?.id == f.familleId)) return false
-      if (f.typeId   && !em.trains.some(t => t.type_id == f.typeId)) return false
-      if (f.trainId  && !em.trains.some(t => t.id == f.trainId)) return false
-      if (f.livreeId && !em.trains.some(t => t.livree_id == f.livreeId)) return false
+    const seenMediaIds = new Set()
+    const result = []
+
+    medias.forEach(em => {
+      const mediaId = em.media.id
+      if (seenMediaIds.has(mediaId)) return
+      seenMediaIds.add(mediaId)
+
       if (f.lieuId) {
         const lid = parseInt(f.lieuId)
-        if (em.media.id_lieu1 !== lid && em.media.id_lieu2 !== lid) return false
+        if (em.media.id_lieu1 !== lid && em.media.id_lieu2 !== lid) return
       }
-      if (f.kind && em.media.type_media !== f.kind) return false
-      if (f.dateFrom && em.media.date_ajout < f.dateFrom) return false
-      if (f.dateTo   && em.media.date_ajout > f.dateTo)   return false
+      if (f.kind && em.media.type_media !== f.kind) return
+      if (f.dateFrom && em.media.date_ajout < f.dateFrom) return
+      if (f.dateTo && em.media.date_ajout > f.dateTo) return
+
+      const trainMatches = em.trains.filter(train => {
+        if (f.familleId && train.types?.famille_type?.id != f.familleId) return false
+        if (f.typeId && train.type_id != f.typeId) return false
+        if (f.trainId && train.id != f.trainId) return false
+        if (f.livreeId && train.livree_id != f.livreeId) return false
+        return true
+      })
+      if (trainMatches.length === 0) return
+
+      let matchingTrain = trainMatches[0]
       if (f.query) {
         const q = f.query.toLowerCase()
-        const hay = [
-          ...em.trains.map(t => t.numero_principal || ''),
-          ...em.trains.map(t => t.numero_secondaire || ''),
-          ...em.trains.map(t => t.livrees?.nom || ''),
-          em.type?.nom || '', em.famille?.nom || '',
-          em.lieu1?.nom || '', em.lieu2?.nom || '',
+        const matchingTrainByQuery = trainMatches.find(train => [
+          train.numero_principal || '',
+          train.numero_secondaire || '',
+          train.livrees?.nom || '',
+          train.types?.nom || '',
+          train.types?.famille_type?.nom || '',
+        ].join(' ').toLowerCase().includes(q))
+        const mediaText = [
+          em.media.description || '',
+          em.media.titre || '',
+          em.type?.nom || '',
+          em.famille?.nom || '',
+          em.lieu1?.nom || '',
+          em.lieu2?.nom || '',
         ].join(' ').toLowerCase()
-        if (!hay.includes(q)) return false
+        if (!matchingTrainByQuery && !mediaText.includes(q)) return
+        matchingTrain = matchingTrainByQuery || trainMatches[0]
       }
-      return true
+
+      result.push({
+        ...em,
+        key: `${mediaId}_${matchingTrain.id}`,
+        train: matchingTrain,
+        type: matchingTrain.types,
+        famille: matchingTrain.types?.famille_type,
+        livree: matchingTrain.livrees,
+      })
     })
+
+    return result
   }
 
   // ─── Card HTML ────────────────────────────────────────────────────────────────
