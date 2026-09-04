@@ -7,38 +7,33 @@
 
   // ─── Constantes ──────────────────────────────────────────────────────────────
 
-  const LIEU_COORDS = {
-    'Paris-Gare-de-Lyon':      [229, 143],
-    'Paris-Nord':              [229, 138],
-    'Paris-Austerlitz':        [232, 149],
-    'Paris-Montparnasse':      [226, 150],
-    'Paris-Est':               [233, 141],
-    'Paris-Saint-Lazare':      [224, 140],
-    'Lyon-Part-Dieu':          [297, 293],
-    'Lyon-Perrache':           [294, 297],
-    'Marseille-Saint-Charles': [312, 412],
-    'Bordeaux-Saint-Jean':     [150, 337],
-    'Lille-Europe':            [249, 57],
-    'Lille-Flandres':          [246, 60],
-    'Strasbourg':              [377, 156],
-    'Nantes':                  [123, 222],
-    'Rennes':                  [119, 181],
-    'Montpellier-Saint-Roch':  [272, 397],
-    'Nice-Ville':              [364, 392],
-    'Toulouse-Matabiau':       [205, 397],
-    'Dijon-Ville':             [303, 217],
-    'Grenoble':                [322, 320],
-    'Caen':                    [149, 127],
-    'Rouen-Rive-Droite':       [195, 115],
-    'Valence-TGV':             [299, 329],
-    'Metz-Ville':              [338, 120],
-    'Nancy':                   [332, 133],
-    'Reims':                   [265, 100],
-    'Tours':                   [210, 210],
-    'Angers':                  [160, 210],
-    'Le Mans':                 [190, 180],
-    'Clermont-Ferrand':        [268, 275],
-    'Avignon-TGV':             [305, 375],
+  const GEO_BOUNDS = {
+    west: -4.795555555555556,
+    east: 8.230555555555556,
+    north: 51.0891667,
+    south: 42.3327778,
+  }
+
+  const SVG_BOUNDS = {
+    left: 45.5,
+    right: 870.4,
+    top: 43.6,
+    bottom: 836.8,
+  }
+
+  function gpsToSvg(latitude, longitude) {
+    const lat = Number(latitude)
+    const lon = Number(longitude)
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null
+
+    return {
+      x: SVG_BOUNDS.left + ((lon - GEO_BOUNDS.west) / (GEO_BOUNDS.east - GEO_BOUNDS.west)) * (SVG_BOUNDS.right - SVG_BOUNDS.left),
+      y: SVG_BOUNDS.top + ((GEO_BOUNDS.north - lat) / (GEO_BOUNDS.north - GEO_BOUNDS.south)) * (SVG_BOUNDS.bottom - SVG_BOUNDS.top),
+    }
+  }
+
+  function lieuToSvg(lieu) {
+    return gpsToSvg(lieu.latitude, lieu.longitude)
   }
 
   const FAMILLE_COLORS = {
@@ -82,11 +77,30 @@
     return { familleId: '', typeId: '', trainId: '', lieuId: '', livreeId: '', kind: '', dateFrom: '', dateTo: '', query: '' }
   }
 
+  async function loadFranceMap() {
+    const svg = document.getElementById('france-map')
+    if (!svg || svg.dataset.loaded === 'true') return
+
+    const response = await fetch('fr.svg')
+    if (!response.ok) throw new Error(`Impossible de charger fr.svg (${response.status})`)
+
+    const xml = new DOMParser().parseFromString(await response.text(), 'image/svg+xml')
+    const sourceSvg = xml.documentElement
+    if (xml.querySelector('parsererror') || sourceSvg.nodeName.toLowerCase() !== 'svg') {
+      throw new Error('fr.svg est invalide')
+    }
+
+    svg.setAttribute('viewBox', sourceSvg.getAttribute('viewBox') || '0 0 1000 960')
+    svg.replaceChildren(...[...sourceSvg.childNodes].map(node => document.importNode(node, true)))
+    svg.dataset.loaded = 'true'
+  }
+
   // ─── Init ─────────────────────────────────────────────────────────────────────
 
   async function init() {
     db = window.supabase.createClient(window.CONFIG.SUPABASE_URL, window.CONFIG.SUPABASE_ANON_KEY)
     try {
+      await loadFranceMap()
       await loadData()
     } catch (err) {
       console.error('Erreur chargement données:', err)
@@ -402,7 +416,11 @@
     // Remove old pins
     svg.querySelectorAll('.map-pin').forEach(p => p.remove())
 
-    Object.entries(LIEU_COORDS).forEach(([nom, [x, y]]) => {
+    lieux.forEach(lieu => {
+      const nom = lieu.nom
+      const coords = lieuToSvg(lieu)
+      if (!coords) return
+      const { x, y } = coords
       const count = counts[nom] || 0
       if (count === 0) return
       const r = 4 + (count / max) * 10
