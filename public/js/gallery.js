@@ -91,6 +91,10 @@
     }
 
     svg.setAttribute('viewBox', sourceSvg.getAttribute('viewBox') || '0 0 1000 960')
+    ;['fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin'].forEach(attribute => {
+      const value = sourceSvg.getAttribute(attribute)
+      if (value !== null) svg.setAttribute(attribute, value)
+    })
     svg.replaceChildren(...[...sourceSvg.childNodes].map(node => document.importNode(node, true)))
     svg.dataset.loaded = 'true'
   }
@@ -118,9 +122,14 @@
 
   // ─── Chargement Supabase ──────────────────────────────────────────────────────
 
-  async function loadData() {
-    const [mRes, tRes, fRes, lRes, lvRes] = await Promise.all([
-      db.from('medias').select(`
+  async function fetchAllMedias() {
+    const pageSize = 500
+    const data = []
+    let offset = 0
+    let total = null
+
+    while (true) {
+      const response = await db.from('medias').select(`
         *,
         lieux_1:lieux!medias_id_lieu1_fkey(*),
         lieux_2:lieux!medias_id_lieu2_fkey(*),
@@ -131,7 +140,23 @@
             types(*, famille_type(*), constructeur(*))
           )
         )
-      `, { count: 'exact' }).order('date_ajout', { ascending: false }),
+      `, { count: 'exact' }).order('date_ajout', { ascending: false }).range(offset, offset + pageSize - 1)
+
+      if (response.error) throw response.error
+
+      data.push(...(response.data || []))
+      total = response.count ?? total
+
+      if (!response.data || response.data.length < pageSize || data.length >= total) break
+      offset += pageSize
+    }
+
+    return { data, count: total ?? data.length }
+  }
+
+  async function loadData() {
+    const [mRes, tRes, fRes, lRes, lvRes] = await Promise.all([
+      fetchAllMedias(),
       db.from('trains').select('*', { count: 'exact', head: true }),
       db.from('famille_type').select('*').order('nom'),
       db.from('lieux').select('*').order('nom'),
