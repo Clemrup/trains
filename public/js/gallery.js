@@ -593,9 +593,14 @@
         ${items.map(em => {
           const mc = em.livree?.main_color || '#1c1c22'
           const tc = em.livree?.text_color || '#e6e0d4'
+          const emYtId = em.media.type_media === 'video' ? getYouTubeId(em.media.media_url) : null
+          const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : em.media.media_url
           return `
-            <div class="map-media-item">
-              <img class="map-media-thumb" src="${em.media.media_url}" alt="">
+            <div class="map-media-item" data-key="${em.key}" role="button" tabindex="0">
+              <div class="map-media-thumb-wrap">
+                <img class="map-media-thumb" src="${emThumb}" alt="">
+                ${emYtId ? '<span class="map-media-play">▶</span>' : ''}
+              </div>
               <div class="map-media-info" style="background:${mc}">
                 <p class="map-media-train" style="color:${tc}">${em.famille?.nom || ''} · N°&nbsp;${em.train?.numero_principal || ''}</p>
                 <p class="map-media-livree" style="color:${tc}">${em.livree?.nom || '—'}</p>
@@ -605,6 +610,17 @@
         }).join('')}
       </div>
       <button class="map-filter-btn" id="carte-filter-btn">Filtrer la galerie par ce lieu →</button>`
+
+    panel.querySelectorAll('.map-media-item').forEach(item => {
+      const open = () => openLightbox(allMedias.find(em => em.key === item.dataset.key))
+      item.addEventListener('click', open)
+      item.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          open()
+        }
+      })
+    })
 
     document.getElementById('carte-close')?.addEventListener('click', () => {
       state.selectedLieuNom = null; renderCarte()

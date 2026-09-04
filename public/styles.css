@@ -338,8 +338,10 @@ img { display: block; }
 .map-panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
 .map-close-btn { background: none; border: none; color: var(--muted); font-size: 1.25rem; cursor: pointer; }
 .map-media-list { display: flex; flex-direction: column; gap: .5rem; height: 352px; overflow-y: auto; }
-.map-media-item { display: flex; flex: 0 0 64px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.map-media-item { display: flex; flex: 0 0 64px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; }
+.map-media-thumb-wrap { position: relative; width: 80px; height: 64px; flex-shrink: 0; }
 .map-media-thumb { width: 80px; height: 64px; object-fit: cover; flex-shrink: 0; }
+.map-media-play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; background: rgba(0,0,0,.35); font-size: 1rem; pointer-events: none; }
 .map-media-info { flex: 1; min-width: 0; padding: .5rem; }
 .map-media-train { font-family: var(--ff-mono); font-size: .7rem; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .map-media-livree { font-size: .65rem; opacity: .7; }
