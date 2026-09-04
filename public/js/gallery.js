@@ -21,7 +21,7 @@
     bottom: 836.8,
   }
 
-  const MAP_VIEW = { width: 1000, height: 960, maxZoom: 10 }
+  const MAP_VIEW = { width: 1000, height: 960, maxZoom: 25 }
   let mapZoom = 1
   let mapViewX = 0
   let mapViewY = 0
