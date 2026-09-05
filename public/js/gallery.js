@@ -255,24 +255,35 @@
   }
 
   async function loadData() {
-    const [mRes, tRes, fRes, lRes, lvRes, lignesRes] = await Promise.all([
+    const [mRes, tRes, fRes, lRes, lvRes, lignesRes, lignesLieuxRes] = await Promise.all([
       fetchAllMedias(),
       db.from('trains').select('*', { count: 'exact', head: true }),
       db.from('famille_type').select('*').order('nom'),
       db.from('lieux').select('*').order('nom'),
       db.from('livrees').select('*').order('nom'),
-      db.from('lignes').select('*, lignes_lieux(*, lieux(*))').order('nom'),
+      db.from('lignes').select('*').order('nom'),
+      db.from('lignes_lieux').select('*').order('id_ligne').order('ordre'),
     ])
 
     if (mRes.error) throw mRes.error
     if (tRes.error) throw tRes.error
     if (fRes.error) throw fRes.error
     if (lignesRes.error) throw lignesRes.error
+    if (lignesLieuxRes.error) throw lignesLieuxRes.error
 
     familles = fRes.data || []
     lieux = lRes.data || []
     livrees = lvRes.data || []
-    lignes = lignesRes.data || []
+    const liensParLigne = new Map()
+    ;(lignesLieuxRes.data || []).forEach(link => {
+      const lineId = String(link.id_ligne)
+      if (!liensParLigne.has(lineId)) liensParLigne.set(lineId, [])
+      liensParLigne.get(lineId).push(link)
+    })
+    lignes = (lignesRes.data || []).map(ligne => ({
+      ...ligne,
+      lignes_lieux: liensParLigne.get(String(ligne.id)) || [],
+    }))
     allMedias = processMedias(mRes.data || [])
 
     // Mettre à jour les compteurs du header
