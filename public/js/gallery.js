@@ -617,7 +617,7 @@
         points: points.map(point => `${point.x},${point.y}`).join(' '),
         fill: 'none',
         stroke: isLgv ? '#c4372a66' : '#85858f99',
-        'stroke-width': isLgv ? 2 : 1.5,
+        'stroke-width': isLgv ? 1.5 : 0.5,
         'stroke-dasharray': isLgv ? '8 5' : 'none',
         opacity: 1,
         'vector-effect': 'non-scaling-stroke',
