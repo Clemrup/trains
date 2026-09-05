@@ -284,6 +284,13 @@
       ...ligne,
       lignes_lieux: liensParLigne.get(String(ligne.id)) || [],
     }))
+    console.info('[carte] lignes chargees:', lignes.length, 'associations:', lignesLieuxRes.data?.length || 0)
+    if (lignesRes.data?.length && !lignesLieuxRes.data?.length) {
+      console.warn('[carte] La table lignes est accessible, mais lignes_lieux ne renvoie aucune association.')
+    }
+    if (!lignesRes.data?.length) {
+      console.warn('[carte] La table lignes ne renvoie aucune ligne. Verifiez les droits RLS et le projet Supabase utilise.')
+    }
     allMedias = processMedias(mRes.data || [])
 
     // Mettre à jour les compteurs du header
@@ -608,10 +615,18 @@
       lineLayer.appendChild(svgEl('polyline', {
         class: isLgv ? 'map-line map-line-lgv' : 'map-line map-line-standard',
         points: points.map(point => `${point.x},${point.y}`).join(' '),
+        fill: 'none',
+        stroke: isLgv ? '#c4372a66' : '#85858f99',
+        'stroke-width': isLgv ? 2 : 1.5,
+        'stroke-dasharray': isLgv ? '8 5' : 'none',
+        opacity: 1,
+        'vector-effect': 'non-scaling-stroke',
         'data-ligne-nom': ligne.nom || '',
       }))
     })
-    svg.appendChild(lineLayer)
+    const mapFeatures = svg.querySelector('#features')
+    if (mapFeatures) mapFeatures.after(lineLayer)
+    else svg.appendChild(lineLayer)
 
     lieux.forEach(lieu => {
       const nom = lieu.nom
