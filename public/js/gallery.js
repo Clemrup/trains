@@ -157,6 +157,7 @@
   let types = []
   let livrees = []
   let lieux = []
+  let lignes = []
 
   let state = {
     view: 'galerie',
@@ -254,21 +255,24 @@
   }
 
   async function loadData() {
-    const [mRes, tRes, fRes, lRes, lvRes] = await Promise.all([
+    const [mRes, tRes, fRes, lRes, lvRes, lignesRes] = await Promise.all([
       fetchAllMedias(),
       db.from('trains').select('*', { count: 'exact', head: true }),
       db.from('famille_type').select('*').order('nom'),
       db.from('lieux').select('*').order('nom'),
       db.from('livrees').select('*').order('nom'),
+      db.from('lignes').select('*, lignes_lieux(*, lieux(*))').order('nom'),
     ])
 
     if (mRes.error) throw mRes.error
     if (tRes.error) throw tRes.error
     if (fRes.error) throw fRes.error
+    if (lignesRes.error) throw lignesRes.error
 
     familles = fRes.data || []
     lieux = lRes.data || []
     livrees = lvRes.data || []
+    lignes = lignesRes.data || []
     allMedias = processMedias(mRes.data || [])
 
     // Mettre à jour les compteurs du header
@@ -572,6 +576,31 @@
     const svg = document.getElementById('france-map')
     // Remove old pins
     svg.querySelectorAll('.map-pin').forEach(p => p.remove())
+    svg.querySelector('.map-line-layer')?.remove()
+
+    const lineLayer = svgEl('g', { class: 'map-line-layer', 'aria-label': 'Lignes ferroviaires', 'pointer-events': 'none' })
+    lignes.forEach(ligne => {
+      const points = (ligne.lignes_lieux || [])
+        .map(link => {
+          const linkLieu = link.lieux
+          const linkLieuId = link.id_lieu ?? link['id-lieu']
+          const lieu = linkLieu || lieux.find(item => String(item.id) === String(linkLieuId))
+          const coords = lieu ? lieuToSvg(lieu) : null
+          return coords ? { ...coords, ordre: Number(link.ordre) } : null
+        })
+        .filter(point => point && Number.isFinite(point.ordre))
+        .sort((a, b) => a.ordre - b.ordre)
+
+      if (points.length < 2) return
+
+      const isLgv = ligne.LGV === true || ligne.lgv === true || ligne.LGV === 'true' || ligne.lgv === 'true'
+      lineLayer.appendChild(svgEl('polyline', {
+        class: isLgv ? 'map-line map-line-lgv' : 'map-line map-line-standard',
+        points: points.map(point => `${point.x},${point.y}`).join(' '),
+        'data-ligne-nom': ligne.nom || '',
+      }))
+    })
+    svg.appendChild(lineLayer)
 
     lieux.forEach(lieu => {
       const nom = lieu.nom
