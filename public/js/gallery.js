@@ -472,7 +472,7 @@
     grid.innerHTML = medias.map(cardHTML).join('')
     grid.querySelectorAll('.media-card').forEach(card => {
       card.addEventListener('click', () => {
-        openLightbox(allMedias.find(em => em.key === card.dataset.key))
+        openLightbox(medias.find(em => em.key === card.dataset.key), medias)
       })
     })
     container.innerHTML = ''
@@ -618,7 +618,6 @@
         fill: 'none',
         stroke: isLgv ? '#c4372a66' : '#85858f99',
         'stroke-width': isLgv ? 1.5 : 0.5,
-        'stroke-dasharray': isLgv ? '8 5' : 'none',
         opacity: 1,
         'vector-effect': 'non-scaling-stroke',
         'data-ligne-nom': ligne.nom || '',
@@ -980,10 +979,32 @@
       if (e.target === e.currentTarget) closeLightbox()
     })
     document.getElementById('lightbox-close').addEventListener('click', closeLightbox)
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox() })
+    document.getElementById('lightbox-prev').addEventListener('click', () => stepLightbox(-1))
+    document.getElementById('lightbox-next').addEventListener('click', () => stepLightbox(1))
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') stepLightbox(-1)
+      if (e.key === 'ArrowRight') stepLightbox(1)
+    })
   }
 
-  function openLightbox(em) {
+  function openLightbox(em, selection = allMedias) {
+    if (!em) return
+    const items = selection.filter(item => item?.media?.id != null)
+    state.lightbox = { items, index: Math.max(0, items.findIndex(item => item.key === em.key)) }
+    renderLightboxItem()
+    document.getElementById('lightbox').classList.add('open')
+  }
+
+  function stepLightbox(direction) {
+    if (!state.lightbox || state.lightbox.items.length < 2) return
+    const { items } = state.lightbox
+    state.lightbox.index = (state.lightbox.index + direction + items.length) % items.length
+    renderLightboxItem()
+  }
+
+  function renderLightboxItem() {
+    const em = state.lightbox?.items[state.lightbox.index]
     if (!em) return
     const { media, train, type, famille, livree, lieu1, lieu2 } = em
     const mc = livree?.main_color || '#1c1c22'
@@ -1027,12 +1048,14 @@
     } else {
       document.getElementById('lb-trains-section').style.display = 'none'
     }
-
-    document.getElementById('lightbox').classList.add('open')
+      const hasNavigation = state.lightbox.items.length > 1
+      document.getElementById('lightbox-prev').disabled = !hasNavigation
+      document.getElementById('lightbox-next').disabled = !hasNavigation
   }
 
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open')
+      state.lightbox = null
     const iframeEl = document.getElementById('lb-iframe')
     if (iframeEl) iframeEl.src = ''
   }
