@@ -17,8 +17,8 @@
   const SVG_BOUNDS = {
     left: 45.5,
     right: 870.4,
-    top: 62.6,
-    bottom: 853.8,
+    top: 60.6,
+    bottom: 851.8,
   }
 
   const MAP_VIEW = { width: 1000, height: 960, maxZoom: 30 }
