@@ -440,7 +440,7 @@
     const ytId = isVideo ? getYouTubeId(media.media_url) : null
     const thumbSrc = ytId
       ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
-      : media.media_url
+      : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
 
     return `
       <div class="media-card" data-key="${key}">
@@ -681,7 +681,7 @@
           const mc = em.livree?.main_color || '#1c1c22'
           const tc = em.livree?.text_color || '#e6e0d4'
           const emYtId = em.media.type_media === 'video' ? getYouTubeId(em.media.media_url) : null
-          const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : em.media.media_url
+          const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
           return `
             <div class="map-media-item" data-key="${em.key}" role="button" tabindex="0">
               <div class="map-media-thumb-wrap">
@@ -749,8 +749,9 @@
             ${s.items.slice(0, 6).map(em => {
               const mc = em.livree?.main_color || '#1c1c22'
               const tc = em.livree?.text_color || '#e6e0d4'
+              const emSrc = em.media.type_media === 'video' ? em.media.media_url : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
               return `<div class="lieu-preview-card">
-                <img src="${em.media.media_url}" alt="">
+                <img src="${emSrc}" alt="">
                 <div class="lieu-preview-info" style="background:${mc}">
                   <span class="lieu-preview-train" style="color:${tc}">${em.famille?.nom || ''} ${em.train?.numero_principal || ''}</span>
                   <span class="lieu-preview-livree" style="color:${tc}">${em.livree?.nom || '—'}</span>
@@ -920,7 +921,7 @@
                           <div class="tree-media-strip">
                             ${trainMedias.map(em => {
                               const emYtId = em.media.type_media === 'video' ? getYouTubeId(em.media.media_url) : null
-                              const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : em.media.media_url
+                              const emThumb = emYtId ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg` : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
                               return `
                               <div class="tree-media-thumb" data-key="${em.key}">
                                 <div class="tree-thumb-wrap">
@@ -1023,7 +1024,7 @@
       iframeEl.style.display = 'none'
       iframeEl.src = ''
       imgEl.style.display = 'block'
-      imgEl.src = media.media_url
+      imgEl.src = `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${media.media_url}`
     }
 
     document.getElementById('lb-livree-band').style.background = mc
