@@ -288,6 +288,9 @@
     if (lignesRes.data?.length && !lignesLieuxRes.data?.length) {
       console.warn('[carte] La table lignes est accessible, mais lignes_lieux ne renvoie aucune association.')
     }
+    console.log('[carte] lignesRes:', lignesRes)
+    console.log('[carte] lignes data:', lignesRes.data)
+    console.log('[carte] lignes error:', lignesRes.error)
     if (!lignesRes.data?.length) {
       console.warn('[carte] La table lignes ne renvoie aucune ligne. Verifiez les droits RLS et le projet Supabase utilise.')
     }
