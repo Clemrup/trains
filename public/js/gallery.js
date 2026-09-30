@@ -29,11 +29,44 @@
   function gpsToSvg(latitude, longitude) {
     const lat = Number(latitude)
     const lon = Number(longitude)
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null
-
+    
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return null
+    }
+  
+    // Projection Mercator
+    function mercatorY(latitude) {
+      const rad = latitude * Math.PI / 180
+    
+      return Math.log(
+        Math.tan(Math.PI / 4 + rad / 2)
+      )
+    }
+  
+    // Transformation longitude → X
+    const x =
+      SVG_BOUNDS.left +
+      ((lon - GEO_BOUNDS.west) /
+        (GEO_BOUNDS.east - GEO_BOUNDS.west)) *
+      (SVG_BOUNDS.right - SVG_BOUNDS.left)
+  
+    // Transformation latitude → Y avec Mercator
+    const mercatorNorth = mercatorY(GEO_BOUNDS.north)
+    const mercatorSouth = mercatorY(GEO_BOUNDS.south)
+    const mercatorLat = mercatorY(lat)
+  
+    const yRatio =
+      (mercatorNorth - mercatorLat) /
+      (mercatorNorth - mercatorSouth)
+  
+    const y =
+      SVG_BOUNDS.top +
+      yRatio *
+      (SVG_BOUNDS.bottom - SVG_BOUNDS.top)
+  
     return {
-      x: SVG_BOUNDS.left + ((lon - GEO_BOUNDS.west) / (GEO_BOUNDS.east - GEO_BOUNDS.west)) * (SVG_BOUNDS.right - SVG_BOUNDS.left),
-      y: SVG_BOUNDS.top + ((GEO_BOUNDS.north - lat) / (GEO_BOUNDS.north - GEO_BOUNDS.south)) * (SVG_BOUNDS.bottom - SVG_BOUNDS.top),
+      x,
+      y
     }
   }
 
@@ -593,22 +626,6 @@
       if (em.lieu2) counts[em.lieu2.nom] = (counts[em.lieu2.nom] || 0) + 1
     })
     const max = Math.max(...Object.values(counts), 1)
-
-          console.table(
-            [...lieux]
-              .sort((a, b) => Number(b.latitude) - Number(a.latitude))
-              .map(lieu => {
-                const coords = lieuToSvg(lieu)
-              
-                return {
-                  nom: lieu.nom,
-                  latitude: Number(lieu.latitude).toFixed(5),
-                  longitude: Number(lieu.longitude).toFixed(5),
-                  svgX: coords ? coords.x.toFixed(2) : '-',
-                  svgY: coords ? coords.y.toFixed(2) : '-'
-                }
-              })
-          )
     // Remove old pins
     svg.querySelectorAll('.map-pin').forEach(p => p.remove())
     svg.querySelector('.map-line-layer')?.remove()
