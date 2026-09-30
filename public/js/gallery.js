@@ -29,41 +29,41 @@
   function gpsToSvg(latitude, longitude) {
     const lat = Number(latitude)
     const lon = Number(longitude)
-    
+
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
       return null
     }
-  
+
     // Projection Mercator
     function mercatorY(latitude) {
       const rad = latitude * Math.PI / 180
-    
+
       return Math.log(
         Math.tan(Math.PI / 4 + rad / 2)
       )
     }
-  
+
     // Transformation longitude → X
     const x =
       SVG_BOUNDS.left +
       ((lon - GEO_BOUNDS.west) /
         (GEO_BOUNDS.east - GEO_BOUNDS.west)) *
       (SVG_BOUNDS.right - SVG_BOUNDS.left)
-  
+
     // Transformation latitude → Y avec Mercator
     const mercatorNorth = mercatorY(GEO_BOUNDS.north)
     const mercatorSouth = mercatorY(GEO_BOUNDS.south)
     const mercatorLat = mercatorY(lat)
-  
+
     const yRatio =
       (mercatorNorth - mercatorLat) /
       (mercatorNorth - mercatorSouth)
-  
+
     const y =
       SVG_BOUNDS.top +
       yRatio *
       (SVG_BOUNDS.bottom - SVG_BOUNDS.top)
-  
+
     return {
       x,
       y
@@ -626,6 +626,8 @@
       if (em.lieu2) counts[em.lieu2.nom] = (counts[em.lieu2.nom] || 0) + 1
     })
     const max = Math.max(...Object.values(counts), 1)
+
+    const svg = document.getElementById('france-map')
     // Remove old pins
     svg.querySelectorAll('.map-pin').forEach(p => p.remove())
     svg.querySelector('.map-line-layer')?.remove()
