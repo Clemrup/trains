@@ -17,7 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
-  },
-  "devDependencies": {}
+    "@supabase/supabase-js": "^2.39.0",
+    "svg-path-properties": "^2.1.0"
+  }
 }

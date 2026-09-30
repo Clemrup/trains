@@ -15,10 +15,10 @@
   }
 
   const SVG_BOUNDS = {
-    left: 68,
-    right: 872,
-    top: 56,
-    bottom: 852,
+    left: 45.6,
+    right: 870.4,
+    top: 43.89,
+    bottom: 836.77,
   }
 
   const MAP_VIEW = { width: 1000, height: 1050, maxZoom: 30 }
@@ -196,15 +196,6 @@
     })
     svg.replaceChildren(...[...sourceSvg.childNodes].map(node => document.importNode(node, true)))
     svg.dataset.loaded = 'true'
-
-    const path = document.getElementById('FRBRE');
-    const box = path.getBBox();
-      
-    console.log('x minimum :', box.x);
-    console.log('y minimum :', box.y);
-    console.log('largeur :', box.width);
-    console.log('hauteur :', box.height);
-    console.log('x maximum :', box.x + box.width);
   }
 
   // ─── Init ─────────────────────────────────────────────────────────────────────
