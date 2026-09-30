@@ -18,7 +18,7 @@
     left: 68,
     right: 872,
     top: 56,
-    bottom: 867,
+    bottom: 872,
   }
 
   const MAP_VIEW = { width: 1000, height: 960, maxZoom: 30 }
