@@ -18,7 +18,7 @@
     left: 68,
     right: 872,
     top: 56,
-    bottom: 852,
+    bottom: 857,
   }
 
   const MAP_VIEW = { width: 1000, height: 960, maxZoom: 30 }
@@ -619,7 +619,7 @@
         ligne.lgv === true ||
         ligne.LGV === 'true' ||
         ligne.lgv === 'true';
-            
+
       lineLayer.appendChild(
         svgEl('polyline', {
           class: isLgv
