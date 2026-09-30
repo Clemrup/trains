@@ -15,8 +15,8 @@
   }
 
   const SVG_BOUNDS = {
-    left: 45.5,
-    right: 870.4,
+    left: 47.5,
+    right: 872.4,
     top: 43.69,
     bottom: 836.77,
   }
@@ -686,7 +686,7 @@
       const mainCircle = svgEl('circle', { cx: x, cy: y, r, fill: isSel ? '#e8a020' : '#e8a02077', stroke: isSel ? '#e8a020bb' : '#e8a02044', 'stroke-width': 1.5 })
       g.appendChild(mainCircle)
       g.appendChild(svgEl('circle', { cx: x, cy: y, r: 2, fill: isSel ? '#0c0c0f' : '#e8a020aa' }))
-      const txt = svgEl('text', { x, y: y - r - 4, 'text-anchor': 'middle', 'font-size': 9, fill: isSel ? '#e8a020' : '#e8a02088', 'font-family': 'JetBrains Mono' })
+      const txt = svgEl('text', { x, y: y - r - 4, 'text-anchor': 'middle', 'font-size': 13, fill: isSel ? '#e8a020' : '#e8a02088', 'font-family': 'JetBrains Mono' })
       txt.textContent = count
       g.appendChild(txt)
 
