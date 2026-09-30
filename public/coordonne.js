@@ -2,15 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import { svgPathProperties } from 'svg-path-properties';
 
-// --------------------------------------------------
-// Configuration
-// --------------------------------------------------
+// ==================================================
+// CONFIGURATION
+// ==================================================
 
 const svgPath = path.join(process.cwd(), 'public', 'fr.svg');
 
-// --------------------------------------------------
-// Lecture du fichier SVG
-// --------------------------------------------------
+// ==================================================
+// LECTURE DU SVG
+// ==================================================
 
 if (!fs.existsSync(svgPath)) {
     console.error(`❌ Fichier introuvable : ${svgPath}`);
@@ -23,28 +23,37 @@ console.log('✅ SVG chargé');
 console.log(`📄 Fichier : ${svgPath}`);
 console.log('');
 
-// --------------------------------------------------
-// Récupération des <path>
-// --------------------------------------------------
+// ==================================================
+// RÉCUPÉRATION DES PATH
+// ==================================================
 
-const pathRegex = /<path\b([^>]*)\bd=["']([^"']+)["'][^>]*>/gi;
+// On récupère toute la balise <path ... >
+const pathRegex = /<path\b([^>]*)>/gi;
 
 const paths = [];
 
 let match;
 
 while ((match = pathRegex.exec(svg)) !== null) {
+
     const attributes = match[1];
-    const d = match[2];
 
-    // Récupération de l'id
-    const idMatch = attributes.match(/\bid=["']([^"']+)["']/i);
+    // Récupération du d=""
+    const dMatch = attributes.match(/\bd\s*=\s*["']([^"']+)["']/i);
 
-    // Récupération du name
-    const nameMatch = attributes.match(/\bname=["']([^"']+)["']/i);
+    if (!dMatch) {
+        continue;
+    }
 
+    // Récupération de id=""
+    const idMatch = attributes.match(/\bid\s*=\s*["']([^"']+)["']/i);
+
+    // Récupération de name=""
+    const nameMatch = attributes.match(/\bname\s*=\s*["']([^"']+)["']/i);
+
+    const d = dMatch[1];
     const id = idMatch ? idMatch[1] : '(sans id)';
-    const name = nameMatch ? nameMatch[1] : '';
+    const name = nameMatch ? nameMatch[1] : '(sans nom)';
 
     paths.push({
         id,
@@ -56,21 +65,25 @@ while ((match = pathRegex.exec(svg)) !== null) {
 console.log(`🔎 ${paths.length} chemins SVG trouvés`);
 console.log('');
 
-// --------------------------------------------------
-// Calcul des coordonnées
-// --------------------------------------------------
+// ==================================================
+// CALCUL DES COORDONNÉES
+// ==================================================
 
 const results = [];
 
 for (const pathData of paths) {
 
     try {
+
         const properties = new svgPathProperties(pathData.d);
 
         const totalLength = properties.getTotalLength();
 
-        // Nombre de points utilisés pour l'analyse
-        const samples = Math.max(1000, Math.ceil(totalLength / 2));
+        // Nombre de points analysés
+        const samples = Math.max(
+            2000,
+            Math.ceil(totalLength / 2)
+        );
 
         let left = Infinity;
         let right = -Infinity;
@@ -90,36 +103,56 @@ for (const pathData of paths) {
                 totalLength * fraction
             );
 
-            // Gauche
+            // ------------------------------------------
+            // GAUCHE
+            // ------------------------------------------
+
             if (point.x < left) {
+
                 left = point.x;
+
                 leftPoint = {
                     x: point.x,
                     y: point.y
                 };
             }
 
-            // Droite
+            // ------------------------------------------
+            // DROITE
+            // ------------------------------------------
+
             if (point.x > right) {
+
                 right = point.x;
+
                 rightPoint = {
                     x: point.x,
                     y: point.y
                 };
             }
 
-            // Haut
+            // ------------------------------------------
+            // HAUT
+            // ------------------------------------------
+
             if (point.y < top) {
+
                 top = point.y;
+
                 topPoint = {
                     x: point.x,
                     y: point.y
                 };
             }
 
-            // Bas
+            // ------------------------------------------
+            // BAS
+            // ------------------------------------------
+
             if (point.y > bottom) {
+
                 bottom = point.y;
+
                 bottomPoint = {
                     x: point.x,
                     y: point.y
@@ -145,24 +178,26 @@ for (const pathData of paths) {
     } catch (error) {
 
         console.error(
-            `❌ Impossible d'analyser ${pathData.id}:`,
+            `❌ Erreur avec ${pathData.id} (${pathData.name}) :`,
             error.message
         );
     }
 }
 
-// --------------------------------------------------
-// Affichage
-// --------------------------------------------------
+// ==================================================
+// AFFICHAGE DE CHAQUE RÉGION
+// ==================================================
 
 console.log('==================================================');
-console.log('              COORDONNÉES DU SVG');
+console.log('             COORDONNÉES DES PATH');
 console.log('==================================================');
 console.log('');
 
 for (const result of results) {
 
-    console.log(`🗺️ ${result.id}${result.name ? ` (${result.name})` : ''}`);
+    console.log(
+        `🗺️ ${result.id} — ${result.name}`
+    );
 
     console.log(
         `   Gauche : ${result.left.toFixed(2)}`
@@ -183,27 +218,27 @@ for (const result of results) {
     console.log('');
 
     console.log(
-        `   Point gauche : (${result.leftPoint.x.toFixed(2)}, ${result.leftPoint.y.toFixed(2)})`
+        `   ⬅️ (${result.leftPoint.x.toFixed(2)}, ${result.leftPoint.y.toFixed(2)})`
     );
 
     console.log(
-        `   Point droit  : (${result.rightPoint.x.toFixed(2)}, ${result.rightPoint.y.toFixed(2)})`
+        `   ➡️ (${result.rightPoint.x.toFixed(2)}, ${result.rightPoint.y.toFixed(2)})`
     );
 
     console.log(
-        `   Point haut   : (${result.topPoint.x.toFixed(2)}, ${result.topPoint.y.toFixed(2)})`
+        `   ⬆️ (${result.topPoint.x.toFixed(2)}, ${result.topPoint.y.toFixed(2)})`
     );
 
     console.log(
-        `   Point bas    : (${result.bottomPoint.x.toFixed(2)}, ${result.bottomPoint.y.toFixed(2)})`
+        `   ⬇️ (${result.bottomPoint.x.toFixed(2)}, ${result.bottomPoint.y.toFixed(2)})`
     );
 
     console.log('--------------------------------------------------');
 }
 
-// --------------------------------------------------
-// Calcul des limites de TOUT le SVG
-// --------------------------------------------------
+// ==================================================
+// LIMITES GLOBALES
+// ==================================================
 
 let globalLeft = Infinity;
 let globalRight = -Infinity;
@@ -215,60 +250,104 @@ let globalRightPoint = null;
 let globalTopPoint = null;
 let globalBottomPoint = null;
 
+let globalLeftPath = null;
+let globalRightPath = null;
+let globalTopPath = null;
+let globalBottomPath = null;
+
 for (const result of results) {
 
     if (result.left < globalLeft) {
+
         globalLeft = result.left;
         globalLeftPoint = result.leftPoint;
+        globalLeftPath = result;
     }
 
     if (result.right > globalRight) {
+
         globalRight = result.right;
         globalRightPoint = result.rightPoint;
+        globalRightPath = result;
     }
 
     if (result.top < globalTop) {
+
         globalTop = result.top;
         globalTopPoint = result.topPoint;
+        globalTopPath = result;
     }
 
     if (result.bottom > globalBottom) {
+
         globalBottom = result.bottom;
         globalBottomPoint = result.bottomPoint;
+        globalBottomPath = result;
     }
 }
 
-// --------------------------------------------------
-// Résultat global
-// --------------------------------------------------
+// ==================================================
+// RÉSULTAT GLOBAL
+// ==================================================
 
 console.log('');
 console.log('==================================================');
-console.log('             LIMITES DE TOUTE LA CARTE');
+console.log('              LIMITES DE LA CARTE');
 console.log('==================================================');
-
-console.log('');
-console.log(`⬅️  Gauche : ${globalLeft.toFixed(2)}`);
-console.log(`➡️  Droite : ${globalRight.toFixed(2)}`);
-console.log(`⬆️  Haut   : ${globalTop.toFixed(2)}`);
-console.log(`⬇️  Bas    : ${globalBottom.toFixed(2)}`);
-
 console.log('');
 
 console.log(
-    `Point le plus à gauche : (${globalLeftPoint.x.toFixed(2)}, ${globalLeftPoint.y.toFixed(2)})`
+    `⬅️ GAUCHE : ${globalLeft.toFixed(2)}`
 );
 
 console.log(
-    `Point le plus à droite : (${globalRightPoint.x.toFixed(2)}, ${globalRightPoint.y.toFixed(2)})`
+    `   Région : ${globalLeftPath.id} — ${globalLeftPath.name}`
 );
 
 console.log(
-    `Point le plus haut : (${globalTopPoint.x.toFixed(2)}, ${globalTopPoint.y.toFixed(2)})`
+    `   Point  : (${globalLeftPoint.x.toFixed(2)}, ${globalLeftPoint.y.toFixed(2)})`
+);
+
+console.log('');
+
+console.log(
+    `➡️ DROITE : ${globalRight.toFixed(2)}`
 );
 
 console.log(
-    `Point le plus bas : (${globalBottomPoint.x.toFixed(2)}, ${globalBottomPoint.y.toFixed(2)})`
+    `   Région : ${globalRightPath.id} — ${globalRightPath.name}`
+);
+
+console.log(
+    `   Point  : (${globalRightPoint.x.toFixed(2)}, ${globalRightPoint.y.toFixed(2)})`
+);
+
+console.log('');
+
+console.log(
+    `⬆️ HAUT : ${globalTop.toFixed(2)}`
+);
+
+console.log(
+    `   Région : ${globalTopPath.id} — ${globalTopPath.name}`
+);
+
+console.log(
+    `   Point  : (${globalTopPoint.x.toFixed(2)}, ${globalTopPoint.y.toFixed(2)})`
+);
+
+console.log('');
+
+console.log(
+    `⬇️ BAS : ${globalBottom.toFixed(2)}`
+);
+
+console.log(
+    `   Région : ${globalBottomPath.id} — ${globalBottomPath.name}`
+);
+
+console.log(
+    `   Point  : (${globalBottomPoint.x.toFixed(2)}, ${globalBottomPoint.y.toFixed(2)})`
 );
 
 console.log('');
