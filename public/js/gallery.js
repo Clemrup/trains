@@ -614,17 +614,25 @@
 
       if (points.length < 2) return
 
-      const isLgv = ligne.LGV === true || ligne.lgv === true || ligne.LGV === 'true' || ligne.lgv === 'true'
-      lineLayer.appendChild(svgEl('polyline', {
-        class: isLgv ? 'map-line map-line-lgv' : 'map-line map-line-standard',
-        points: points.map(point => `${point.x},${point.y}`).join(' '),
-        fill: 'none',
-        stroke: isLgv ? '#c4372a66' : '#85858f99',
-        'stroke-width': isLgv ? 1.5 : 0.5,
-        opacity: 1,
-        'vector-effect': 'non-scaling-stroke',
-        'data-ligne-nom': ligne.nom || '',
-      }))
+      const isLgv =
+        ligne.LGV === true ||
+        ligne.lgv === true ||
+        ligne.LGV === 'true' ||
+        ligne.lgv === 'true';
+            
+      lineLayer.appendChild(
+        svgEl('polyline', {
+          class: isLgv
+            ? 'map-line map-line-lgv'
+            : 'map-line map-line-standard',
+        
+          points: points
+            .map(point => `${point.x},${point.y}`)
+            .join(' '),
+        
+          'data-ligne-nom': ligne.nom || '',
+        })
+      );
     })
     const mapFeatures = svg.querySelector('#features')
     if (mapFeatures) mapFeatures.after(lineLayer)
