@@ -594,7 +594,21 @@
     })
     const max = Math.max(...Object.values(counts), 1)
 
-    const svg = document.getElementById('france-map')
+          console.table(
+            [...lieux]
+              .sort((a, b) => Number(b.latitude) - Number(a.latitude))
+              .map(lieu => {
+                const coords = lieuToSvg(lieu)
+              
+                return {
+                  nom: lieu.nom,
+                  latitude: Number(lieu.latitude).toFixed(5),
+                  longitude: Number(lieu.longitude).toFixed(5),
+                  svgX: coords ? coords.x.toFixed(2) : '-',
+                  svgY: coords ? coords.y.toFixed(2) : '-'
+                }
+              })
+          )
     // Remove old pins
     svg.querySelectorAll('.map-pin').forEach(p => p.remove())
     svg.querySelector('.map-line-layer')?.remove()
