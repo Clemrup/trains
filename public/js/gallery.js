@@ -17,7 +17,7 @@
   const SVG_BOUNDS = {
     left: 68,
     right: 872,
-    top: 46,
+    top: 56,
     bottom: 852,
   }
 
