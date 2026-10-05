@@ -796,7 +796,7 @@
               const emSrc = emYtId
                 ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg`
                 : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
-              return `<div class="lieu-preview-card">
+              return `<div class="lieu-preview-card" data-key="${em.key}" role="button" tabindex="0">
                 <img src="${emSrc}" alt="">
                 <div class="lieu-preview-info" style="background:${mc}">
                   <span class="lieu-preview-train" style="color:${tc}">${em.famille?.nom || ''} ${em.train?.numero_principal || ''}</span>
@@ -814,6 +814,21 @@
         const id = parseInt(btn.closest('.lieu-row').dataset.lieuId)
         state.expandedLieu = state.expandedLieu === id ? null : id
         renderLieux()
+      })
+    })
+    list.querySelectorAll('.lieu-preview-card').forEach(card => {
+      const open = () => {
+        const row = card.closest('.lieu-row')
+        const lieuId = parseInt(row.dataset.lieuId)
+        const items = stats.find(s => s.lieu.id === lieuId)?.items || []
+        openLightbox(items.find(em => em.key === card.dataset.key), items)
+      }
+      card.addEventListener('click', open)
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          open()
+        }
       })
     })
     list.querySelectorAll('.lieu-filter-btn').forEach(btn => {
