@@ -1120,4 +1120,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 })() // Fin de la IIFE
-

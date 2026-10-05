@@ -194,6 +194,14 @@ img { display: block; }
   justify-content: flex-end; padding: .75rem;
   opacity: 0; transition: opacity .3s;
 }
+.card-overlay::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--card-overlay-bg);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,.4) 55%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,.4) 55%, transparent 100%);
+  pointer-events: none;
+}
+.card-overlay > * { position: relative; }
 .media-card:hover .card-overlay { opacity: 1; }
 .card-overlay-lieu { font-family: var(--ff-mono); font-size: .7rem; font-weight: 500; }
 .card-overlay-date { font-family: var(--ff-mono); font-size: .7rem; margin-top: 2px; opacity: .8; }

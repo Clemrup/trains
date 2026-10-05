@@ -470,7 +470,6 @@
     const mc = livree?.main_color || '#1c1c22'
     const tc = livree?.text_color || '#e6e0d4'
     const fc = FAMILLE_COLORS[famille?.nom] || '#888'
-    const rgb = hexToRgb(mc)
     const locStr = lieu1?.nom + (lieu2 ? ' · ' + lieu2.nom : '')
     const isVideo = media.type_media === 'video'
     const ytId = isVideo ? getYouTubeId(media.media_url) : null
@@ -482,7 +481,7 @@
       <div class="media-card" data-key="${key}">
         <div class="card-img-wrap">
           <img src="${thumbSrc}" alt="${famille?.nom || ''} ${train.numero_principal}" loading="lazy">
-          <div class="card-overlay" style="background:linear-gradient(to top,rgba(${rgb},.96) 0%,rgba(${rgb},.4) 55%,transparent 100%)">
+          <div class="card-overlay" style="--card-overlay-bg:${mc}">
             <span class="card-overlay-lieu" style="color:${tc}">${locStr}</span>
             <span class="card-overlay-date" style="color:${tc}">${formatDate(media.date_ajout)}</span>
           </div>
@@ -1114,10 +1113,6 @@
 
   // ─── Utilitaires ──────────────────────────────────────────────────────────────
 
-  function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16)
-    return `${r},${g},${b}`
-  }
   function formatDate(d) {
     if (!d) return ''
     return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
