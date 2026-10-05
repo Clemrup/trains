@@ -792,7 +792,10 @@
             ${s.items.slice(0, 6).map(em => {
               const mc = em.livree?.main_color || '#1c1c22'
               const tc = em.livree?.text_color || '#e6e0d4'
-              const emSrc = em.media.type_media === 'video' ? em.media.media_url : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
+              const emYtId = em.media.type_media === 'video' ? getYouTubeId(em.media.media_url) : null
+              const emSrc = emYtId
+                ? `https://img.youtube.com/vi/${emYtId}/hqdefault.jpg`
+                : `https://pub-790ccb7ad27f46308945c8ed6d9a5f91.r2.dev/${em.media.media_url}`
               return `<div class="lieu-preview-card">
                 <img src="${emSrc}" alt="">
                 <div class="lieu-preview-info" style="background:${mc}">
